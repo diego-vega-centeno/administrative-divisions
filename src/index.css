@@ -1,6 +1,7 @@
-:root{
-  --color-primary: #181a1b;
+:root {
+  --color-primary: #FBFADA;
   --color-secondary: #325b41;
+  --header-footer-height: 7vh;
 }
 
 
@@ -8,9 +9,10 @@
   box-sizing: content-box;
   padding: 0;
   margin: 0;
+  font-family: 'Sour Gummy Variable', sans-serif;
 }
 
-body{
+body {
   min-height: 100vh;
   background-color: var(--color-primary);
 }

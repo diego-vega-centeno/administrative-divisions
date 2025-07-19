@@ -1,4 +1,4 @@
-.header{
+.footer {
   color: black;
   background-color: var(--color-secondary);
   display: flex;
@@ -7,5 +7,10 @@
   padding: 0 2rem;
   height: var(--header-footer-height);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+}
+
+.footer-linkedin{
+  color: black;
+  font-size: 2rem;
 }
