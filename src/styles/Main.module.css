@@ -1,0 +1,14 @@
+.main {
+  display: flex;
+  min-height: calc(100vh - var(--header-footer-height) - var(--header-footer-height));
+}
+
+.aside {
+  width: 20%;
+  background-color: blue;
+}
+
+.main-content {
+  width: 80%;
+  background-color: green;
+}
