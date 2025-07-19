@@ -1,14 +1,22 @@
 .main {
   display: flex;
-  min-height: calc(100vh - var(--header-footer-height) - var(--header-footer-height));
+  min-height: calc(100vh - var(--header-footer-height));
 }
 
 .aside {
   width: 20%;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
   background-color: blue;
 }
 
-.main-content {
+.main-body {
   width: 80%;
   background-color: green;
+}
+
+.main-content {
+  min-height: calc(100vh - var(--header-footer-height));
 }
