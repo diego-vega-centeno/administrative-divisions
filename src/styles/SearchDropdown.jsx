@@ -1,6 +1,3 @@
-import TouchRipple from "@mui/material/ButtonBase/TouchRipple"
-import { alignItems, borderRadius, display, fontSize, height, justifyContent, margin, padding, width } from "@mui/system";
-
 const dropdown = {
   backgroundColor: '#F8F9FA',
   height: '2.3rem',
@@ -30,6 +27,7 @@ const searchFieldBox = {
 
 const searchField = {
   backgroundColor: 'white',
+  flex:'1',
   '& .MuiInputBase-input': {
     padding: '.25rem .5rem',
     fontSize: '.9rem',
