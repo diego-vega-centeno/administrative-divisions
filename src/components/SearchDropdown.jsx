@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import styles from '../styles/SearchDropdown.module.css'
 import { dropdown, dropdownIcon, searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
 import { useState } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -24,7 +23,7 @@ export default function SearchDropdown({ text = '', content }) {
     <Box>
       <ListItemButton disableRipple sx={dropdown} onClick={handleClick}>
         {expandLess}
-        <ListItemText className={styles.dropdownText} primary="Search" />
+        <ListItemText primary="Search" />
       </ListItemButton>
       <Collapse in={isOpen}>
         <Box sx={searchFieldBox}>
