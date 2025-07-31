@@ -7,6 +7,11 @@ const dropdown = {
   },
   '&:active': {
     backgroundColor: '#C6C7C8'
+  },
+  '& .MuiTypography-root': {
+    fontFamily: "'Oswald', sans-serif",
+    letterSpacing: '-0.03em',
+
   }
 }
 
@@ -27,7 +32,7 @@ const searchFieldBox = {
 
 const searchField = {
   backgroundColor: 'white',
-  flex:'1',
+  flex: '1',
   '& .MuiInputBase-input': {
     padding: '.25rem .5rem',
     fontSize: '.9rem',
