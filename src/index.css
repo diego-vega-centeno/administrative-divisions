@@ -6,7 +6,7 @@
 
 
 * {
-  box-sizing: content-box;
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
   font-family: 'Oswald Variable', sans-serif;
@@ -15,4 +15,5 @@
 body {
   min-height: 100vh;
   background-color: var(--color-primary);
+  width: 100vw;
 }
