@@ -11,7 +11,8 @@ const dropdown = {
   '& .MuiTypography-root': {
     fontFamily: "'Oswald', sans-serif",
     letterSpacing: '-0.03em',
-
+    fontWeight: '500',
+    textShadow: '0 0 0.3px currentColor'
   }
 }
 
@@ -27,7 +28,7 @@ const dropdownIcon = (isOpen) => ({
 const searchFieldBox = {
   display: 'flex',
   margin: '0.4rem 1rem',
-  height: '2.5rem'
+  height: '2.2rem'
 }
 
 const searchField = {
