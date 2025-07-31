@@ -1,11 +1,12 @@
 .main {
   display: flex;
   min-height: calc(100vh - var(--header-footer-height));
+  width: 100vw;
 }
 
 .aside {
-  width: 20%;
-  min-width: 250px;
+  width: clamp(270px, 25%, 300px);
+  flex-shrink: 0;
   height: 100vh;
   position: sticky;
   top: 0;
