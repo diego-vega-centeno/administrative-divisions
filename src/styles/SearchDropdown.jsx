@@ -5,6 +5,7 @@ const dropdown = {
   '&:hover': {
     backgroundColor: '#D3D4D5'
   },
+  border: '0.5px solid #dee2e6',
   '&:active': {
     backgroundColor: '#C6C7C8'
   },
