@@ -6,17 +6,18 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
-import TextField from '@mui/material/TextField';
 
-export default function SearchDropdown({ text = '' }) {
+export default function SelectAddDropdown({ text = '' }) {
 
   const [isOpen, setIsOpen] = useState(false);
 
   function handleClick() {
     setIsOpen(prev => !prev);
   }
+
+  const itemList = <ul>
+    {Array(100).fill().map((_, i) => <li key={i} style={{ backgroundColor: 'red', margin: '1px' }}></li>)}
+  </ul>;
 
   return (
     <Box>
@@ -25,14 +26,7 @@ export default function SearchDropdown({ text = '' }) {
         <ListItemText primary={text} />
       </ListItemButton>
       <Collapse in={isOpen}>
-        <Box sx={searchFieldBox}>
-          <TextField
-            sx={searchField} placeholder="search" variant="outlined"
-          />
-          <Box sx={searchFieldIconBox}>
-            <FontAwesomeIcon icon={faSearch} />
-          </Box>
-        </Box>
+        {itemList}
       </Collapse>
     </Box>
   )
