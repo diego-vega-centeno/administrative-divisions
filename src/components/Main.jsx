@@ -16,7 +16,7 @@ export default function Main() {
       <section className={styles['main-body']}>
         <div className={styles['main-content']}>
           <button onClick={() => setShow2(!show2)}>expand</button>
-          <div style={{ display: `${show2 ? 'block' : 'none'}`, height: '1000px', backgroundColor: 'red', margin: '10px' }}></div>
+          <div style={{ display: `${show2 ? 'block' : 'none'}`, height: '1000px', backgroundColor: '#cfcb5d', margin: '10px' }}></div>
 
         </div>
         <Footer />
