@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
 import TextField from '@mui/material/TextField';
+import { getNominatimSearch } from '../utils/nominatim.js'; 
 
 export default function SearchDropdown({ text = '' }) {
 
@@ -20,6 +21,9 @@ export default function SearchDropdown({ text = '' }) {
   }
 
   function handleSearch() {
+    if(input == '') return;
+
+    getNominatimSearch(input)
   }
 
   return (
