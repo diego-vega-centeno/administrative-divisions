@@ -13,9 +13,13 @@ import TextField from '@mui/material/TextField';
 export default function SearchDropdown({ text = '' }) {
 
   const [isOpen, setIsOpen] = useState(false);
+  const [input, setInput] = useState('');
 
   function handleClick() {
     setIsOpen(prev => !prev);
+  }
+
+  function handleSearch() {
   }
 
   return (
@@ -28,8 +32,9 @@ export default function SearchDropdown({ text = '' }) {
         <Box sx={searchFieldBox}>
           <TextField
             sx={searchField} placeholder="search" variant="outlined"
+            value={input} onChange={(e) => setInput(e.target.value)}
           />
-          <Box sx={searchFieldIconBox}>
+          <Box sx={searchFieldIconBox} onClick={handleSearch}>
             <FontAwesomeIcon icon={faSearch} />
           </Box>
         </Box>
