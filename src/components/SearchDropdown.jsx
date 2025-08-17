@@ -39,6 +39,9 @@ export default function SearchDropdown({ text = '' }) {
           <TextField
             sx={searchField} placeholder="search" variant="outlined"
             value={input} onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {handleSearch();}
+            }}
           />
           <Box sx={searchFieldIconBox} onClick={handleSearch}>
             <FontAwesomeIcon icon={faSearch} />

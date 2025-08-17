@@ -9,7 +9,7 @@ const listItem = {
 }
 
 const listBox = {
-  paddingBottom: '1rem'
+  padding: '0.5rem 0'
 }
 
 export {listItem, listBox}
