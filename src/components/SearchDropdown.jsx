@@ -9,21 +9,23 @@ import Box from '@mui/material/Box';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
 import TextField from '@mui/material/TextField';
-import { getNominatimSearch } from '../utils/nominatim.js'; 
+import { getNominatimSearch } from '../utils/nominatim.js';
+import SearchResultList from './SearchResultList.jsx';
 
 export default function SearchDropdown({ text = '' }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
+  const [entities, setEntities] = useState([]);
 
   function handleClick() {
     setIsOpen(prev => !prev);
   }
 
-  function handleSearch() {
-    if(input == '') return;
-
-    getNominatimSearch(input)
+  async function handleSearch() {
+    if (input == '') return;
+    const entities = await getNominatimSearch(input);
+    setEntities(entities)
   }
 
   return (
@@ -42,6 +44,7 @@ export default function SearchDropdown({ text = '' }) {
             <FontAwesomeIcon icon={faSearch} />
           </Box>
         </Box>
+        <SearchResultList entities={entities} />
       </Collapse>
     </Box>
   )
