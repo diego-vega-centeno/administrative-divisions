@@ -11,11 +11,11 @@
   position: sticky;
   top: 0;
   overflow-y: auto;
+  border-right: 1px solid black;
 }
 
 .main-body {
   flex: 1;
-  background-color: green;
 }
 
 .main-content {
