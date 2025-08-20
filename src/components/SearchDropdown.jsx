@@ -37,12 +37,14 @@ export default function SearchDropdown({ text = '' }) {
       <Collapse in={isOpen}>
         <Box sx={searchFieldBox}>
           <TextField
+            type="search"
             sx={searchField} placeholder="search" variant="outlined"
             value={input} onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {handleSearch();}
+              if (e.key === 'Enter') { handleSearch(); }
             }}
           />
+          {/* <FontAwesomeIcon icon={faCircleXmark} /> */}
           <Box sx={searchFieldIconBox} onClick={handleSearch}>
             <FontAwesomeIcon icon={faSearch} />
           </Box>
