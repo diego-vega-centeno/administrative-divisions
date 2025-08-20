@@ -12,8 +12,14 @@ export default function SearchResultList({ entities }) {
   return (
     <Box sx={listBox}>
       {entities.map(ent => (
-        <ListItem sx={listItem}>
-          <ListItemText primary={ent['name']} key={ent['osm_id']} />
+        <ListItem sx={listItem} key={ent['osm_id']}>
+          <ListItemText primary={
+            <>
+              {ent['display_name']}{" "}
+              <span style={{ color: "black" }}>({ent['addresstype']} - rel:{ent['osm_id']})</span>
+              <span style={{ color: "black" }}></span>
+            </>
+          } />
         </ListItem>
       ))}
     </Box>

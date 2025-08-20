@@ -1,6 +1,5 @@
 const listItem = {
   backgroundColor: '#F8F9FA',
-  height: '2.3rem',
   '&:hover': {
     backgroundColor: '#e5e8eaff'
   },

@@ -22,7 +22,7 @@ async function getNominatimSearch(query) {
   /* hide busy icon */
   // document.getElementById("entitySelectorBusyIcon").style.display = "none";
 
-  return entitiesFound;
+  return relationsFound;
 }
 
 export { getNominatimSearch }
