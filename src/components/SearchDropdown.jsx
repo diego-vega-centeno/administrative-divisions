@@ -7,16 +7,18 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
+import { searchFieldBox, searchField, searchFieldIconBox, progressIcon } from '../styles/SearchDropdown';
 import TextField from '@mui/material/TextField';
 import { getNominatimSearch } from '../utils/nominatim.js';
 import SearchResultList from './SearchResultList.jsx';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function SearchDropdown({ text = '' }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [entities, setEntities] = useState([]);
+  const [isProgressIconActive, setIsProgressIconActive] = useState(false);
 
   function handleClick() {
     setIsOpen(prev => !prev);
@@ -24,7 +26,9 @@ export default function SearchDropdown({ text = '' }) {
 
   async function handleSearch() {
     if (input == '') return;
+    setIsProgressIconActive(true);
     const entities = await getNominatimSearch(input);
+    setIsProgressIconActive(false);
     setEntities(entities)
   }
 
@@ -44,11 +48,16 @@ export default function SearchDropdown({ text = '' }) {
               if (e.key === 'Enter') { handleSearch(); }
             }}
           />
-          {/* <FontAwesomeIcon icon={faCircleXmark} /> */}
           <Box sx={searchFieldIconBox} onClick={handleSearch}>
             <FontAwesomeIcon icon={faSearch} />
           </Box>
         </Box>
+        {isProgressIconActive && (
+          <Box sx={progressIcon}>
+            <CircularProgress thickness={8} size={40} />
+          </Box>
+        )}
+
         <SearchResultList entities={entities} />
       </Collapse>
     </Box>
