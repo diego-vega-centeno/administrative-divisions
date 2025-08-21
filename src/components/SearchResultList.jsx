@@ -9,10 +9,17 @@ export default function SearchResultList({ entities }) {
     return null;
   }
 
+  function handleItemClick(osmId) {
+    console.log(osmId);
+  }
+
   return (
     <Box sx={listBox}>
       {entities.map(ent => (
-        <ListItem sx={listItem} key={ent['osm_id']}>
+        <ListItem
+          sx={listItem} key={ent['osm_id']}
+          onClick={() => handleItemClick(ent.osm_id)}
+        >
           <ListItemText primary={
             <>
               {ent['display_name']}{" "}
