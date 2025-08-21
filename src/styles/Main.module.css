@@ -18,6 +18,16 @@
   flex: 1;
 }
 
-.main-content {
-  min-height: calc(100vh - var(--header-footer-height));
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - var(--header-footer-height));
+}
+
+.map {
+  height: 90%;
+  width: 90%;
+  border-radius: 10px;
+  border: 1px solid black;
 }
