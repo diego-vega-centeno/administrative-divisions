@@ -58,4 +58,16 @@ const searchFieldIconBox = {
   }
 }
 
-export { dropdown, dropdownIcon, searchFieldBox, searchField, searchFieldIconBox }
+const progressIcon = {
+  display: 'flex',
+  justifyContent: 'center',
+  padding: '0.7rem 0',
+  '& .MuiCircularProgress-root': {
+    color: '#3F7251',
+  }
+}
+
+export {
+  dropdown, dropdownIcon, searchFieldBox, searchField,
+  searchFieldIconBox, progressIcon
+}
