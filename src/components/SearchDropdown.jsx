@@ -26,6 +26,7 @@ export default function SearchDropdown({ text = '' }) {
 
   async function handleSearch() {
     if (input == '') return;
+    setEntities([])
     setIsProgressIconActive(true);
     const entities = await getNominatimSearch(input);
     setIsProgressIconActive(false);
