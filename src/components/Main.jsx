@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Main.module.css'
 import Footer from './Footer.jsx'
 import SearchDropdown from './SearchDropdown.jsx'
@@ -7,11 +7,15 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { getRelation } from '../utils/overpass';
 import { addToLeafletMap } from '../utils/leafletMap.js';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import { progressMapIcon } from '../styles/Main.jsx';
 
 export default function Main() {
 
   const mapRef = useRef(null); // will hold map instance from leaflet
   const mapContainerRef = useRef(null); // will hold map container dom element
+  const [isProgressIconActive, setIsProgressIconActive] = useState(true);
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -52,6 +56,11 @@ export default function Main() {
       <section className={styles['main-body']}>
         <div className={styles['main-content']}>
           <div className={styles['map-container']}>
+            {isProgressIconActive && (
+              <Box sx={progressMapIcon}>
+                <CircularProgress thickness={9} size={70} />
+              </Box>
+            )}
             <div
               ref={mapContainerRef}
               className={styles['map']}
