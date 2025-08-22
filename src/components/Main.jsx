@@ -5,6 +5,8 @@ import SearchDropdown from './SearchDropdown.jsx'
 import SelectAddDropdown from './SelectAddDropdown.jsx'
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { getRelation } from '../utils/overpass';
+import { addToLeafletMap } from '../utils/leafletMap.js';
 
 export default function Main() {
 
@@ -22,11 +24,19 @@ export default function Main() {
 
   }, []);
 
+  async function handleItemSelect(osmId) {
+    try {
+      const osmData = await getRelation(osmId);
+      addToLeafletMap(osmData, mapRef.current);
+    } catch (error) {
+      console.log('An error ocurred: ', error);
+    }
+  }
 
   return (
     <main className={styles.main}>
       <aside className={styles.aside}>
-        <SearchDropdown text='Search' />
+        <SearchDropdown text='Search' onSelect={handleItemSelect} />
         <SelectAddDropdown text='Select administrative division' />
       </aside>
       <section className={styles['main-body']}>
