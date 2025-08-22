@@ -14,6 +14,8 @@ export default function Main() {
   const mapContainerRef = useRef(null); // will hold map container dom element
 
   useEffect(() => {
+    // exist if container doesn't exist
+    // exitst if map object already exist
     if (!mapContainerRef.current || mapRef.current) return;
 
     mapRef.current = L.map(mapContainerRef.current).setView([0, 0], 1);
@@ -22,6 +24,14 @@ export default function Main() {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(mapRef.current);
 
+    // check change in dimension just in case, lol
+    mapRef.current.invalidateSize();
+
+    // destroy map on unmount
+    return () => {
+      mapRef.current.remove();
+      mapRef.current = null;
+    };
   }, []);
 
   async function handleItemSelect(osmId) {
