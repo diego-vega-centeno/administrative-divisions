@@ -2,6 +2,7 @@ import ListItem from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import { listItem, listBox } from '../styles/SearchResultList';
+import { getRelation } from '../utils/overpass';
 
 export default function SearchResultList({ entities }) {
 
@@ -9,8 +10,14 @@ export default function SearchResultList({ entities }) {
     return null;
   }
 
-  function handleItemClick(osmId) {
-    console.log(osmId);
+  async function handleItemClick(osmId) {
+    try {
+      const osmData = await getRelation(osmId);
+      console.log(osmData);
+      addToSlippyMap(osmData);
+    } catch (error) {
+      console.log('An error ocurred: ', error);
+    }
   }
 
   return (
