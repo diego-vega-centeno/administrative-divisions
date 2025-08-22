@@ -15,7 +15,7 @@ export default function Main() {
 
   const mapRef = useRef(null); // will hold map instance from leaflet
   const mapContainerRef = useRef(null); // will hold map container dom element
-  const [isProgressIconActive, setIsProgressIconActive] = useState(true);
+  const [isProgressIconActive, setIsProgressIconActive] = useState(false);
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -40,8 +40,10 @@ export default function Main() {
 
   async function handleItemSelect(osmId) {
     try {
+      setIsProgressIconActive(true);
       const osmData = await getRelation(osmId);
-      addToLeafletMap(osmData, mapRef.current);
+      await addToLeafletMap(osmData, mapRef.current);
+      setIsProgressIconActive(false);
     } catch (error) {
       console.log('An error ocurred: ', error);
     }
