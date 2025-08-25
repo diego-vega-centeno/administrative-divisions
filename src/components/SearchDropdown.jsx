@@ -13,7 +13,7 @@ import { getNominatimSearch } from '../utils/nominatim.js';
 import SearchResultList from './SearchResultList.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function SearchDropdown({ text = '', onSelect }) {
+export default function SearchDropdown({ text = '', onSelect, onError }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -28,9 +28,15 @@ export default function SearchDropdown({ text = '', onSelect }) {
     if (input == '') return;
     setEntities([])
     setIsProgressIconActive(true);
-    const entities = await getNominatimSearch(input);
-    setIsProgressIconActive(false);
-    setEntities(entities)
+    try {
+      const entities = await getNominatimSearch(input);
+      setIsProgressIconActive(false);
+      setEntities(entities)
+    } catch (error) {
+      setIsProgressIconActive(false);
+      onError(error.message);
+      console.log(error);
+    }
   }
 
   return (
@@ -59,7 +65,7 @@ export default function SearchDropdown({ text = '', onSelect }) {
           </Box>
         )}
 
-        <SearchResultList entities={entities} onSelect={onSelect}/>
+        <SearchResultList entities={entities} onSelect={onSelect} />
       </Collapse>
     </Box>
   )
