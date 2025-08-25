@@ -45,6 +45,7 @@ export default function Main() {
       await addToLeafletMap(osmData, mapRef.current);
       setIsProgressIconActive(false);
     } catch (error) {
+      setIsProgressIconActive(false);
       console.log('An error ocurred: ', error);
     }
   }
