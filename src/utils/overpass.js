@@ -14,7 +14,7 @@ async function getRelation(relationID, out = "geom") {
 
   if (!response.ok) {
     // A 'not ok' response doesn't throw an error, so throw one and add the response object
-    throw new Error("Fetch response was not ok", { cause: response });
+    throw new Error("Fetch response was not ok");
   }
 
   const osmRes = await response.json();

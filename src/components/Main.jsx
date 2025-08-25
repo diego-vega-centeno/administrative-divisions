@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import { getRelation } from '../utils/overpass';
 import { addToLeafletMap } from '../utils/leafletMap.js';
 import Box from '@mui/material/Box';
+import { Dialog, Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
 
@@ -16,6 +17,7 @@ export default function Main() {
   const mapRef = useRef(null); // will hold map instance from leaflet
   const mapContainerRef = useRef(null); // will hold map container dom element
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -46,14 +48,38 @@ export default function Main() {
       setIsProgressIconActive(false);
     } catch (error) {
       setIsProgressIconActive(false);
+      setErrorMessage(error.message);
       console.log('An error ocurred: ', error);
     }
   }
 
+  const handleError = (errorMessage) => {
+    setErrorMessage(errorMessage);
+  }
+
+  const alertDialog = <>
+    <Dialog
+      open={Boolean(errorMessage)}
+      onClose={() => setErrorMessage(null)}
+    >
+      <Alert
+        severity="warning"
+        onClose={() => setErrorMessage(null)}
+      >
+        {errorMessage}
+      </Alert>
+    </Dialog>
+  </>
+
+
   return (
     <main className={styles.main}>
       <aside className={styles.aside}>
-        <SearchDropdown text='Search' onSelect={handleItemSelect} />
+        <SearchDropdown 
+          text='Search' 
+          onSelect={handleItemSelect}
+          onError={handleError}
+        />
         <SelectAddDropdown text='Select administrative division' />
       </aside>
       <section className={styles['main-body']}>
@@ -72,6 +98,8 @@ export default function Main() {
         </div>
         <Footer />
       </section>
+      {/* The mui a dialog use a portal */}
+      {alertDialog}
     </main>
   )
 }

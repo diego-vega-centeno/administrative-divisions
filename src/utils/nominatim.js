@@ -2,9 +2,6 @@ async function getNominatimSearch(query) {
 
   const endpoint = 'https://nominatim.openstreetmap.org/search';
 
-  // display busy icon
-  // document.getElementById("entitySelectorBusyIcon").style.display = "block";
-  
   // use the free-form query
   const url = `${endpoint}?q=${query}&format=jsonv2`;
   const res = await fetch(url, {
@@ -12,15 +9,12 @@ async function getNominatimSearch(query) {
   });
 
   if (!res.ok) {
-    // display error message here
+    throw new Error("Nonatim fetch response was not ok");
   }
 
   const entitiesFound = await res.json();
   // filters to get relations only
   const relationsFound = entitiesFound.filter(ele => ele.osm_type == "relation");
-
-  /* hide busy icon */
-  // document.getElementById("entitySelectorBusyIcon").style.display = "none";
 
   return relationsFound;
 }
