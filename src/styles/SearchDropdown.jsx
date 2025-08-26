@@ -1,5 +1,5 @@
 const dropdown = {
-  backgroundColor: '#F8F9FA',
+  backgroundColor: '#dfd8d8ff',
   height: '2.3rem',
   paddingLeft: '0.8rem',
   '&:hover': {
