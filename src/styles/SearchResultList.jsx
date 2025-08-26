@@ -5,6 +5,7 @@ const listItem = {
   },
   color: '#1078beff',
   border: '0.5px solid #dee2e6',
+  padding: '0.2rem 0.7rem'
 }
 
 const listBox = {
