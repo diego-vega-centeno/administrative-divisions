@@ -98,7 +98,6 @@ export default function Main() {
         </div>
         <Footer />
       </section>
-      {/* The mui a dialog use a portal */}
       {alertDialog}
     </main>
   )
