@@ -7,4 +7,12 @@ const dropdownIcon = (isOpen) => ({
   transition: 'transform ease 0.2s'
 });
 
-export { dropdownIcon }
+const dropdown = {
+  backgroundColor: '#bebea2ff',
+  '&:hover': {
+    backgroundColor: '#abaa90ff'
+  },
+  paddingLeft: '2rem'
+}
+
+export { dropdownIcon, dropdown }
