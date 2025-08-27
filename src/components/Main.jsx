@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import { Dialog, Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
+import OSMTagsDropDown from './OSMTagsDropDown.jsx';
 
 export default function Main() {
 
@@ -18,6 +19,7 @@ export default function Main() {
   const mapContainerRef = useRef(null); // will hold map container dom element
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [osmElements, setOsmElements] = useState(null);
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -40,12 +42,18 @@ export default function Main() {
     };
   }, []);
 
-  async function handleItemSelect(osmId) {
+  async function handleItemSelect(entity) {
     try {
       setIsProgressIconActive(true);
-      const osmData = await getRelation(osmId);
+      // get osm data and add to map
+      const osmData = await getRelation(entity.osm_id);
       await addToLeafletMap(osmData, mapRef.current);
       setIsProgressIconActive(false);
+
+      // add display name before passing to tags table
+      const osmElements = osmData.elements;
+      osmElements[0].display_name = entity.display_name;
+      setOsmElements(osmElements);
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
@@ -75,8 +83,8 @@ export default function Main() {
   return (
     <main className={styles.main}>
       <aside className={styles.aside}>
-        <SearchDropdown 
-          text='Search' 
+        <SearchDropdown
+          text='Search'
           onSelect={handleItemSelect}
           onError={handleError}
         />
@@ -95,6 +103,9 @@ export default function Main() {
               className={styles['map']}
             />
           </div>
+          {Boolean(osmElements) && osmElements.map(
+            elementData => <OSMTagsDropDown key={elementData.id} elementData={elementData} />
+          )}
         </div>
         <Footer />
       </section>
