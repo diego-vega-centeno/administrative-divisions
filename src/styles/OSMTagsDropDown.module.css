@@ -1,0 +1,38 @@
+.table-container {
+  margin: 1rem 2rem;
+  background-color: white;
+  max-width: 650px;
+  border: 1px solid #c0c5ca;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.header {
+  background-color: #212529;
+  color: white;
+  padding: 0.5rem;
+}
+
+.table {
+  border-collapse: collapse;
+}
+
+.cell-key, .cell-value{
+  padding: .3rem .5rem;
+  font-size: 0.9em;
+  text-align: left;
+}
+
+.cell-value {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.cell-key {
+  background-color: #E2E3E5;
+}
+
+.row {
+  border-top: 1px solid #9c9d9f;
+}
+

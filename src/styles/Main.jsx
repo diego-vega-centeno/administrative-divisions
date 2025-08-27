@@ -1,5 +1,3 @@
-import { fontSize } from "@mui/system"
-
 const progressMapIcon = {
   display: 'flex',
   justifyContent: 'center',

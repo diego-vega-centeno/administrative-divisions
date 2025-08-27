@@ -12,7 +12,7 @@ export default function SearchResultList({ entities, onSelect }) {
       {entities.map(ent => (
         <ListItem
           sx={listItem} key={ent['osm_id']}
-          onClick={() => onSelect(ent.osm_id)}
+          onClick={() => onSelect(ent)}
         >
           <ListItemText primary={
             <>
