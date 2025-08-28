@@ -48,7 +48,7 @@ export default function OSMTagsDropDown({ elementData }) {
 
   // memoize the sub tables and recompute based on elemenData
   const filteredTags = useMemo(() => {
-    const toFilterTags = ['name', 'official_name'];
+    const toFilterTags = ['name', 'official_name','long_name'];
     const regexes = toFilterTags.map(tag => [tag, new RegExp(`^${tag}.+$`)]);
     const matchedTags = Object.fromEntries(toFilterTags.map(tag => [tag, []]));
     const filteredTags = {};
