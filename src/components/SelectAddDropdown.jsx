@@ -6,6 +6,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
+import JsTreeWrapper from './jsTreeWrapper.jsx';
+import treeData from '../allAddTree.json'
 
 export default function SelectAddDropdown({ text = '' }) {
 
@@ -26,7 +28,10 @@ export default function SelectAddDropdown({ text = '' }) {
         <ListItemText primary={text} />
       </ListItemButton>
       <Collapse in={isOpen}>
-        {itemList}
+        <JsTreeWrapper
+          data={treeData}
+          onSelect={(node) => console.log("Selected:", node)}
+        />
       </Collapse>
     </Box>
   )
