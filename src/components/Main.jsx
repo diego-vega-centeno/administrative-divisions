@@ -5,7 +5,7 @@ import SearchDropdown from './SearchDropdown.jsx'
 import SelectAddDropdown from './SelectAddDropdown.jsx'
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { getRelation } from '../utils/overpass';
+import { getRelationsOSMData } from '../utils/overpass';
 import { addToLeafletMap } from '../utils/leafletMap.js';
 import Box from '@mui/material/Box';
 import { Dialog, Alert } from '@mui/material';
@@ -48,7 +48,7 @@ export default function Main() {
     try {
       setIsProgressIconActive(true);
       // get osm data and add to map
-      const osmData = await getRelation(entity.osm_id);
+      const osmData = await getRelationsOSMData(entity.osm_id);
       await addToLeafletMap(osmData, mapRef.current);
       setIsProgressIconActive(false);
 
@@ -66,6 +66,21 @@ export default function Main() {
   // for add selection from tree
   async function handleADDPlot(selected) {
     console.log(selected);
+    try {
+      setIsProgressIconActive(true);
+      // get osm data and add to map
+      const osmData = await getRelationsOSMData(selected.map(node => node.id));
+      await addToLeafletMap(osmData, mapRef.current);
+      setIsProgressIconActive(false);
+
+      // add display name before passing to tags table
+      const osmElements = osmData.elements;
+      setOsmElements(osmElements);
+    } catch (error) {
+      setIsProgressIconActive(false);
+      setErrorMessage(error.message);
+      console.log('An error ocurred: ', error);
+    }
   }
 
   const handleError = (errorMessage) => {
