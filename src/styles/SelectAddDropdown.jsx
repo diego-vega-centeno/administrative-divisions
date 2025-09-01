@@ -8,7 +8,7 @@ const addTools = {
 const addToolsButton = {
   backgroundColor: 'white',
   minWidth: '45px',
-  fontSize: '10px',
+  fontSize: '.7rem',
   color: 'black',
   textTransform: 'none',
   padding: '.5rem .5rem',
