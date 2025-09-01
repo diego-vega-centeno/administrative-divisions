@@ -12,6 +12,7 @@
   top: 0;
   overflow-y: auto;
   border-right: 1px solid black;
+  overflow-y: scroll;
 }
 
 .main-body {
