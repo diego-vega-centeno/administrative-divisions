@@ -42,6 +42,8 @@ export default function Main() {
     };
   }, []);
 
+
+  // for relation search query
   async function handleItemSelect(entity) {
     try {
       setIsProgressIconActive(true);
@@ -59,6 +61,11 @@ export default function Main() {
       setErrorMessage(error.message);
       console.log('An error ocurred: ', error);
     }
+  }
+
+  // for add selection from tree
+  async function handleADDPlot(selected) {
+    console.log(selected);
   }
 
   const handleError = (errorMessage) => {
@@ -88,7 +95,10 @@ export default function Main() {
           onSelect={handleItemSelect}
           onError={handleError}
         />
-        <SelectAddDropdown text='Select administrative division' />
+        <SelectAddDropdown
+          text='Select administrative division'
+          onPlotRequest={handleADDPlot}
+        />
       </aside>
       <section className={styles['main-body']}>
         <div className={styles['main-content']}>

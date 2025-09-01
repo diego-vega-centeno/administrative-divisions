@@ -1,38 +1,55 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { dropdown, dropdownIcon } from '../styles/SearchDropdown';
+import { dropdown } from '../styles/SearchDropdown';
 import { useState } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 import JsTreeWrapper from './jsTreeWrapper.jsx';
 import treeData from '../allAddTree.json'
+import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
+import TextField from '@mui/material/TextField';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import Button from '@mui/material/Button';
+import { addToolsButton, addTools } from '../styles/SelectAddDropdown.jsx';
 
-export default function SelectAddDropdown({ text = '' }) {
+export default function SelectAddDropdown({ text = '', onPlotRequest }) {
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [selectedNodes, setSelectedNodes] = useState([]);
 
-  function handleClick() {
-    setIsOpen(prev => !prev);
+  function handlePlotClick() {
+    onPlotRequest(selectedNodes);
   }
-
-  const itemList = <ul>
-    {Array(100).fill().map((_, i) => <li key={i} style={{ backgroundColor: 'red', margin: '1px' }}></li>)}
-  </ul>;
 
   return (
     <Box>
-      <ListItemButton disableRipple sx={dropdown} onClick={handleClick}>
-        <FontAwesomeIcon style={dropdownIcon(isOpen)} icon={faChevronRight} />
+      <ListItemButton disableRipple sx={dropdown}>
         <ListItemText primary={text} />
       </ListItemButton>
-      <Collapse in={isOpen}>
-        <JsTreeWrapper
-          data={treeData}
-          onSelect={(node) => console.log("Selected:", node)}
+      <Box sx={searchFieldBox}>
+        <TextField
+          type="search"
+          sx={searchField}
+          placeholder="filter..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-      </Collapse>
+        <Box sx={searchFieldIconBox} onClick={handlePlotClick}>
+          <FontAwesomeIcon icon={faSearch} />
+        </Box>
+      </Box>
+      <Box sx={addTools}>
+        <Button sx={addToolsButton}
+          size='small'
+          variant="contained">Plot</Button>
+        <Button sx={addToolsButton}
+          size='small'
+          variant="contained">Download</Button>
+      </Box>
+      <JsTreeWrapper
+        data={treeData}
+        onSelect={(nodes) => setSelectedNodes(nodes)}
+      />
     </Box>
   )
 }
