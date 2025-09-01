@@ -65,7 +65,7 @@ export default function Main() {
 
   // for add selection from tree
   async function handleADDPlot(selected) {
-    console.log(selected);
+    // console.log(selected);
     try {
       setIsProgressIconActive(true);
       // get osm data and add to map
