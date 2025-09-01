@@ -16,4 +16,8 @@ const addToolsButton = {
   margin: '.2rem'
 }
 
-export { addToolsButton, addTools }
+const treeContainer = {
+  padding: '.5rem'
+}
+
+export { addToolsButton, addTools, treeContainer }
