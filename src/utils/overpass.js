@@ -1,8 +1,8 @@
-async function getRelation(relationID, out = "geom") {
+async function getRelationsOSMData(ids, out = "geom") {
   const endPoint = "https://overpass-api.de/api/interpreter";
 
   // to accept an array
-  const idsArray = ((typeof relationID) == "number") ? [relationID] : relationID;
+  const idsArray = ((typeof ids) == "number") ? [ids] : ids;
 
   const query = `
     [out:json][timeout:90];
@@ -26,4 +26,4 @@ async function getRelation(relationID, out = "geom") {
   return osmRes;
 }
 
-export { getRelation }
+export { getRelationsOSMData }
