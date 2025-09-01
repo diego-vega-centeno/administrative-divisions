@@ -14,12 +14,14 @@ import { addToolsButton, addTools, treeContainer } from '../styles/SelectAddDrop
 
 export default function SelectAddDropdown({ text = '', onPlotRequest }) {
 
-  const [search, setSearch] = useState('');
   const [selectedNodes, setSelectedNodes] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [filterInput, setFilterInput] = useState('');
 
   function handlePlotClick() {
     onPlotRequest(selectedNodes);
   }
+
 
   return (
     <Box>
@@ -31,10 +33,13 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
           type="search"
           sx={searchField}
           placeholder="filter..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={filterInput}
+          onChange={(e) => setFilterInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') setFilter(filterInput);
+          }}
         />
-        <Box sx={searchFieldIconBox} onClick={handlePlotClick}>
+        <Box sx={searchFieldIconBox} onClick={() => setFilter(filterInput)}>
           <FontAwesomeIcon icon={faSearch} />
         </Box>
       </Box>
@@ -53,6 +58,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
         <JsTreeWrapper
           data={treeData}
           onSelect={(nodes) => setSelectedNodes(nodes)}
+          filter={filter}
         />
       </Box>
     </Box>
