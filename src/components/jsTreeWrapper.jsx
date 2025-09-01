@@ -23,13 +23,17 @@ export default function JsTreeWrapper({ data, onSelect }) {
           // "cascade": "down",
           "whole_node": true
         },
-      })
+      });
 
+    $(treeRef.current).on("changed.jstree", (e, data) => {
+      const selectedNodes = data.instance.get_selected(true);
+      onSelect(selectedNodes);
+    });
 
     return () => {
       $(treeRef.current).jstree("destroy");
     };
-  }, [data, onSelect]);
+  }, []);
 
   return <div ref={treeRef} />;
 }

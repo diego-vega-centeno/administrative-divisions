@@ -1,0 +1,19 @@
+const addTools = {
+  paddingTop: '.2rem',
+  paddingBottom: '.5rem',
+  paddingLeft: '1rem',
+  borderBottom: '1px solid black'
+}
+
+const addToolsButton = {
+  backgroundColor: 'white',
+  minWidth: '45px',
+  fontSize: '10px',
+  color: 'black',
+  textTransform: 'none',
+  padding: '.5rem .5rem',
+  lineHeight: 1.2,
+  margin: '.2rem'
+}
+
+export { addToolsButton, addTools }
