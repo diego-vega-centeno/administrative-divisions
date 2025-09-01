@@ -48,7 +48,7 @@ export default function OSMTagsDropDown({ elementData }) {
 
   // memoize the sub tables and recompute based on elemenData
   const filteredTags = useMemo(() => {
-    const toFilterTags = ['name', 'official_name','long_name'];
+    const toFilterTags = ['name', 'official_name', 'long_name'];
     const regexes = toFilterTags.map(tag => [tag, new RegExp(`^${tag}.+$`)]);
     const matchedTags = Object.fromEntries(toFilterTags.map(tag => [tag, []]));
     const filteredTags = {};
@@ -63,7 +63,7 @@ export default function OSMTagsDropDown({ elementData }) {
         filteredTags[key] = value;
       }
     }
-    console.log('matchedTags: ', matchedTags);
+    // console.log('matchedTags: ', matchedTags);
 
     // Define SubTable and add to corresponding key
     for (const [key, tags] of Object.entries(matchedTags)) {
@@ -78,12 +78,12 @@ export default function OSMTagsDropDown({ elementData }) {
     return filteredTags
   }, [elementData]);
 
-  console.log('filteredTags: ', filteredTags);
+  // console.log('filteredTags: ', filteredTags);
 
   return <Box>
     <ListItemButton sx={dropdown} disableRipple onClick={handleClick}>
       <FontAwesomeIcon style={dropdownIcon(isOpen)} icon={faChevronRight} />
-      <ListItemText primary={elementData.display_name} />
+      <ListItemText primary={elementData.display_name ? elementData.display_name : elementData.tags.name} />
     </ListItemButton>
     <Collapse in={isOpen}>
       <div>
