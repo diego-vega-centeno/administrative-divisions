@@ -10,7 +10,7 @@ import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/Searc
 import TextField from '@mui/material/TextField';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from '@mui/material/Button';
-import { addToolsButton, addTools } from '../styles/SelectAddDropdown.jsx';
+import { addToolsButton, addTools,treeContainer } from '../styles/SelectAddDropdown.jsx';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest }) {
 
@@ -46,10 +46,12 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
           size='small'
           variant="contained">Download</Button>
       </Box>
-      <JsTreeWrapper
-        data={treeData}
-        onSelect={(nodes) => setSelectedNodes(nodes)}
-      />
+      <Box sx={treeContainer}>
+        <JsTreeWrapper
+          data={treeData}
+          onSelect={(nodes) => setSelectedNodes(nodes)}
+        />
+      </Box>
     </Box>
   )
 }
