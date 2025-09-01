@@ -5,7 +5,7 @@
 }
 
 .aside {
-  width: clamp(270px, 20%, 300px);
+  width: clamp(270px, 23%, 400px);
   flex-shrink: 0;
   height: 100vh;
   position: sticky;
