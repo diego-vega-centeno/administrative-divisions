@@ -1,0 +1,43 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.menu-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #F8F9FA;
+  min-width: 300px;
+  z-index: 1001;
+  padding: .8rem 1rem;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.5);
+  font-size: .9rem;
+}
+
+.menu-container label {
+  margin-right: .3rem;
+}
+
+.menu-container input[type='radio'] {
+  vertical-align: middle;
+  margin-right: 1rem;
+}
+
+.section div:first-of-type{
+  padding-bottom: .5rem;
+  font-size: 1rem;
+}
+
+.menu-container hr{
+  margin: .6rem 0;
+}
+
+.tags-geom{
+  display: inline-flex;
+  flex-direction: column;
+}
