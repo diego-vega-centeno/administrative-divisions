@@ -11,11 +11,13 @@ import TextField from '@mui/material/TextField';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from '@mui/material/Button';
 import { addToolsButton, addTools, treeContainer } from '../styles/SelectAddDropdown.jsx';
+import DownloadMenu from './DownloadMenu.jsx';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest }) {
 
   const treeRef = useRef(null);
   const [filterInput, setFilterInput] = useState('');
+  const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
 
   function handlePlot() {
     onPlotRequest(treeRef.current?.getSelected());
@@ -65,6 +67,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
         <Button sx={addToolsButton}
           size='small'
           variant="contained"
+          onClick={() => setIsDownloadMenuOpen(true)}
         >Download</Button>
       </Box>
       <Box sx={treeContainer}>
@@ -73,6 +76,10 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
           ref={treeRef}
         />
       </Box>
+      <DownloadMenu
+        open={isDownloadMenuOpen}
+        onClose={() => setIsDownloadMenuOpen(false)}
+      />
     </Box>
   )
 }
