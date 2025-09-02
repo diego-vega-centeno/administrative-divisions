@@ -40,8 +40,8 @@ export default function DownloadMenu({ open, onClose }) {
               <input type="radio" id="osmTagsAndGeometry" />
             </div>
             <div>
-              <label htmlFor="addGeoJson">osm tags and geometry</label>
-              <input type="checkbox" id="osmTagsAndGeometry" />
+              <label htmlFor="addGeojsonGeom">add geojson geometry</label>
+              <input type="checkbox" id="addGeojsonGeom" />
             </div>
           </div>
         </div>
