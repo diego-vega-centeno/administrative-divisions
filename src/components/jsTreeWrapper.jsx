@@ -1,11 +1,12 @@
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import $ from "jquery";
 window.jQuery = $;
 window.$ = $;
 import "jstree";
 import 'jstree/dist/themes/default/style.min.css';
 
-export default function JsTreeWrapper({ data, onSelect, filter }) {
+const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
+
   const treeRef = useRef(null);
 
   useEffect(() => {
@@ -38,7 +39,6 @@ export default function JsTreeWrapper({ data, onSelect, filter }) {
                   node.children.forEach(child => {
                     $(node).jstree("select_node", child, true);
                   });
-                  onSelect($(treeRef.current).jstree(true).get_selected(true))
                 }
               },
               "allChildss": {
@@ -46,8 +46,7 @@ export default function JsTreeWrapper({ data, onSelect, filter }) {
                 "action": function (obj) {
                   node.children_d.forEach(child => {
                     $(node).jstree("select_node", child, true);
-                  });
-                  onSelect($(treeRef.current).jstree(true).get_selected(true));
+                  })
                 }
               }
             }
@@ -55,21 +54,24 @@ export default function JsTreeWrapper({ data, onSelect, filter }) {
         }
       });
 
-    $(treeRef.current).on("changed.jstree", (e, data) => {
-      const selectedNodes = data.instance.get_selected(true);
-      onSelect(selectedNodes);
-    });
-
     return () => {
       $(treeRef.current).jstree("destroy");
     };
   }, []);
 
-  useEffect(() => {
-    if (treeRef.current) {
+  useImperativeHandle(ref, () => ({
+    deselectAll: () => {
+      $(treeRef.current).jstree(true).deselect_all();
+    },
+    getSelected: () => {
+      return $(treeRef.current).jstree(true).get_selected(true);
+    },
+    filter: (filter) => {
       $(treeRef.current).jstree(true).search(filter);
-    }
-  }, [filter]);
+    },
+  }));
 
   return <div ref={treeRef} />;
-}
+})
+
+export default JsTreeWrapper;

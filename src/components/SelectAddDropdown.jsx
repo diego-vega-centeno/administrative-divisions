@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dropdown } from '../styles/SearchDropdown';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
@@ -14,14 +14,22 @@ import { addToolsButton, addTools, treeContainer } from '../styles/SelectAddDrop
 
 export default function SelectAddDropdown({ text = '', onPlotRequest }) {
 
-  const [selectedNodes, setSelectedNodes] = useState([]);
-  const [filter, setFilter] = useState('');
+  const treeRef = useRef(null);
   const [filterInput, setFilterInput] = useState('');
 
-  function handlePlotClick() {
-    onPlotRequest(selectedNodes);
+  function handlePlot() {
+    onPlotRequest(treeRef.current?.getSelected());
   }
 
+  function handleFilter(filterInput) {
+    treeRef.current?.filter(filterInput)
+  }
+
+  function handleReset() {
+    treeRef.current?.deselectAll();
+    treeRef.current?.filter('');
+    setFilterInput('');
+  }
 
   return (
     <Box>
@@ -36,10 +44,10 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
           value={filterInput}
           onChange={(e) => setFilterInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') setFilter(filterInput);
+            if (e.key === 'Enter') handleFilter(filterInput);
           }}
         />
-        <Box sx={searchFieldIconBox} onClick={() => setFilter(filterInput)}>
+        <Box sx={searchFieldIconBox} onClick={handleFilter}>
           <FontAwesomeIcon icon={faSearch} />
         </Box>
       </Box>
@@ -47,7 +55,12 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
         <Button sx={addToolsButton}
           size='small'
           variant="contained"
-          onClick={handlePlotClick}
+          onClick={handleReset}
+        >Reset</Button>
+        <Button sx={addToolsButton}
+          size='small'
+          variant="contained"
+          onClick={handlePlot}
         >Plot</Button>
         <Button sx={addToolsButton}
           size='small'
@@ -57,8 +70,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
       <Box sx={treeContainer}>
         <JsTreeWrapper
           data={treeData}
-          onSelect={(nodes) => setSelectedNodes(nodes)}
-          filter={filter}
+          ref={treeRef}
         />
       </Box>
     </Box>
