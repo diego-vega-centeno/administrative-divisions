@@ -33,6 +33,10 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
     setFilterInput('');
   }
 
+  function handleDownload(params){
+    console.log(params);
+  }
+
   return (
     <Box>
       <ListItemButton disableRipple sx={dropdown}>
@@ -79,6 +83,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
       <DownloadMenu
         open={isDownloadMenuOpen}
         onClose={() => setIsDownloadMenuOpen(false)}
+        onDownload={handleDownload}
       />
     </Box>
   )
