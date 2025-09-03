@@ -113,6 +113,7 @@ export default function Main() {
         <SelectAddDropdown
           text='Select administrative division'
           onPlotRequest={handleADDPlot}
+          onError={handleError}
         />
       </aside>
       <section className={styles['main-body']}>

@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import { addToolsButton, addTools, treeContainer } from '../styles/SelectAddDropdown.jsx';
 import DownloadMenu from './DownloadMenu.jsx';
 
-export default function SelectAddDropdown({ text = '', onPlotRequest }) {
+export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
   const treeRef = useRef(null);
   const [filterInput, setFilterInput] = useState('');
@@ -31,10 +31,6 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
     treeRef.current?.deselectAll();
     treeRef.current?.filter('');
     setFilterInput('');
-  }
-
-  function handleDownload(params){
-    console.log(params);
   }
 
   return (
@@ -83,7 +79,8 @@ export default function SelectAddDropdown({ text = '', onPlotRequest }) {
       <DownloadMenu
         open={isDownloadMenuOpen}
         onClose={() => setIsDownloadMenuOpen(false)}
-        onDownload={handleDownload}
+        onError={onError}
+        selectedNodes={treeRef.current?.getSelected()}
       />
     </Box>
   )
