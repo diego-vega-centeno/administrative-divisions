@@ -3,6 +3,10 @@ import styles from '../styles/DownloadMenu.module.css'
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import Button from "@mui/material/Button";
 import { useState } from "react";
+import Box from "@mui/material/Box";
+import CircularProgress from '@mui/material/CircularProgress';
+import { progressDownloadIcon } from "../styles/Main";
+import { getRelationsOSMData } from '../utils/overpass';
 
 function Backdrop({ onClick }) {
   return (
@@ -13,21 +17,31 @@ function Backdrop({ onClick }) {
   )
 }
 
-export default function DownloadMenu({ open, onClose, onDownload }) {
+export default function DownloadMenu({ open, onClose, onError, selectedNodes }) {
 
   if (!open) return null;
 
   const [include, setInclude] = useState('name');
   const [structure, setStructure] = useState('tree');
   const [addGeojsonGeom, setAddGeojsonGeom] = useState(false);
+  const [isProgressIconActive, setIsProgressIconActive] = useState(false);
 
-  function handleDownload() {
-    onDownload({
+  async function handleDownload() {
+    const params = {
       structure,
       include,
       addGeojsonGeom: include === 'osmTagsAndGeometry' && addGeojsonGeom
-    });
-    // onClose();
+    }
+    setIsProgressIconActive(true);
+    try {
+      const osmData = await getRelationsOSMData(selectedNodes.map(node => node.id));
+      setIsProgressIconActive(false);
+      console.log(osmData);
+    } catch (error) {
+      setIsProgressIconActive(false);
+      onError(error.message);
+      console.log('An error ocurred: ', error);
+    }
   }
 
   return createPortal(
@@ -101,11 +115,16 @@ export default function DownloadMenu({ open, onClose, onDownload }) {
           </div>
         </div>
         <hr />
-        <Button sx={addToolsButton}
-          size='small'
-          variant="contained"
-          onClick={handleDownload}
-        >Download</Button>
+        <Box sx={progressDownloadIcon}>
+          <Button sx={addToolsButton}
+            size='small'
+            variant="contained"
+            onClick={handleDownload}
+          >Download</Button>
+          {isProgressIconActive && (
+            <CircularProgress thickness={9} size={30} />
+          )}
+        </Box>
       </div>
     </>,
     document.body);
