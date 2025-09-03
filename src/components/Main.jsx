@@ -107,7 +107,7 @@ export default function Main() {
     <main className={styles.main}>
       <aside className={styles.aside}>
         <SearchDropdown
-          text='Search'
+          text='Search OpenStreetMap'
           onSelect={handleItemSelect}
           onError={handleError}
         />
