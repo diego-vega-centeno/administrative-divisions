@@ -1,4 +1,7 @@
 async function getRelationsOSMData(ids, out = "geom") {
+
+  if (ids.length === 0) throw new Error("Please select some divisions");
+
   const endPoint = "https://overpass-api.de/api/interpreter";
 
   // to accept an array
