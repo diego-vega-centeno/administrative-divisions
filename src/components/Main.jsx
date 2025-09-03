@@ -91,6 +91,7 @@ export default function Main() {
     <Dialog
       open={Boolean(errorMessage)}
       onClose={() => setErrorMessage(null)}
+      disableScrollLock
     >
       <Alert
         severity="warning"
