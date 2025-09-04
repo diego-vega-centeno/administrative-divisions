@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressDownloadIcon } from "../styles/Main";
 import { getRelationsOSMData } from '../utils/overpass';
+import osmtogeojson from "osmtogeojson";
 
 function Backdrop({ onClick }) {
   return (
@@ -21,22 +22,26 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
 
   if (!open) return null;
 
-  const [include, setInclude] = useState('name');
+  const [include, setInclude] = useState(
+    { tags: true, geom: false, geojson: false }
+  );
   const [structure, setStructure] = useState('tree');
-  const [addGeojsonGeom, setAddGeojsonGeom] = useState(false);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
 
   async function handleDownload() {
     const params = {
       structure,
       include,
-      addGeojsonGeom: include === 'osmTagsAndGeometry' && addGeojsonGeom
+      addGeojsonGeom: include.geom && include.geojson
     }
     setIsProgressIconActive(true);
+    console.log(selectedNodes);
     try {
       const osmData = await getRelationsOSMData(selectedNodes.map(node => node.id));
+      // const geojsonData = osmtogeojson(osmData);
       setIsProgressIconActive(false);
       console.log(osmData);
+      // console.log(geojsonData);
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
@@ -59,57 +64,52 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
             checked={structure === 'tree'}
             onChange={() => setStructure('tree')}
           />
-          <label htmlFor="nodes">nodes</label>
+          <label htmlFor="nodes">flatten</label>
           <input
             type="radio"
-            id="nodes"
-            value='nodes'
+            id="flatten"
+            value='flatten'
             name="structure"
-            checked={structure === 'nodes'}
-            onChange={() => setStructure('nodes')}
+            checked={structure === 'flatten'}
+            onChange={() => setStructure('flatten')}
           />
         </div>
         <hr />
         <div className={styles['section']}>
           <div>include OSM data:</div>
-          <label htmlFor="name">name</label>
+          <label htmlFor="tags">tags</label>
           <input
-            type="radio"
-            id="name"
-            name="include"
-            value='name'
-            checked={include === 'name'}
-            onChange={() => setInclude('name')}
-          />
-          <label htmlFor="osmTags">osm tags</label>
-          <input
-            type="radio"
-            id="osmTags"
-            name="include"
-            value='osmTags'
-            checked={include === 'osmTags'}
-            onChange={() => setInclude('osmTags')}
+            type="checkbox"
+            id="tags"
+            value='tags'
+            checked={include.tags}
+            onChange={(e) => setInclude(prev => (
+              { ...prev, tags: e.target.checked }
+            ))}
           />
           <div className={styles['tags-geom']}>
             <div>
-              <label htmlFor="osmTagsAndGeometry">osm tags and geometry</label>
+              <label htmlFor="geom">geometry</label>
               <input
-                type="radio"
-                id="osmTagsAndGeometry"
-                name="include"
-                value='osmTagsAndGeometry'
-                checked={include === 'osmTagsAndGeometry'}
-                onChange={() => setInclude('osmTagsAndGeometry')}
+                type="checkbox"
+                id="geom"
+                value='geom'
+                checked={include.geom}
+                onChange={(e) => setInclude(prev => (
+                  { ...prev, geom: e.target.checked }
+                ))}
               />
             </div>
             <div>
-              <label htmlFor="addGeojsonGeom">add geojson geometry</label>
+              <label htmlFor="geojson">add geojson geometry</label>
               <input
                 type="checkbox"
-                id="addGeojsonGeom"
-                disabled={include !== 'osmTagsAndGeometry'}
-                checked={addGeojsonGeom}
-                onChange={(e) => setAddGeojsonGeom(e.target.checked)}
+                id="geojson"
+                disabled={!include.geom}
+                checked={include.geojson}
+                onChange={(e) => setInclude(prev => (
+                  { ...prev, geojson: e.target.checked }
+                ))}
               />
             </div>
           </div>
