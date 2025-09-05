@@ -6,7 +6,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressDownloadIcon } from "../styles/Main";
-import { getRelationsOSMData } from '../utils/overpass';
+import { getRelationsOSMData, formatData } from '../utils/overpass';
 import osmtogeojson from "osmtogeojson";
 
 function Backdrop({ onClick }) {
@@ -23,7 +23,7 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
   if (!open) return null;
 
   const [include, setInclude] = useState(
-    { tags: true, geom: false, geojson: false }
+    { tags: false, geom: false, geojson: false }
   );
   const [structure, setStructure] = useState('tree');
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
@@ -31,17 +31,22 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
   async function handleDownload() {
     const params = {
       structure,
-      include,
       addGeojsonGeom: include.geom && include.geojson
     }
+
+    let out = '';
+    if (include.tags) out = 'tags';
+    if (include.geom) out = 'geom';
+
     setIsProgressIconActive(true);
     console.log(selectedNodes);
     try {
-      const osmData = await getRelationsOSMData(selectedNodes.map(node => node.id));
+      const osmData = await getRelationsOSMData(selectedNodes.map(node => node.id), out);
+      const outputData = formatData(osmData, structure, include, selectedNodes);
       // const geojsonData = osmtogeojson(osmData);
       setIsProgressIconActive(false);
       console.log(osmData);
-      // console.log(geojsonData);
+      console.log(outputData);
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
@@ -64,7 +69,7 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
             checked={structure === 'tree'}
             onChange={() => setStructure('tree')}
           />
-          <label htmlFor="nodes">flatten</label>
+          <label htmlFor="flatten">flatten</label>
           <input
             type="radio"
             id="flatten"
