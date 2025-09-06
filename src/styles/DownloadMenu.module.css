@@ -23,21 +23,26 @@
   margin-right: .3rem;
 }
 
+.menu-container input[type='checkbox'],
 .menu-container input[type='radio'] {
   vertical-align: middle;
   margin-right: 1rem;
 }
 
-.section div:first-of-type{
+.section div:first-of-type {
   padding-bottom: .5rem;
   font-size: 1rem;
 }
 
-.menu-container hr{
+.menu-container hr {
   margin: .6rem 0;
 }
 
-.tags-geom{
+.tags-geom {
   display: inline-flex;
   flex-direction: column;
+}
+
+fieldset {
+  border: none;
 }
