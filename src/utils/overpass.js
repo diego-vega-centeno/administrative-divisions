@@ -55,21 +55,33 @@ function formatData(osmData, params, selectedNodes) {
     ele['children'] = jstreeDataIndex[ele.id]['children'].map(id => parseInt(id));
   });
 
+  // delete tags if checked
   if (!params.tags) {
     outputData.elements.forEach(ele => {
       delete ele.tags
     });
   }
 
-  if (structure === 'tree') {
+  // convert to geojson and add data to relations
+  if (params.geom && params.geojsonInOSM) {
+    const features = osmtogeojson(osmData).features.filter(feature => {
+      return feature.id.includes('relation');
+    });
+    const geojsonMap = new Map(features.map(feature => {
+      return [parseInt(feature.id.replace('relation/', '')), feature.geometry]
+    }));
+    outputData.elements.forEach(ele => {
+      ele['geometry'] = geojsonMap.get(ele.id);
+    });
+  };
+
+  // make tree data
+  if (params.structure === 'tree') {
     const normalized = normalizeSelection(outputData.elements);
     outputData.elements = makeTree(normalized);
   };
 
-  // if (params.geom && params.geojsonInOSM) {
-  //   const geojson = osmtogeojson(osmData);
-  //   console.log(geojson);
-  // };
+
   return outputData;
 }
 
