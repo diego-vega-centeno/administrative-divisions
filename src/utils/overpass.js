@@ -122,4 +122,17 @@ function makeTree(nodes, parentID = 0) {
   })
 }
 
-export { getRelationsOSMData, formatData }
+function donwloadJSONData(content, filename) {
+  const a = document.createElement("a");
+  const file = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+  // createObjectURL makes the file available in disk to use as href
+  a.href = URL.createObjectURL(file);
+  a.download = filename;
+  // wait and then revoke the object
+  a.addEventListener("click", function () {
+    setTimeout(() => URL.revokeObjectURL(a.href), 200);
+  });
+  a.click();
+}
+
+export { getRelationsOSMData, formatData, donwloadJSONData }
