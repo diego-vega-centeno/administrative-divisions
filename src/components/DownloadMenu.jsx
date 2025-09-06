@@ -41,14 +41,11 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
     if (params.format === 'geojson') out = 'geom';
 
     setIsProgressIconActive(true);
-    console.log(selectedNodes);
     try {
       const osmData = await getRelationsOSMData(selectedNodes.map(node => node.id), out);
       const outputData = formatData(osmData, params, selectedNodes);
       setIsProgressIconActive(false);
-      // console.log(osmData);
-      // console.log(outputData);
-      donwloadJSONData(outputData, 'admin_divisions_selection.json')
+      donwloadJSONData(outputData, 'admin_divisions_selection.json');
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
