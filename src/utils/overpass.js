@@ -1,3 +1,5 @@
+import osmtogeojson from "osmtogeojson";
+
 async function getRelationsOSMData(ids, out = "geom") {
 
   if (ids.length === 0) throw new Error("Please select some divisions");
@@ -29,10 +31,14 @@ async function getRelationsOSMData(ids, out = "geom") {
   return osmRes;
 }
 
-function formatData(osmData, structure, include, selectedNodes) {
+function formatData(osmData, params, selectedNodes) {
 
-  // modify in place
-  let outputElements = osmData.elements;
+  if (params.format === 'geojson') {
+    return osmtogeojson(osmData);
+  }
+
+  // make deep copy
+  const outputData = JSON.parse(JSON.stringify(osmData));
 
   // include jstree data
   const jstreeDataIndex = {};
@@ -40,7 +46,7 @@ function formatData(osmData, structure, include, selectedNodes) {
     jstreeDataIndex[ele.id] = ele;
   });
 
-  outputElements.forEach(ele => {
+  outputData.elements.forEach(ele => {
     const parentID = jstreeDataIndex[ele.id]['parent'];
     ele['parent'] = parentID === '#' ? 0 : parseInt(parentID);
     ele['parents'] = jstreeDataIndex[ele.id]['parents'].map(id => {
@@ -49,18 +55,22 @@ function formatData(osmData, structure, include, selectedNodes) {
     ele['children'] = jstreeDataIndex[ele.id]['children'].map(id => parseInt(id));
   });
 
-  if (!include.tags) {
-    outputElements.forEach(ele => {
+  if (!params.tags) {
+    outputData.elements.forEach(ele => {
       delete ele.tags
     });
   }
 
   if (structure === 'tree') {
-    const normalized = normalizeSelection(outputElements);
-    outputElements = makeTree(normalized);
+    const normalized = normalizeSelection(outputData.elements);
+    outputData.elements = makeTree(normalized);
   };
 
-  return outputElements;
+  // if (params.geom && params.geojsonInOSM) {
+  //   const geojson = osmtogeojson(osmData);
+  //   console.log(geojson);
+  // };
+  return outputData;
 }
 
 function normalizeSelection(nodes) {
