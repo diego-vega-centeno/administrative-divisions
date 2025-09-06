@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressDownloadIcon } from "../styles/Main";
 import { getRelationsOSMData, formatData } from '../utils/overpass';
+import { donwloadJSONData } from "../utils/overpass";
 
 function Backdrop({ onClick }) {
   return (
@@ -45,8 +46,9 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
       const osmData = await getRelationsOSMData(selectedNodes.map(node => node.id), out);
       const outputData = formatData(osmData, params, selectedNodes);
       setIsProgressIconActive(false);
-      console.log(osmData);
-      console.log(outputData);
+      // console.log(osmData);
+      // console.log(outputData);
+      donwloadJSONData(outputData, 'admin_divisions_selection.json')
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
