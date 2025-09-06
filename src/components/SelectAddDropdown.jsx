@@ -49,7 +49,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
             if (e.key === 'Enter') handleFilter(filterInput);
           }}
         />
-        <Box sx={searchFieldIconBox} onClick={handleFilter}>
+        <Box sx={searchFieldIconBox} onClick={() => handleFilter(filterInput)}>
           <FontAwesomeIcon icon={faSearch} />
         </Box>
       </Box>
