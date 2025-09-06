@@ -117,7 +117,6 @@ function makeTree(nodes, parentID = 0) {
   return children.map(node => {
     const subtree = makeTree(nodes, node.id);
     const newNode = { ...node, children: subtree.length === 0 ? node.children : subtree };
-    delete newNode.parents;
     return newNode
   })
 }
