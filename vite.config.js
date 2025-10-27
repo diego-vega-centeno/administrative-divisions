@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: 'https://github.com/CopaCabana21/administrative-divisions',
+  base: '/administrative-divisions/',
   plugins: [react()],
   resolve: {
     alias: {
