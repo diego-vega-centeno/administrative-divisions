@@ -1,6 +1,7 @@
 :root {
-  --color-primary: #FBFADA;
-  --color-secondary: #3F7251;
+  --color-primary: #3b3b45;
+  --color-secondary: #28272c;
+  --color-text: rgb(215, 200, 200);
   --header-footer-height: 7vh;
 }
 
@@ -27,10 +28,32 @@ body {
   word-break: break-word;
   padding-right: 1.5rem !important;
   height: auto !important;
+  color: var(--color-text);
 }
 
 .jstree-node {
   overflow: hidden;
+}
+
+.jstree-container-ul {
+  color: var(--color-text);
+}
+
+.jstree-wholerow-clicked {
+  color: white !important;
+  background: var(--color-secondary) !important;
+}
+
+.jstree-checked {
+  background-color: var(--color-secondary);
+}
+
+.jstree-wholerow-hovered {
+  background-color: var(--color-secondary) !important;
+}
+
+.jstree-node.jstree-open > .jstree-ocl {
+  filter: brightness(0) invert(1) !important;
 }
 
 /* .jstree-anchor {
