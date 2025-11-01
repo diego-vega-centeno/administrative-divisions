@@ -13,6 +13,7 @@
   overflow-y: auto;
   border-right: 1px solid black;
   overflow-y: scroll;
+  scrollbar-color: var(--color-primary) var(--color-secondary);
 }
 
 .main-body {

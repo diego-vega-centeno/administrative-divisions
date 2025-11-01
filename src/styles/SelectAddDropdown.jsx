@@ -6,14 +6,17 @@ const addTools = {
 }
 
 const addToolsButton = {
-  backgroundColor: 'white',
+  backgroundColor: 'var(--color-secondary)',
   minWidth: '45px',
   fontSize: '.7rem',
-  color: 'black',
+  color: 'var(--color-text)',
   textTransform: 'none',
   padding: '.5rem .5rem',
   lineHeight: 1.2,
-  margin: '.2rem'
+  margin: '.2rem',
+  '&:hover': {
+    backgroundColor: 'color-mix(in srgb, var(--color-secondary) 70%, white);'
+  },
 }
 
 const treeContainer = {
