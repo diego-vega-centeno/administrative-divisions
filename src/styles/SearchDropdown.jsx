@@ -1,13 +1,14 @@
 const dropdown = {
-  backgroundColor: '#dfd8d8ff',
+  backgroundColor: 'var(--color-secondary)',
+  color: 'var(--color-text)',
   height: '2.3rem',
   paddingLeft: '0.8rem',
   '&:hover': {
-    backgroundColor: '#D3D4D5'
+    backgroundColor: 'color-mix(in srgb, var(--color-secondary) 90%, white);'
   },
-  border: '0.5px solid #dee2e6',
+  border: '0.5px solid black',
   '&:active': {
-    backgroundColor: '#C6C7C8'
+    backgroundColor: 'color-mix(in srgb, var(--color-secondary) 70%, white);'
   },
   '& .MuiTypography-root': {
     fontFamily: "'Oswald', sans-serif",
@@ -33,9 +34,10 @@ const searchFieldBox = {
 }
 
 const searchField = {
-  backgroundColor: 'white',
+  backgroundColor: 'var(--color-secondary)',
   flex: '1',
   '& .MuiInputBase-input': {
+    color: 'white',
     padding: '.25rem .5rem',
     fontSize: '.9rem',
     height: '100%'
@@ -63,7 +65,7 @@ const progressIcon = {
   justifyContent: 'center',
   padding: '0.7rem 0',
   '& .MuiCircularProgress-root': {
-    color: '#3F7251',
+    color: 'green',
   }
 }
 
