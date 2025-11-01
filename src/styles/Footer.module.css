@@ -1,5 +1,5 @@
 .footer {
-  color: black;
+  color: white;
   background-color: var(--color-secondary);
   display: flex;
   justify-content: space-between;
@@ -11,6 +11,6 @@
 }
 
 .footer-linkedin{
-  color: black;
+  color: white;
   font-size: 2rem;
 }

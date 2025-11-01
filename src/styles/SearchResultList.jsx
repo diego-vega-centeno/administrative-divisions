@@ -1,10 +1,10 @@
 const listItem = {
-  backgroundColor: '#F8F9FA',
+  backgroundColor: 'var(--color-primary)',
   '&:hover': {
-    backgroundColor: '#e5e8eaff'
+    backgroundColor: 'color-mix(in srgb, var(--color-secondary) 90%, white)'
   },
-  color: '#1078beff',
-  border: '0.5px solid #dee2e6',
+  color: 'white',
+  border: '0.5px solid black',
   padding: '0.2rem 0.7rem'
 }
 
