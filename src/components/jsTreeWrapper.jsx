@@ -18,7 +18,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
             'icons': false
           },
         },
-        "plugins": ["checkbox", 'wholerow', "search", "contextmenu"],
+        "plugins": ["checkbox", "search", "contextmenu"],
         "checkbox": {
           "three_state": false,
           // "cascade": "down",

@@ -39,8 +39,7 @@ body {
   color: var(--color-text);
 }
 
-.jstree-wholerow-clicked {
-  color: white !important;
+.jstree-clicked {
   background: var(--color-secondary) !important;
 }
 
@@ -48,13 +47,14 @@ body {
   background-color: var(--color-secondary);
 }
 
-.jstree-wholerow-hovered {
+.jstree-hovered {
   background-color: var(--color-secondary) !important;
 }
 
 .jstree-node.jstree-open > .jstree-ocl {
   filter: brightness(0) invert(1) !important;
 }
+
 
 /* .jstree-anchor {
   white-space: normal !important;
