@@ -2,7 +2,11 @@ const addTools = {
   paddingTop: '.2rem',
   paddingBottom: '.5rem',
   paddingLeft: '1rem',
-  borderBottom: '1px solid black'
+  borderBottom: '1px solid black',
+  position: 'sticky',
+  top: '2.2rem',
+  backgroundColor: 'var(--color-primary)',
+  zIndex: '100'
 }
 
 const addToolsButton = {
