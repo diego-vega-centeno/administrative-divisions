@@ -32,7 +32,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
           "items": function (node) {
             return {
               "childs": {
-                "label": "select childs",
+                "label": "select immediate childs",
                 // obj is the button object
                 "action": function (obj) {
                   // select only immediate children

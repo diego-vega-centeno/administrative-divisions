@@ -55,6 +55,25 @@ body {
   filter: brightness(0) invert(1) !important;
 }
 
+.vakata-context li>a{
+  padding: 0 0.4rem !important;
+  background-color: var(--color-secondary) !important;
+  color: white !important;
+  text-shadow: none !important;
+  font-size: 0.9rem;
+}
+
+.vakata-context li>a:hover{
+  background-color: color-mix(in srgb, var(--color-secondary) 90%, white) !important;
+}
+
+.vakata-context{
+  padding: 0 !important;
+}
+
+.jstree-context{
+  background-color: var(--color-secondary) !important;
+}
 
 /* .jstree-anchor {
   white-space: normal !important;
