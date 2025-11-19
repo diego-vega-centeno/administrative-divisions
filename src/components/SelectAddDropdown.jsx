@@ -10,7 +10,7 @@ import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/Searc
 import TextField from '@mui/material/TextField';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from '@mui/material/Button';
-import { addToolsButton, addTools, treeContainer } from '../styles/SelectAddDropdown.jsx';
+import { addToolsButton, addTools, treeContainer, infoAddBox } from '../styles/SelectAddDropdown.jsx';
 import DownloadMenu from './DownloadMenu.jsx';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
@@ -18,6 +18,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const treeRef = useRef(null);
   const [filterInput, setFilterInput] = useState('');
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
+  const [selectedNodes, setSelectedNodes] = useState(0);
 
   function handlePlot() {
     onPlotRequest(treeRef.current?.getSelected());
@@ -33,8 +34,8 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
     setFilterInput('');
   }
 
-  function handleSelect(){
-    console.log(treeRef.current?.getSelected());
+  function handleSelect() {
+    setSelectedNodes(treeRef.current?.getSelected().length)
   }
 
   return (
@@ -74,9 +75,9 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
           onClick={() => setIsDownloadMenuOpen(true)}
         >Download</Button>
       </Box>
-      {/* <Box sx={infoAddBox}>
-
-      </Box> */}
+      <Box sx={infoAddBox}>
+        {selectedNodes} nodes selected
+      </Box>
       <Box sx={treeContainer}>
         <JsTreeWrapper
           data={treeData}

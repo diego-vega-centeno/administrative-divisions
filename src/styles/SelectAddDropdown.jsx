@@ -2,7 +2,6 @@ const addTools = {
   paddingTop: '.2rem',
   paddingBottom: '.5rem',
   paddingLeft: '1rem',
-  borderBottom: '1px solid black',
   position: 'sticky',
   top: '2.2rem',
   backgroundColor: 'var(--color-primary)',
@@ -28,7 +27,13 @@ const treeContainer = {
 }
 
 const infoAddBox = {
-  
+  position: 'sticky',
+  top: '4.4rem',
+  backgroundColor: 'var(--color-primary)',
+  zIndex: '100',
+  color: 'white',
+  padding: '.5rem 1rem',
+  borderBottom: '1px solid black',
 }
 
-export { addToolsButton, addTools, treeContainer }
+export { addToolsButton, addTools, treeContainer, infoAddBox }
