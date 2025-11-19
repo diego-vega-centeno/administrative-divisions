@@ -33,6 +33,10 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
     setFilterInput('');
   }
 
+  function handleSelect(){
+    console.log(treeRef.current?.getSelected());
+  }
+
   return (
     <Box>
       <ListItemButton disableRipple sx={dropdown}>
@@ -70,10 +74,14 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
           onClick={() => setIsDownloadMenuOpen(true)}
         >Download</Button>
       </Box>
+      {/* <Box sx={infoAddBox}>
+
+      </Box> */}
       <Box sx={treeContainer}>
         <JsTreeWrapper
           data={treeData}
           ref={treeRef}
+          onSelect={handleSelect}
         />
       </Box>
       <DownloadMenu

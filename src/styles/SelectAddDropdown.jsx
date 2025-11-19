@@ -27,4 +27,8 @@ const treeContainer = {
   padding: '.5rem'
 }
 
+const infoAddBox = {
+  
+}
+
 export { addToolsButton, addTools, treeContainer }

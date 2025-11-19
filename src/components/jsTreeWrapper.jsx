@@ -10,8 +10,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
   const treeRef = useRef(null);
 
   useEffect(() => {
-    $(treeRef.current)
-      .jstree({
+    $(treeRef.current).jstree({
         'core': {
           'data': data,
           'themes': {
@@ -37,7 +36,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
                 "action": function (obj) {
                   // select only immediate children
                   node.children.forEach(child => {
-                    $(node).jstree("select_node", child, true);
+                    $(treeRef.current).jstree("select_node", child, true);
                   });
                 }
               },
@@ -45,7 +44,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
                 "label": "select all childs",
                 "action": function (obj) {
                   node.children_d.forEach(child => {
-                    $(node).jstree("select_node", child, true);
+                    $(treeRef.current).jstree("select_node", child, true);
                   })
                 }
               }
@@ -53,6 +52,10 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
           }
         }
       });
+    
+    $(treeRef.current).on('changed.jstree', function(e, data){
+      onSelect($(treeRef.current).jstree(true).get_selected(true));
+    });
 
     return () => {
       $(treeRef.current).jstree("destroy");
