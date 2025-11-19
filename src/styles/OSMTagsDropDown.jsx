@@ -8,9 +8,9 @@ const dropdownIcon = (isOpen) => ({
 });
 
 const dropdown = {
-  backgroundColor: 'var(--color-secondary)',
+  backgroundColor: 'color-mix(in srgb, var(--color-secondary) 80%, white);',
   '&:hover': {
-    backgroundColor: 'color-mix(in srgb, var(--color-secondary) 80%, white);'
+    backgroundColor: 'var(--color-secondary)'
   },
   paddingLeft: '2rem',
   color: 'white'
