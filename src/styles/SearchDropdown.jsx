@@ -30,7 +30,11 @@ const dropdownIcon = (isOpen) => ({
 const searchFieldBox = {
   display: 'flex',
   margin: '0.4rem 1rem',
-  height: '2.2rem'
+  height: '2.2rem',
+  position: 'sticky',
+  top: '0',
+  backgroundColor: 'var(--color-primary)',
+  zIndex: '100'
 }
 
 const searchField = {
