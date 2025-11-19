@@ -8,11 +8,12 @@ const dropdownIcon = (isOpen) => ({
 });
 
 const dropdown = {
-  backgroundColor: '#bebea2ff',
+  backgroundColor: 'var(--color-secondary)',
   '&:hover': {
-    backgroundColor: '#abaa90ff'
+    backgroundColor: 'color-mix(in srgb, var(--color-secondary) 80%, white);'
   },
-  paddingLeft: '2rem'
+  paddingLeft: '2rem',
+  color: 'white'
 }
 
 export { dropdownIcon, dropdown }
