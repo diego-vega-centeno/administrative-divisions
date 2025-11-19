@@ -75,6 +75,7 @@ export default function Main() {
 
       // add display name before passing to tags table
       const osmElements = osmData.elements;
+      console.log(osmElements);
       setOsmElements(osmElements);
     } catch (error) {
       setIsProgressIconActive(false);
