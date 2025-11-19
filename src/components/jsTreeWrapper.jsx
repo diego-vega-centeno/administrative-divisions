@@ -36,7 +36,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
                 "action": function (obj) {
                   // select only immediate children
                   node.children.forEach(child => {
-                    $(treeRef.current).jstree("select_node", child, true);
+                    $(treeRef.current).jstree("select_node", child);
                   });
                 }
               },
@@ -44,7 +44,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
                 "label": "select all childs",
                 "action": function (obj) {
                   node.children_d.forEach(child => {
-                    $(treeRef.current).jstree("select_node", child, true);
+                    $(treeRef.current).jstree("select_node", child);
                   })
                 }
               }
