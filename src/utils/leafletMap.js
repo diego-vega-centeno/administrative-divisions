@@ -55,13 +55,16 @@ async function addToLeafletMap(osmBaseData, map) {
 function onEachFeature(feature, layer) {
 
   const id = feature.id || feature.properties?.id || '';
-  const name = feature.properties?.name || 'Missing name';
+  const name = feature.properties?.['name:en'] || 
+  feature.properties?.['name'] || 
+  feature.properties?.['alt_name:en'] ||
+  'Missing name';
 
   layer.bindTooltip(
     `<span 
             class="custom-bindPopup" 
             href="https://www.openstreetmap.org/relation/${feature.properties.id.replace("relation/", "")}">
-             ${name} (${id.replace("relation/", "")})
+             ${name}
         </span>`
   );
 
@@ -93,7 +96,7 @@ function highlightFeature(event) {
 
   // update info panel
   const tags = layer.feature.properties;
-  leafletState.mapControl.updatePanel(tags);
+  leafletState.mapControl.updatePanel(tags, layer.feature.id);
 
 }
 
@@ -108,12 +111,14 @@ leafletState.mapControl.onAdd = function (map) {
   return this.div;
 }
 
-leafletState.mapControl.updatePanel = function (tags) {
+leafletState.mapControl.updatePanel = function (tags, id) {
 
   let rows = "";
-  const tagsToUse = ["admin_level", "name", "population", "population:date", "wikipedia", "wikidata"];
+  const tagsToUse = ["admin_level", "name:en", "name", "population", "population:date", "wikipedia", "wikidata"];
 
   const filteredTags = Object.keys(tags).filter(ele => tagsToUse.includes(ele));
+  // to include link to OSM
+  filteredTags.unshift('OSM id');
 
   for (const key of filteredTags) {
 
@@ -125,6 +130,9 @@ leafletState.mapControl.updatePanel = function (tags) {
         break;
       case "wikidata":
         value = `<a href="https://www.wikidata.org/wiki/${tags[key]}">${tags[key]}</a>`;
+        break;
+      case "OSM id":
+        value = `<a href="https://www.openstreetmap.org/relation/${id.replace('relation/','')}">${id.replace('relation/','')}</a>`;
         break;
       default:
         value = `${tags[key]}`;
