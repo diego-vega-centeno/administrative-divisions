@@ -74,14 +74,3 @@ body {
 .jstree-context{
   background-color: var(--color-secondary) !important;
 }
-
-/* .jstree-anchor {
-  white-space: normal !important;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  display: block;
-  max-width: 100%;
-  line-height: 1.2;
-  padding-right: 0.5rem;
-  height: auto !important;
-} */
