@@ -49,3 +49,16 @@
 .leaflet-control-panel-cell {
   padding: .5rem .5rem;
 }
+
+@media screen and (max-width: 768px){
+  .main {
+    flex-direction: column;
+  }
+
+  .aside {
+    width: 100%;
+    position: static;
+    height: 500px;
+    border-bottom: 1px solid black  ;
+  }
+}
