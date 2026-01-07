@@ -48,6 +48,14 @@ async function addToLeafletMap(osmBaseData, map) {
   // clearn content of control
   leafletState.mapControl.div.innerHTML = "";
 
+  // unhighlight on click outside a feature
+  map.on('click', function(e) {
+    if (leafletState.highlightedLayer) {
+      leafletState.geojsonLayer.resetStyle(leafletState.highlightedLayer);
+      leafletState.highlightedLayer = null;
+      leafletState.mapControl.div.innerHTML = "";
+    }
+  });
 }
 
 /* Custom tooltip function */
@@ -81,6 +89,9 @@ function onEachFeature(feature, layer) {
 
 function highlightFeature(event) {
 
+  // stop event propagation to prevent map click
+  L.DomEvent.stopPropagation(event);
+
   // remove highlighted layer if it exist
   if (leafletState.highlightedLayer) {
     leafletState.geojsonLayer.resetStyle(leafletState.highlightedLayer);
@@ -108,6 +119,8 @@ leafletState.mapControl = L.control();
 leafletState.mapControl.onAdd = function (map) {
   this.div = L.DomUtil.create('div');
   this.div.innerHTML = "";
+  // prevent map click when clicking on control panel
+  L.DomEvent.on(this.div, 'click', L.DomEvent.stopPropagation);
   return this.div;
 }
 
