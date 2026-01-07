@@ -18,8 +18,8 @@ async function getRelationsOSMData(ids, out = "geom") {
   const response = await fetch(endPoint, { method: "POST", body: ("data=" + encodeURIComponent(query)) });
 
   if (!response.ok) {
-    // A 'not ok' response doesn't throw an error, so throw one and add the response object
-    throw new Error("Fetch response was not ok");
+    // A 'not ok' response doesn't throw an error, so throw one and add status
+    throw new Error(`Fetch response was not ok: ${response.status} - ${response.statusText}`);
   }
 
   const osmRes = await response.json();
