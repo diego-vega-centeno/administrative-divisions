@@ -4,16 +4,12 @@ async function getRelationsOSMData(ids, out = "geom") {
 
   if (ids.length === 0) throw new Error("Please select some divisions");
 
-  const endPoint = "https://overpass-api.de/api/interpreter";
+  const endPoint = "https://maps.mail.ru/osm/tools/overpass/api/interpreter";
 
   // to accept an array
   const idsArray = ((typeof ids) == "number") ? [ids] : ids;
 
-  const query = `
-    [out:json][timeout:90];
-    rel(id:${idsArray.join(",")});
-    out ${out};
-    `;
+  const query = `[out:json][timeout:90];rel(id:${idsArray.join(",")});out ${out};`;
 
   const response = await fetch(endPoint, { method: "POST", body: ("data=" + encodeURIComponent(query)) });
 
