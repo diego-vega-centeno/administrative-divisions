@@ -1,8 +1,7 @@
 import osmtogeojson from "osmtogeojson";
+import { putStoreRelations, getStoreRelation } from '../utils/indexedDB.js';
 
 async function getRelationsOSMData(ids, out = "geom") {
-
-  if (ids.length === 0) throw new Error("Please select some divisions");
 
   const endPoint = "https://maps.mail.ru/osm/tools/overpass/api/interpreter";
 
@@ -130,4 +129,31 @@ function donwloadJSONData(content, filename) {
   a.click();
 }
 
-export { getRelationsOSMData, formatData, donwloadJSONData }
+async function getRelationsDataWithCache(nodes) {
+  // obtain relation from cache if present
+  const cachedRels = [];
+  for (const node of nodes) {
+    const rel = await getStoreRelation(node.id);
+    if (rel) cachedRels.push(rel);
+  }
+  const cachedIds = cachedRels.map(rel => rel.id.toString());
+  const nonCached = nodes.filter(node => !cachedIds.includes(node.id));
+
+  // get osm data
+  let queryRels = [];
+  if (nonCached.length) {
+    queryRels = (await getRelationsOSMData(nonCached.map(node => node.id)))['elements'];
+  }
+
+  // join cached data
+  console.log('base: ', queryRels.length);
+  console.log('cached: ', cachedRels.length);
+  const osmRels = [...queryRels, ...cachedRels];
+
+  // store relations
+  putStoreRelations(queryRels);
+
+  return osmRels
+}
+
+export { getRelationsOSMData, formatData, donwloadJSONData, getRelationsDataWithCache }
