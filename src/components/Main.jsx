@@ -5,15 +5,13 @@ import SearchDropdown from './SearchDropdown.jsx'
 import SelectAddDropdown from './SelectAddDropdown.jsx'
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { getRelationsOSMData } from '../utils/overpass';
+import { getRelationsOSMData, getRelationsDataWithCache } from '../utils/overpass';
 import { addToLeafletMap } from '../utils/leafletMap.js';
 import Box from '@mui/material/Box';
 import { Dialog, Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
 import OSMTagsDropDown from './OSMTagsDropDown.jsx';
-import db from '../utils/indexedDB.js';
-import { putStoreRelations } from '../utils/indexedDB.js';
 
 export default function Main() {
 
@@ -67,21 +65,20 @@ export default function Main() {
 
   // for add selection from tree
   async function handleADDPlot(selected) {
-    // console.log(selected);
     try {
+
+      if (!selected.length) throw new Error("Please select some divisions");
+
       setIsProgressIconActive(true);
-      // get osm data and add to map
-      const osmData = await getRelationsOSMData(selected.map(node => node.id));
-      await addToLeafletMap(osmData, mapRef.current);
+      const osmRels = await getRelationsDataWithCache(selected);
+
+      // add to map
+      const fakeOSMRes = { 'elements': osmRels };
+      await addToLeafletMap(fakeOSMRes, mapRef.current);
       setIsProgressIconActive(false);
+      setOsmElements(osmRels);
 
-      // add display name before passing to tags table
-      const osmElements = osmData.elements;
-      // console.log(osmElements);
-      setOsmElements(osmElements);
 
-      // store relations in cache
-      putStoreRelations(osmElements);
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
