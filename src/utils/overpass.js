@@ -146,14 +146,39 @@ async function getRelationsDataWithCache(nodes) {
   }
 
   // join cached data
-  console.log('base: ', queryRels.length);
-  console.log('cached: ', cachedRels.length);
+  console.log(`Relations: In cache ${cachedRels.length}, non-cached: ${queryRels.length}`);
   const osmRels = [...queryRels, ...cachedRels];
 
-  // store relations
-  putStoreRelations(queryRels);
+  // store >= 400KB relations
+  const largeRels = queryRels.filter(rel => {
+    const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
+    return sizeInBytes >= 400 * 1024;
+  });
+
+  const smallRels = queryRels.filter(rel => {
+    const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
+    return sizeInBytes < 400 * 1024;
+  });
+
+  console.log(`Relations: Added to cache: ${largeRels.length}, skipped: ${smallRels.length}`);
+
+  // store large rels only
+  putStoreRelations(largeRels);
 
   return osmRels
 }
 
-export { getRelationsOSMData, formatData, donwloadJSONData, getRelationsDataWithCache }
+function profileSize(rels) {
+  let sum = 0;
+  rels.forEach(elem => {
+    let sizeInBytes = new Blob([JSON.stringify(elem)]).size;
+    sum += sizeInBytes / 1024;
+    console.log(`elem id: ${elem.id}, size (KB): ${sizeInBytes / 1024}`);
+  });
+  let sizeInBytes = new Blob([JSON.stringify(rels)]).size;
+  console.log(`Total rels size (KB): ${sizeInBytes / 1024}`);
+
+  console.log(`Average size (KB): ${sum / rels.length}`)
+}
+
+export { getRelationsOSMData, formatData, donwloadJSONData, getRelationsDataWithCache, profileSize }
