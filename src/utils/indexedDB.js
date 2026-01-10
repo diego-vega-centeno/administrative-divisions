@@ -1,5 +1,3 @@
-import { event } from "jquery";
-
 const DB_NAME = 'osm-cache';
 const DB_VERSION = 1;
 const STORE_NAME = 'relations';
@@ -30,8 +28,8 @@ request.onupgradeneeded = (event) => {
   };
 }
 
-function putStoreRelations(relations) {
-  const transaction = db.transaction(STORE_NAME, 'readwrite')
+function makeTransaction(storeName) {
+  const transaction = db.transaction(storeName, 'readwrite')
   transaction.oncomplete = (event) => {
     console.log('Transaction successful');
   }
@@ -40,22 +38,40 @@ function putStoreRelations(relations) {
     console.log(`There was an error: ${event.message}`);
   }
 
-  const store = transaction.objectStore(STORE_NAME);
+  const store = transaction.objectStore(storeName);
+  return store;
+}
+
+function putStoreRelations(relations) {
+  const store = makeTransaction(STORE_NAME);
 
   relations.forEach(rel => {
     const request = store.put(rel);
     request.onsuccess = () => {
-      console.log(`Relation added: ${request.result}`);
+      console.log(`Object added id: ${request.result}`);
     };
 
     request.onerror = () => {
-      console.log(`Error when adding relation: ${request.error}`);
+      console.log(`Error while adding relation: ${request.error}`);
     }
   });
 }
 
-// function getStoreRelation()
+function getStoreRelation(id) {
+  return new Promise((resolve, reject) => {
+    const store = makeTransaction(STORE_NAME);
+    const request = store.get(parseInt(id));
 
-export default db;
+    request.onsuccess = () => {
+      console.log(`Object obtained id: ${request.result?.id}`);
+      resolve(request.result);
+    };
 
-export { putStoreRelations }
+    request.onerror = () => {
+      console.log(`Error while getting relation: ${request.error}`);
+      reject(request.error);
+    }
+  });
+}
+
+export { putStoreRelations, getStoreRelation }
