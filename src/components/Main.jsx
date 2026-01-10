@@ -12,6 +12,8 @@ import { Dialog, Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
 import OSMTagsDropDown from './OSMTagsDropDown.jsx';
+import db from '../utils/indexedDB.js';
+import { putStoreRelations } from '../utils/indexedDB.js';
 
 export default function Main() {
 
@@ -77,6 +79,9 @@ export default function Main() {
       const osmElements = osmData.elements;
       // console.log(osmElements);
       setOsmElements(osmElements);
+
+      // store relations in cache
+      putStoreRelations(osmElements);
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
