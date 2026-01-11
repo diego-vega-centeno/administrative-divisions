@@ -133,7 +133,8 @@ async function getRelationsDataWithCache(nodes) {
   // obtain relation from cache if present
   const cachedRels = [];
   for (const node of nodes) {
-    const rel = await getStoreRelation(node.id);
+    // object key is id(int), node is id(string)
+    const rel = await getStoreRelation(parseInt(node.id));
     if (rel) cachedRels.push(rel);
   }
   const cachedIds = cachedRels.map(rel => rel.id.toString());
