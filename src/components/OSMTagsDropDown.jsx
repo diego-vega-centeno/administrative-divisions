@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { debugLog, errorLog } from "./logger";
+import { debugLog, errorLog } from "../utils/logger";
 
 export default function OSMTagsDropDown({ elementData }) {
 
