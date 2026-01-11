@@ -8,6 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { progressDownloadIcon } from "../styles/Main";
 import { getRelationsOSMData, formatData } from '../utils/overpass';
 import { donwloadJSONData } from "../utils/overpass";
+import { debugLog, errorLog } from "./logger";
 
 function Backdrop({ onClick }) {
   return (
@@ -49,7 +50,7 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
-      console.log('An error ocurred: ', error);
+      errorLog('An error ocurred: ', error);
     }
   }
 
