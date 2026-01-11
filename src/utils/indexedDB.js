@@ -1,3 +1,5 @@
+import { debugLog, errorLog } from "./logger";
+
 const DB_NAME = 'osm-cache';
 const DB_VERSION = 1;
 const STORE_NAME = 'relations';
@@ -5,19 +7,19 @@ const STORE_NAME = 'relations';
 let db;
 
 if (!indexedDB) {
-  console.log("Your browser doesn't support IndexedDB.");
+  debugLog("Your browser doesn't support IndexedDB.");
 }
 
 const request = indexedDB.open(DB_NAME, DB_VERSION);
 
 request.onerror = (event) => {
-  console.log(`Database error: ${event.target.errorCode}`);
+  errorLog(`Database error: ${event.target.errorCode}`);
 }
 
 request.onsuccess = (event) => {
   db = request.result;
-  console.log(`Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`);
-  
+  debugLog(`Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`);
+
   // Clear cache on page load for session-only caching
   clearAllStoredRelations();
 }
@@ -34,11 +36,11 @@ request.onupgradeneeded = (event) => {
 function makeTransaction(storeName) {
   const transaction = db.transaction(storeName, 'readwrite')
   transaction.oncomplete = (event) => {
-    console.log('Transaction successful');
+    debugLog('Transaction successful');
   }
   transaction.onerror = (event) => {
     event.stopPropagation();
-    console.log(`There was an error: ${event.message}`);
+    errorLog(`There was an error: ${event.message}`);
   }
 
   const store = transaction.objectStore(storeName);
@@ -51,11 +53,11 @@ function putStoreRelations(relations) {
   relations.forEach(rel => {
     const request = store.put(rel);
     request.onsuccess = () => {
-      // console.log(`Object added id: ${request.result}`);
+      // debugLog(`Object added id: ${request.result}`);
     };
 
     request.onerror = () => {
-      console.log(`Error while adding relation: ${request.error}`);
+      errorLog(`Error while adding relation: ${request.error}`);
     }
   });
 }
@@ -67,13 +69,13 @@ function getStoreRelation(id) {
 
     request.onsuccess = () => {
       if (request.result) {
-        // console.log(`Object obtained id: ${request.result.id}`);
+        // debugLog(`Object obtained id: ${request.result.id}`);
       }
       resolve(request.result);
     };
 
     request.onerror = () => {
-      console.log(`Error while getting relation: ${request.error}`);
+      errorLog(`Error while getting relation: ${request.error}`);
       reject(request.error);
     }
   });
@@ -85,13 +87,13 @@ function getAllStoredRelations() {
     const request = store.getAll();
 
     request.onsuccess = () => {
-      console.log(`All stored relations: ${request.result.length} items`);
+      debugLog(`All stored relations: ${request.result.length} items`);
       console.table(request.result);
       resolve(request.result);
     };
 
     request.onerror = () => {
-      console.log(`Error getting all relations: ${request.error}`);
+      errorLog(`Error getting all relations: ${request.error}`);
       reject(request.error);
     }
   });
@@ -103,15 +105,15 @@ function clearAllStoredRelations() {
     const request = store.clear();
 
     request.onsuccess = () => {
-      console.log('All stored relations cleared');
+      debugLog('All stored relations cleared');
       resolve();
     };
 
     request.onerror = () => {
-      console.log(`Error clearing relations: ${request.error}`);
+      errorLog(`Error clearing relations: ${request.error}`);
       reject(request.error);
     }
   });
 }
 
-export { putStoreRelations, getStoreRelation, getAllStoredRelations, clearAllStoredRelations}
+export { putStoreRelations, getStoreRelation, getAllStoredRelations, clearAllStoredRelations }
