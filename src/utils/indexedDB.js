@@ -63,7 +63,7 @@ function putStoreRelations(relations) {
 function getStoreRelation(id) {
   return new Promise((resolve, reject) => {
     const store = makeTransaction(STORE_NAME);
-    const request = store.get(parseInt(id));
+    const request = store.get(id);
 
     request.onsuccess = () => {
       if (request.result) {
