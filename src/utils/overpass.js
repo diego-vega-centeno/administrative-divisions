@@ -1,8 +1,8 @@
 import osmtogeojson from "osmtogeojson";
+import { putStoreRelations, getStoreRelation } from '../utils/indexedDB.js';
+import { debugLog, errorLog } from "./logger.js";
 
 async function getRelationsOSMData(ids, out = "geom") {
-
-  if (ids.length === 0) throw new Error("Please select some divisions");
 
   const endPoint = "https://maps.mail.ru/osm/tools/overpass/api/interpreter";
 
@@ -130,4 +130,57 @@ function donwloadJSONData(content, filename) {
   a.click();
 }
 
-export { getRelationsOSMData, formatData, donwloadJSONData }
+async function getRelationsDataWithCache(nodes) {
+  // obtain relation from cache if present
+  const cachedRels = [];
+  for (const node of nodes) {
+    // object key is id(int), node is id(string)
+    const rel = await getStoreRelation(parseInt(node.id));
+    if (rel) cachedRels.push(rel);
+  }
+  const cachedIds = cachedRels.map(rel => rel.id.toString());
+  const nonCached = nodes.filter(node => !cachedIds.includes(node.id));
+
+  // get osm data
+  let queryRels = [];
+  if (nonCached.length) {
+    queryRels = (await getRelationsOSMData(nonCached.map(node => node.id)))['elements'];
+  }
+
+  // join cached data
+  debugLog(`Relations: In cache ${cachedRels.length}, non-cached: ${queryRels.length}`);
+  const osmRels = [...queryRels, ...cachedRels];
+
+  // store >= 400KB relations
+  const largeRels = queryRels.filter(rel => {
+    const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
+    return sizeInBytes >= 400 * 1024;
+  });
+
+  const smallRels = queryRels.filter(rel => {
+    const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
+    return sizeInBytes < 400 * 1024;
+  });
+
+  debugLog(`Relations: Added to cache: ${largeRels.length}, skipped: ${smallRels.length}`);
+
+  // store large rels only
+  putStoreRelations(largeRels);
+
+  return osmRels
+}
+
+function profileSize(rels) {
+  let sum = 0;
+  rels.forEach(elem => {
+    let sizeInBytes = new Blob([JSON.stringify(elem)]).size;
+    sum += sizeInBytes / 1024;
+    debugLog(`elem id: ${elem.id}, size (KB): ${sizeInBytes / 1024}`);
+  });
+  let sizeInBytes = new Blob([JSON.stringify(rels)]).size;
+  debugLog(`Total rels size (KB): ${sizeInBytes / 1024}`);
+
+  debugLog(`Average size (KB): ${sum / rels.length}`)
+}
+
+export { getRelationsOSMData, formatData, donwloadJSONData, getRelationsDataWithCache, profileSize }
