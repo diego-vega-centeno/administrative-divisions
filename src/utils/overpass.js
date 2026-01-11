@@ -152,20 +152,20 @@ async function getRelationsDataWithCache(nodes) {
   const osmRels = [...queryRels, ...cachedRels];
 
   // store >= 400KB relations
-  const largeRels = queryRels.filter(rel => {
-    const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
-    return sizeInBytes >= 400 * 1024;
-  });
+  // const largeRels = queryRels.filter(rel => {
+  //   const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
+  //   return sizeInBytes >= 400 * 1024;
+  // });
 
-  const smallRels = queryRels.filter(rel => {
-    const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
-    return sizeInBytes < 400 * 1024;
-  });
+  // const smallRels = queryRels.filter(rel => {
+  //   const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
+  //   return sizeInBytes < 400 * 1024;
+  // });
+  // debugLog(`Relations: Added to cache: ${largeRels.length}, skipped: ${smallRels.length}`);
 
-  debugLog(`Relations: Added to cache: ${largeRels.length}, skipped: ${smallRels.length}`);
-
-  // store large rels only
-  putStoreRelations(largeRels);
+  // store query rels
+  putStoreRelations(queryRels);
+  debugLog(`Relations: Added to cache: ${queryRels.length}`);
 
   return osmRels
 }
