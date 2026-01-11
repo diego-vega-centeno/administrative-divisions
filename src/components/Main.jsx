@@ -12,7 +12,9 @@ import { Dialog, Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
 import OSMTagsDropDown from './OSMTagsDropDown.jsx';
-import { clearAllStoredRelations } from '../utils/indexedDB.js';
+import ListItem from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import { errorLog } from '../utils/logger.js';
 
 export default function Main() {
@@ -139,6 +141,9 @@ export default function Main() {
               className={styles['map']}
             />
           </div>
+          {Boolean(osmElements) && <ListItem sx={dropdown}>
+            <ListItemText primary={"Selected divisions tags"} />
+          </ListItem>}
           {Boolean(osmElements) && osmElements.map(
             elementData => <OSMTagsDropDown key={elementData.id} elementData={elementData} />
           )}
