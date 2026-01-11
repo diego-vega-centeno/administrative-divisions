@@ -13,6 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
 import OSMTagsDropDown from './OSMTagsDropDown.jsx';
 import { clearAllStoredRelations } from '../utils/indexedDB.js';
+import { errorLog } from '../utils/logger.js';
 
 export default function Main() {
 
@@ -60,7 +61,7 @@ export default function Main() {
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
-      console.log('An error ocurred: ', error);
+      errorLog('An error ocurred: ', error);
     }
   }
 
@@ -87,7 +88,7 @@ export default function Main() {
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
-      console.log('An error ocurred: ', error);
+      errorLog('An error ocurred: ', error);
     }
   }
 
