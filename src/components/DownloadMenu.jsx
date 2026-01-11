@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { progressDownloadIcon } from "../styles/Main";
 import { getRelationsOSMData, formatData } from '../utils/overpass';
 import { donwloadJSONData } from "../utils/overpass";
-import { debugLog, errorLog } from "./logger";
+import { debugLog, errorLog } from "../utils/logger";
 
 function Backdrop({ onClick }) {
   return (
