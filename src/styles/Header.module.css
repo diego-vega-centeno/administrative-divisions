@@ -9,3 +9,13 @@
   font-weight: 700;
   font-size: 1.2rem;
 }
+
+
+.header-menu > div {
+  margin: 0 1rem;
+}
+
+.header-menu{
+  display: flex;
+  align-items: center;
+}
