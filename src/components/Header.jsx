@@ -7,8 +7,10 @@ export default function Header() {
     <header className={styles.header}>
       <span>Administrative divisions</span>
       <div className={styles['header-menu']}>
-        <span>about</span>
-        <NavSidebar />
+        <span className={styles['header-menu-item']}>about</span>
+        <div className={styles['header-menu-item']}>
+          <NavSidebar />
+        </div>
       </div>
     </header>
   )
