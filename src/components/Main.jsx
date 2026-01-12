@@ -79,8 +79,8 @@ export default function Main() {
       const osmRels = await getRelationsDataWithCache(selected);
 
       // aproximate size in KB
-      profileSize(osmRels);
-
+      if(process.env.NODE_ENV === 'development') profileSize(osmRels);
+      
       // add to map
       const fakeOSMRes = { 'elements': osmRels };
       await addToLeafletMap(fakeOSMRes, mapRef.current);
