@@ -6,7 +6,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressDownloadIcon } from "../styles/Main";
-import { getRelationsOSMData, formatData } from '../utils/overpass';
+import { getRelationsDataWithCache, formatData } from '../utils/overpass';
 import { donwloadJSONData } from "../utils/overpass";
 import { debugLog, errorLog } from "../utils/logger";
 
@@ -43,10 +43,10 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
 
     setIsProgressIconActive(true);
     try {
-      const osmData = await getRelationsOSMData(selectedNodes.map(node => node.id), out);
-      const outputData = formatData(osmData, params, selectedNodes);
+      const osmRels = await getRelationsDataWithCache(selectedNodes, out);
+      const osmElems = formatData(osmRels, params, selectedNodes);
       setIsProgressIconActive(false);
-      donwloadJSONData(outputData, 'admin_divisions_selection.json');
+      donwloadJSONData(osmElems, 'admin_divisions_selection.json');
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
