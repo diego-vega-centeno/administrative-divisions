@@ -1,7 +1,7 @@
 const navSideBox = {
   backgroundColor: 'var(--color-secondary)',
   height: '100%',
-  width: '10rem'
+  width: '20rem'
 }
 
 const navSideBarIcon = {
