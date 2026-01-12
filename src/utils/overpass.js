@@ -27,14 +27,14 @@ async function getRelationsOSMData(ids, out = "geom") {
   return osmRes;
 }
 
-function formatData(osmData, params, selectedNodes) {
+function formatData(osmElemsInput, params, selectedNodes) {
 
   if (params.format === 'geojson') {
-    return osmtogeojson(osmData);
+    return osmtogeojson({ "elements": osmElemsInput });
   }
 
   // make deep copy
-  const outputData = JSON.parse(JSON.stringify(osmData));
+  let osmElems = JSON.parse(JSON.stringify(osmElemsInput));
 
   // include jstree data
   const jstreeDataIndex = {};
@@ -42,7 +42,7 @@ function formatData(osmData, params, selectedNodes) {
     jstreeDataIndex[ele.id] = ele;
   });
 
-  outputData.elements.forEach(ele => {
+  osmElems.forEach(ele => {
     const parentID = jstreeDataIndex[ele.id]['parent'];
     ele['parent'] = parentID === '#' ? 0 : parseInt(parentID);
     ele['parents'] = jstreeDataIndex[ele.id]['parents'].map(id => {
@@ -53,32 +53,32 @@ function formatData(osmData, params, selectedNodes) {
 
   // delete tags if checked
   if (!params.tags) {
-    outputData.elements.forEach(ele => {
+    osmElems.forEach(ele => {
       delete ele.tags
     });
   }
 
   // convert to geojson and add data to relations
   if (params.geom && params.geojsonInOSM) {
-    const features = osmtogeojson(osmData).features.filter(feature => {
+    const features = osmtogeojson({ "elements": osmElemsInput }).features.filter(feature => {
       return feature.id.includes('relation');
     });
     const geojsonMap = new Map(features.map(feature => {
       return [parseInt(feature.id.replace('relation/', '')), feature.geometry]
     }));
-    outputData.elements.forEach(ele => {
+    osmElems.forEach(ele => {
       ele['geometry'] = geojsonMap.get(ele.id);
     });
   };
 
   // make tree data
   if (params.structure === 'tree') {
-    const normalized = normalizeSelection(outputData.elements);
-    outputData.elements = makeTree(normalized);
+    const normalized = normalizeSelection(osmElems);
+    osmElems = makeTree(normalized);
   };
 
 
-  return outputData;
+  return osmElems;
 }
 
 function normalizeSelection(nodes) {
