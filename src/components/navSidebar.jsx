@@ -15,7 +15,7 @@ export default function NavSidebar() {
   const toggleDrawer = (bool) => () => setOpen(bool);
 
   const navList = (
-    <Box sx={navSideBox}>
+    <Box sx={navSideBox} onClick={toggleDrawer(false)}>
       <List>
         {['About', 'Log in', 'Favorites'].map((text, index) => (
           <ListItem key={text} disablePadding>

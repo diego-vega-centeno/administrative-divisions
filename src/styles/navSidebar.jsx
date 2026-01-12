@@ -19,7 +19,8 @@ const navSideBarButton = {
 }
 
 const navSideItem = {
-  color: 'white'
+  color: 'white',
+  '&:hover':{backgroundColor: '#6C757D'}
 }
 
 export { navSideBox, navSideBarIcon, navSideItem, navSideBarButton }
