@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
-import LoginMenu from './loginMenu.jsx'
+import LoginMenu from './LoginMenu.jsx'
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
