@@ -1,6 +1,5 @@
 import styles from '../styles/Header.module.css'
 import NavSidebar from './navSidebar.jsx'
-import Box from '@mui/material/Box';
 
 export default function Header() {
   return (

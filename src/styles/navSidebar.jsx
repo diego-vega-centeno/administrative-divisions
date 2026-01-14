@@ -7,9 +7,6 @@ const navSideBox = {
 const navSideBarIcon = {
   fontSize: '1.5rem',
   padding: 2,
-  '&:hover': {
-    backgroundColor: 'red',
-  },
   color: 'white'
 }
 
