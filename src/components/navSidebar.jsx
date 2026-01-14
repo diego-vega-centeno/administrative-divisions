@@ -1,5 +1,4 @@
 import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -9,17 +8,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
+import LoginMenu from './LoginMenu.jsx'
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
+  const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
   const toggleDrawer = (bool) => () => setOpen(bool);
+
+  const handleLoginButton = () => {
+    setIsLoginMenuOpen(true);
+  }
+
+  const buttonHandlers = { 'Log in': handleLoginButton, 'About': ()=>{}, 'Favorites': ()=>{} }
 
   const navList = (
     <Box sx={navSideBox} onClick={toggleDrawer(false)}>
       <List>
         {['About', 'Log in', 'Favorites'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton sx={navSideItem}>
+            <ListItemButton onClick={buttonHandlers[text]} sx={navSideItem}>
               {text}
             </ListItemButton>
           </ListItem>
@@ -41,6 +48,10 @@ export default function NavSidebar() {
       >
         {navList}
       </Drawer>
+      <LoginMenu
+        open={isLoginMenuOpen}
+        onClose={() => setIsLoginMenuOpen(false)}
+      />
     </div>
   )
 }
