@@ -1,12 +1,13 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { debugLog, errorLog } from "../utils/logger";
 
 export default function OAuthCallback() {
   const navigate = useNavigate();
-  useEffect(() => {
+  const [searchParams] = useSearchParams();
 
-    let token = localStorage.getItem('authToken');
+  useEffect(() => {
+    let token = localStorage.getItem('token');
 
     if (token) {
       debugLog(`Token found, redirecting...`);
@@ -14,11 +15,10 @@ export default function OAuthCallback() {
       return;
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    token = urlParams.get('token');
+    token = searchParams.get('token');
     if (token) {
       debugLog(`Token received, storing and redirecting...`);
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('token', token);
       navigate('/');
     } else {
       errorLog('No token received from OAuth');
