@@ -3,6 +3,17 @@ import { BrowserRouter, Routes, Route } from "react-router"
 import OAuthCallback from "../pages/OAuthCallback.jsx"
 
 function App() {
+  // Wake up backend
+  useEffect(() => {
+    if (import.meta.env.VITE_BACKEND_URL) {
+      fetch(import.meta.env.VITE_BACKEND_URL, {
+        method: "GET",
+        cache: "no-cache",
+      }).catch(() => { });
+    }
+
+  }, []);
+
   return <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
