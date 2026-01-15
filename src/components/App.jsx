@@ -1,6 +1,7 @@
 import Home from "../pages/Home.jsx"
 import { BrowserRouter, Routes, Route } from "react-router"
 import OAuthCallback from "../pages/OAuthCallback.jsx"
+import {useEffect} from "react"
 
 function App() {
   // Wake up backend
