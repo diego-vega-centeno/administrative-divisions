@@ -17,7 +17,7 @@ export default function OAuthCallback() {
 
     token = searchParams.get('token');
     if (token) {
-      debugLog(`Token received, storing and redirecting...`);
+      debugLog(`Token received: storing and redirecting...`);
       localStorage.setItem('token', token);
       navigate('/');
     } else {
