@@ -10,7 +10,7 @@ export default function OAuthCallback() {
     let token = localStorage.getItem('token');
 
     if (token) {
-      debugLog(`Token found, redirecting...`);
+      debugLog(`Token found: redirecting...`);
       navigate('/');
       return;
     }
