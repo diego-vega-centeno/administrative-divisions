@@ -6,15 +6,15 @@ import { errorLog } from "../utils/logger.js"
 
 function App() {
   // Wake up backend
-  useEffect(() => {
-    if (import.meta.env.VITE_BACKEND_URL) {
-      fetch(import.meta.env.VITE_BACKEND_URL + '/health', {
-        method: "GET",
-        cache: "no-cache",
-      }).catch((error) => {errorLog(`Could not wake up server: ${error}`)});
-    }
+  // useEffect(() => {
+  //   if (import.meta.env.VITE_BACKEND_URL) {
+  //     fetch(import.meta.env.VITE_BACKEND_URL + '/health', {
+  //       method: "GET",
+  //       cache: "no-cache",
+  //     }).catch((error) => {errorLog(`Could not wake up server: ${error}`)});
+  //   }
 
-  }, []);
+  // }, []);
 
   return <BrowserRouter>
     <Routes>
