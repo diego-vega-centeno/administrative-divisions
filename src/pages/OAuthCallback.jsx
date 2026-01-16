@@ -22,7 +22,7 @@ export default function OAuthCallback() {
       navigate('/');
     } else {
       errorLog('No token received from OAuth');
-      navigate('/auth/callback?error=oauth_failed');
+      navigate('/?error=oauth_failed');
     }
   }, []);
 
