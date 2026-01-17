@@ -1,0 +1,17 @@
+import { Dialog, Alert } from '@mui/material';
+
+export default function AlertDialog({ severity, message, open, onClose }) {
+  return (
+    <Dialog
+      open={open}
+      disableScrollLock
+    >
+      <Alert
+        severity={severity}
+        onClose={onClose}
+      >
+        {message}
+      </Alert>
+    </Dialog>
+  )
+}
