@@ -2,7 +2,7 @@ import Header from '../components/Header.jsx'
 import Main from '../components/Main.jsx'
 import { useSearchParams } from "react-router";
 import { useState, useEffect } from 'react';
-import { Dialog, Alert } from '@mui/material';
+import AlertDialog from '../components/AlertDialog.jsx';
 
 export default function Home() {
   const [searchParams] = useSearchParams();
@@ -15,23 +15,14 @@ export default function Home() {
     }
   }, [error]);
 
-  const alertDialog = <>
-    <Dialog
-      open={Boolean(errorMessage)}
-      disableScrollLock
-    >
-      <Alert
-        severity="warning"
-        onClose={() => setErrorMessage(null)}
-      >
-        {errorMessage}
-      </Alert>
-    </Dialog>
-  </>
-
   return (
     <>
-      {alertDialog}
+      <AlertDialog
+        open={Boolean(errorMessage)}
+        severity={"warning"}
+        message={errorMessage}
+        onClose={() => setErrorMessage(null)}
+      />
       <Header />
       <Main />
     </>
