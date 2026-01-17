@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import { errorLog } from '../utils/logger.js';
+import AlertDialog from './AlertDialog.jsx';
 
 export default function Main() {
 
@@ -70,7 +71,6 @@ export default function Main() {
   // for add selection from tree
   async function handleADDPlot(selected) {
     try {
-
       if (!selected.length) throw new Error("Please select some divisions");
 
       setIsProgressIconActive(true);
@@ -79,14 +79,14 @@ export default function Main() {
       const osmRels = await getRelationsDataWithCache(selected);
 
       // aproximate size in KB
-      if(process.env.NODE_ENV === 'development') profileSize(osmRels);
-      
+      if (process.env.NODE_ENV === 'development') profileSize(osmRels);
+
       // add to map
       const fakeOSMRes = { 'elements': osmRels };
       await addToLeafletMap(fakeOSMRes, mapRef.current);
       setIsProgressIconActive(false);
       setOsmElements(osmRels);
-
+      throw new Error('Testing')
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
@@ -97,22 +97,6 @@ export default function Main() {
   const handleError = (errorMessage) => {
     setErrorMessage(errorMessage);
   }
-
-  const alertDialog = <>
-    <Dialog
-      open={Boolean(errorMessage)}
-      onClose={() => setErrorMessage(null)}
-      disableScrollLock
-    >
-      <Alert
-        severity="warning"
-        onClose={() => setErrorMessage(null)}
-      >
-        {errorMessage}
-      </Alert>
-    </Dialog>
-  </>
-
 
   return (
     <main className={styles.main}>
@@ -150,7 +134,12 @@ export default function Main() {
         </div>
         <Footer />
       </section>
-      {alertDialog}
+      <AlertDialog
+        open={Boolean(errorMessage)}
+        severity={"warning"}
+        message={errorMessage}
+        onClose={() => setErrorMessage(null)}
+      />
     </main>
   )
 }
