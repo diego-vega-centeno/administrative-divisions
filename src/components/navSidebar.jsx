@@ -26,7 +26,7 @@ export default function NavSidebar() {
 
   const logoutUser = async () => {
     try {
-      await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/logout',
+      await fetch(import.meta.env.VITE_BACKEND_URL + '/user/logout',
         { credentials: 'include' }
       )
       window.location.reload();
