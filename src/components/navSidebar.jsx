@@ -1,5 +1,5 @@
 import Drawer from "@mui/material/Drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -9,29 +9,56 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
 import LoginMenu from './LoginMenu.jsx'
+import useSession from "../utils/useSession.js";
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
   const toggleDrawer = (bool) => () => setOpen(bool);
 
-  const handleLoginButton = () => {
-    setIsLoginMenuOpen(true);
+  const handleUserStateButton = () => {
+    if (user) {
+      logoutUser();
+    } else {
+      setIsLoginMenuOpen(true);
+    }
   }
 
-  const buttonHandlers = { 'Log in': handleLoginButton, 'About': ()=>{}, 'Favorites': ()=>{} }
+  const logoutUser = async () => {
+    try {
+      await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/logout',
+        { credentials: 'include' }
+      )
+      window.location.reload();
+    } catch (error) {
+      errorLog(`Logout failed: ${error}`)
+    }
+  }
+
+  const { user, loading } = useSession();
+  let userState;
+
+  if (loading) userState = 'Loading ...'
+  else userState = user ? 'Log out' : 'Log in'
 
   const navList = (
     <Box sx={navSideBox} onClick={toggleDrawer(false)}>
       <List>
-        {['About', 'Log in', 'Favorites'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton onClick={buttonHandlers[text]} sx={navSideItem}>
-              {text}
-            </ListItemButton>
-          </ListItem>
-        ))
-        }
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleUserStateButton} sx={navSideItem}>
+            {userState}
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={navSideItem}>
+            About
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={navSideItem}>
+            Favorites
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   )
