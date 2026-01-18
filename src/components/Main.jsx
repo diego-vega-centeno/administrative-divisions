@@ -124,7 +124,7 @@ export default function Main() {
               className={styles['map']}
             />
           </div>
-          {Boolean(osmElements) && <ListItem sx={dropdown}>
+          {Boolean(osmElements) && <ListItem disableRipple sx={dropdown}>
             <ListItemText primary={"Selected divisions tags"} />
           </ListItem>}
           {Boolean(osmElements) && osmElements.map(
