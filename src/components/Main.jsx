@@ -86,7 +86,6 @@ export default function Main() {
       await addToLeafletMap(fakeOSMRes, mapRef.current);
       setIsProgressIconActive(false);
       setOsmElements(osmRels);
-      throw new Error('Testing')
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
