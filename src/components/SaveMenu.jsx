@@ -1,4 +1,3 @@
-import { Backdrop } from "@mui/material"
 import { createPortal } from "react-dom";
 import styles from '../styles/DownloadMenu.module.css'
 import Button from "@mui/material/Button";
@@ -6,7 +5,6 @@ import Box from "@mui/material/Box";
 import { progressDownloadIcon } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState } from "react";
-import { event } from "jquery";
 
 export default function SaveMenu({ open, onClose, selectedNodes }) {
   if (!open) return null;
