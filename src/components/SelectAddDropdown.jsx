@@ -12,15 +12,21 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from '@mui/material/Button';
 import { addToolsButton, addTools, treeContainer, infoAddBox } from '../styles/SelectAddDropdown.jsx';
 import DownloadMenu from './DownloadMenu.jsx';
+import SaveMenu from './SaveMenu.jsx';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
   const treeRef = useRef(null);
   const [filterInput, setFilterInput] = useState('');
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
+  const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState(0);
 
   function handlePlot() {
+    if (!selectedNodes.length) {
+      onError('Please select a division');
+      return;
+    };
     onPlotRequest(selectedNodes);
   }
 
@@ -44,6 +50,14 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       return;
     };
     setIsDownloadMenuOpen(true);
+  }
+
+  function handleSave() {
+    if (!selectedNodes.length) {
+      onError('Please select a division');
+      return;
+    };
+    setIsSaveMenuOpen(true);
   }
 
   return (
@@ -82,6 +96,11 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
           variant="contained"
           onClick={handleDownload}
         >Download</Button>
+        <Button sx={addToolsButton}
+          size='small'
+          variant="contained"
+          onClick={handleSave}
+        >Save</Button>
       </Box>
       <Box sx={infoAddBox}>
         {selectedNodes.length} nodes selected
@@ -93,6 +112,11 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
           onSelect={handleSelect}
         />
       </Box>
+      <SaveMenu
+        open={isSaveMenuOpen}
+        onClose={() => setIsSaveMenuOpen(false)}
+        selectedNodes={treeRef.current?.getSelected()}
+      />
       <DownloadMenu
         open={isDownloadMenuOpen}
         onClose={() => setIsDownloadMenuOpen(false)}
