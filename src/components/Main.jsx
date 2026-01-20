@@ -78,8 +78,6 @@ export default function Main() {
   // for add selection from tree
   async function handleADDPlot(selected) {
     try {
-      if (!selected.length) throw new Error("Please select a division");
-
       setIsProgressIconActive(true);
       // getAllStoredRelations();
       // clearAllStoredRelations();
