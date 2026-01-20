@@ -21,7 +21,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const [selectedNodes, setSelectedNodes] = useState(0);
 
   function handlePlot() {
-    onPlotRequest(treeRef.current?.getSelected());
+    onPlotRequest(selectedNodes);
   }
 
   function handleFilter(filterInput) {
@@ -35,7 +35,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   }
 
   function handleSelect() {
-    setSelectedNodes(treeRef.current?.getSelected().length)
+    setSelectedNodes(treeRef.current?.getSelected())
   }
 
   return (
@@ -76,7 +76,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         >Download</Button>
       </Box>
       <Box sx={infoAddBox}>
-        {selectedNodes} nodes selected
+        {selectedNodes.length} nodes selected
       </Box>
       <Box sx={treeContainer}>
         <JsTreeWrapper
@@ -89,7 +89,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         open={isDownloadMenuOpen}
         onClose={() => setIsDownloadMenuOpen(false)}
         onError={onError}
-        selectedNodes={treeRef.current?.getSelected()}
+        selectedNodes={selectedNodes}
       />
     </Box>
   )
