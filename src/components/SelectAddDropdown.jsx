@@ -103,7 +103,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         >Save</Button>
       </Box>
       <Box sx={infoAddBox}>
-        {selectedNodes.length} nodes selected
+        {selectedNodes.length || 0} nodes selected
       </Box>
       <Box sx={treeContainer}>
         <JsTreeWrapper
