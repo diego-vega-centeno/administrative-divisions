@@ -38,6 +38,14 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
     setSelectedNodes(treeRef.current?.getSelected())
   }
 
+  function handleDownload() {
+    if (!selectedNodes.length) {
+      onError('Please select a division');
+      return;
+    };
+    setIsDownloadMenuOpen(true);
+  }
+
   return (
     <Box>
       <ListItemButton disableRipple sx={dropdown}>
@@ -72,7 +80,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         <Button sx={addToolsButton}
           size='small'
           variant="contained"
-          onClick={() => setIsDownloadMenuOpen(true)}
+          onClick={handleDownload}
         >Download</Button>
       </Box>
       <Box sx={infoAddBox}>
