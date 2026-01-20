@@ -17,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import { errorLog } from '../utils/logger.js';
 import AlertDialog from './AlertDialog.jsx';
+import { useSearchParams } from "react-router";
 
 export default function Main() {
 
@@ -25,6 +26,8 @@ export default function Main() {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [osmElements, setOsmElements] = useState(null);
+  const [searchParams] = useSearchParams();
+  const error = searchParams.get('error');
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -46,6 +49,10 @@ export default function Main() {
       mapRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (error === 'oauth_failed') setErrorMessage('Authentication failed');
+  }, [error]);
 
 
   // for relation search query
