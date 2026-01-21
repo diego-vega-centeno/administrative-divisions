@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { progressDownloadIcon } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { backdrop, basicMenu, textField, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
 
 import Typography from "@mui/material/Typography";
@@ -14,17 +14,48 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function SaveMenu({ open, onClose, selectedNodes }) {
   if (!open) return null;
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
+  const [error, setError] = useState('');
+  const titleInputRef = useRef(null);
 
-  function handleSave() {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!title.trim()) {
+      setError('Title is required');
+      titleInputRef.current?.focus();
+      return;
+    }
+
+    setError('');
+    setIsProgressIconActive(true);
+
+    console.log('Form submitted with title:', title);
     console.log('selectedNodes: ', selectedNodes);
-    // setIsProgressIconActive(true);
-    // saveLayer(selectedNodes)
-  }
+
+    // saveLayer(selectedNodes, title)
+    // setTimeout(() => {
+    //   setIsProgressIconActive(false);
+    //   onClose();
+    // }, 1000);
+  };
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+    if (error) setError('');
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit(event);
+    }
+  };
 
   return createPortal(
     <>
@@ -32,15 +63,25 @@ export default function SaveMenu({ open, onClose, selectedNodes }) {
         onClick={() => onClose()}
         sx={backdrop}
       />
-      <Box sx={basicMenu}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={basicMenu}
+      >
         <Typography>Save layer</Typography>
         <Typography variant="body2">Title</Typography>
         <TextField
+          inputRef={titleInputRef}
           sx={textField}
           fullWidth
           placeholder="add a title"
           value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          onChange={handleTitleChange}
+          onKeyDown={handleKeyDown}
+          error={Boolean(error)}
+          helperText={error}
+          disabled={isProgressIconActive}
+          autoFocus
         />
         <TableContainer sx={tableContainer}>
           <Table>
@@ -61,10 +102,12 @@ export default function SaveMenu({ open, onClose, selectedNodes }) {
           </Table>
         </TableContainer>
         <Box sx={progressDownloadIcon}>
-          <Button sx={addToolsButton}
+          <Button
+            sx={addToolsButton}
             size='small'
             variant="contained"
-            onClick={handleSave}
+            type="submit"
+            disabled={isProgressIconActive}
           >Save</Button>
           {isProgressIconActive && (
             <CircularProgress thickness={9} size={30} />
