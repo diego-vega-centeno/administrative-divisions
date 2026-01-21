@@ -17,7 +17,7 @@ const basicMenu = {
   borderRadius: '5px',
   boxShadow: '3px 3px 3px 3px rgba(0, 0, 0, 0.5)',
   fontSize: '.9rem',
-  '& > *': {
+  '& .MuiTypography-root, & .MuiTextField-root, & .MuiBox-root, & .MuiTableContainer-root': {
     marginBottom: '.5rem',
     fontFamily: 'Oswald, sans-serif'
   }
