@@ -15,6 +15,7 @@ export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
   const toggleDrawer = (bool) => () => setOpen(bool);
+  const { user, loading } = useSession();
 
   const handleUserStateButton = () => {
     if (user) {
@@ -35,9 +36,7 @@ export default function NavSidebar() {
     }
   }
 
-  const { user, loading } = useSession();
   let userState;
-
   if (loading) userState = 'Loading ...'
   else userState = user ? 'Log out' : 'Log in'
 
