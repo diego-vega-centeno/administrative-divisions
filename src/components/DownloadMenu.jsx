@@ -43,10 +43,10 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
 
     setIsProgressIconActive(true);
     try {
-      const osmRels = await getRelationsDataWithCache(selectedNodes, out);
-      const osmElems = formatData(osmRels, params, selectedNodes);
+      let osmRels = await getRelationsDataWithCache(selectedNodes, out);
+      osmRels = formatData(osmRels, params, selectedNodes);
       setIsProgressIconActive(false);
-      donwloadJSONData(osmElems, 'admin_divisions_selection.json');
+      donwloadJSONData(osmRels, 'admin_divisions_selection.json');
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
