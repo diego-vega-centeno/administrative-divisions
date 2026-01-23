@@ -27,14 +27,11 @@ async function getRelationsOSMData(ids, out = "geom") {
   return osmRes;
 }
 
-function formatData(osmElemsInput, params, selectedNodes) {
+function formatData(osmElems, params, selectedNodes) {
 
   if (params.format === 'geojson') {
-    return osmtogeojson({ "elements": osmElemsInput });
+    return osmtogeojson({ "elements": osmElems });
   }
-
-  // make deep copy
-  let osmElems = JSON.parse(JSON.stringify(osmElemsInput));
 
   // include jstree data
   const jstreeDataIndex = {};
@@ -60,7 +57,7 @@ function formatData(osmElemsInput, params, selectedNodes) {
 
   // convert to geojson and add data to relations
   if (params.geom && params.geojsonInOSM) {
-    const features = osmtogeojson({ "elements": osmElemsInput }).features.filter(feature => {
+    const features = osmtogeojson({ "elements": osmElems }).features.filter(feature => {
       return feature.id.includes('relation');
     });
     const geojsonMap = new Map(features.map(feature => {
