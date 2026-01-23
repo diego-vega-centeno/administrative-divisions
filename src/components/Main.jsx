@@ -8,7 +8,6 @@ import 'leaflet/dist/leaflet.css';
 import { getRelationsOSMData, getRelationsDataWithCache, profileSize } from '../utils/overpass';
 import { addToLeafletMap } from '../utils/leafletMap.js';
 import Box from '@mui/material/Box';
-import { Dialog, Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
 import OSMTagsDropDown from './OSMTagsDropDown.jsx';
