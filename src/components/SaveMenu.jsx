@@ -15,15 +15,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
+import AlertDialog from "./AlertDialog.jsx";
+import { saveLayerToDB } from '../utils/database.js'
+import { debugLog, errorLog } from "../utils/logger.js";
 
-export default function SaveMenu({ open, onClose, selectedNodes }) {
+export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
   if (!open) return null;
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
   const titleInputRef = useRef(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!title.trim()) {
@@ -34,15 +37,22 @@ export default function SaveMenu({ open, onClose, selectedNodes }) {
 
     setError('');
     setIsProgressIconActive(true);
+    try {
+      const saveResponse = await saveLayerToDB(title, selectedNodes);
+      debugLog(saveResponse);
+    } catch (error) {
+      errorLog(error);
+      if (error?.code === 'DUPLICATE_TITLE') {
+        setError('This title already exists. Choose another one.');
+        titleInputRef.current?.focus();
+        setIsProgressIconActive(false);
+        return;
+      }
 
-    console.log('Form submitted with title:', title);
-    console.log('selectedNodes: ', selectedNodes);
+      onError(error?.message || 'Unexpected error');
+    }
 
-    // saveLayer(selectedNodes, title)
-    // setTimeout(() => {
-    //   setIsProgressIconActive(false);
-    //   onClose();
-    // }, 1000);
+    setIsProgressIconActive(false);
   };
 
   const handleTitleChange = (event) => {
@@ -113,7 +123,6 @@ export default function SaveMenu({ open, onClose, selectedNodes }) {
             <CircularProgress thickness={9} size={30} />
           )}
         </Box>
-
       </Box>
     </>,
     document.body)
