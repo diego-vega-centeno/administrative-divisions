@@ -1,6 +1,6 @@
 import osmtogeojson from "osmtogeojson";
 import { putStoreRelations, getStoreRelation } from '../utils/indexedDB.js';
-import { debugLog, errorLog } from "./logger.js";
+import { debugLog } from "./logger.js";
 
 async function getRelationsOSMData(ids, out = "geom") {
 
