@@ -15,7 +15,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
-import AlertDialog from "./AlertDialog.jsx";
 import { saveLayerToDB } from '../utils/database.js'
 import { debugLog, errorLog } from "../utils/logger.js";
 
