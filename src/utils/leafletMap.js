@@ -11,11 +11,8 @@ const leafletState = {
 /* main leaflet map creation */
 
 async function addToLeafletMap(osmBaseData, map) {
-  // make a deep copy of data
-  const osmData = JSON.parse(JSON.stringify(osmBaseData));
-
   // create layer from geojson data
-  leafletState.geojsonLayer = L.geoJSON(osmtogeojson(osmData), {
+  leafletState.geojsonLayer = L.geoJSON(osmtogeojson(osmBaseData), {
     filter: function (feature, layer) {
       return !(feature.id.includes('node'));
     },
@@ -49,7 +46,7 @@ async function addToLeafletMap(osmBaseData, map) {
   leafletState.mapControl.div.innerHTML = "";
 
   // unhighlight on click outside a feature
-  map.on('click', function(e) {
+  map.on('click', function (e) {
     if (leafletState.highlightedLayer) {
       leafletState.geojsonLayer.resetStyle(leafletState.highlightedLayer);
       leafletState.highlightedLayer = null;
@@ -63,10 +60,10 @@ async function addToLeafletMap(osmBaseData, map) {
 function onEachFeature(feature, layer) {
 
   const id = feature.id || feature.properties?.id || '';
-  const name = feature.properties?.['name:en'] || 
-  feature.properties?.['name'] || 
-  feature.properties?.['alt_name:en'] ||
-  'Missing name';
+  const name = feature.properties?.['name:en'] ||
+    feature.properties?.['name'] ||
+    feature.properties?.['alt_name:en'] ||
+    'Missing name';
 
   layer.bindTooltip(
     `<span 
@@ -145,7 +142,7 @@ leafletState.mapControl.updatePanel = function (tags, id) {
         value = `<a href="https://www.wikidata.org/wiki/${tags[key]}">${tags[key]}</a>`;
         break;
       case "OSM id":
-        value = `<a href="https://www.openstreetmap.org/relation/${id.replace('relation/','')}">${id.replace('relation/','')}</a>`;
+        value = `<a href="https://www.openstreetmap.org/relation/${id.replace('relation/', '')}">${id.replace('relation/', '')}</a>`;
         break;
       default:
         value = `${tags[key]}`;
