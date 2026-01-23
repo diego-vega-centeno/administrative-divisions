@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import { addToolsButton, addTools, treeContainer, infoAddBox } from '../styles/SelectAddDropdown.jsx';
 import DownloadMenu from './DownloadMenu.jsx';
 import SaveMenu from './SaveMenu.jsx';
+import useSession from '../utils/useSession.js';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
@@ -21,10 +22,11 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState(0);
+  const { user, loading } = useSession();
 
   function handlePlot() {
     if (!selectedNodes.length) {
-      onError('Please select a division');
+      onError('Select a division');
       return;
     };
     onPlotRequest(selectedNodes);
@@ -46,15 +48,19 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
 
   function handleDownload() {
     if (!selectedNodes.length) {
-      onError('Please select a division');
+      onError('Select a division');
       return;
     };
     setIsDownloadMenuOpen(true);
   }
 
   function handleSave() {
+    if (loading || !user) {
+      onError('Log in to save layers');
+      return;
+    }
     if (!selectedNodes.length) {
-      onError('Please select a division');
+      onError('Select a division');
       return;
     };
     setIsSaveMenuOpen(true);
