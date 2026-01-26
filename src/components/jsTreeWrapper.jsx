@@ -11,49 +11,49 @@ const JsTreeWrapper = forwardRef(({ data, onSelect }, ref) => {
 
   useEffect(() => {
     $(treeRef.current).jstree({
-        'core': {
-          'data': data,
-          'themes': {
-            'icons': false
-          },
+      'core': {
+        'data': data,
+        'themes': {
+          'icons': false
         },
-        "plugins": ["checkbox", "search", "contextmenu"],
-        "checkbox": {
-          "three_state": false,
-          // "cascade": "down",
-          "whole_node": true
-        },
-        "search": {
-          "show_only_matches": true
-        },
-        "contextmenu": {
-          "select_node": false,
-          "items": function (node) {
-            return {
-              "childs": {
-                "label": "select immediate childs",
-                // obj is the button object
-                "action": function (obj) {
-                  // select only immediate children
-                  node.children.forEach(child => {
-                    $(treeRef.current).jstree("select_node", child);
-                  });
-                }
-              },
-              "allChilds": {
-                "label": "select all childs",
-                "action": function (obj) {
-                  node.children_d.forEach(child => {
-                    $(treeRef.current).jstree("select_node", child);
-                  })
-                }
+      },
+      "plugins": ["checkbox", "search", "contextmenu"],
+      "checkbox": {
+        "three_state": false,
+        // "cascade": "down",
+        "whole_node": true
+      },
+      "search": {
+        "show_only_matches": true
+      },
+      "contextmenu": {
+        "select_node": false,
+        "items": function (node) {
+          return {
+            "childs": {
+              "label": "select immediate childs",
+              // obj is the button object
+              "action": function (obj) {
+                // select only immediate children
+                node.children.forEach(child => {
+                  $(treeRef.current).jstree("select_node", child);
+                });
+              }
+            },
+            "allChilds": {
+              "label": "select all childs",
+              "action": function (obj) {
+                node.children_d.forEach(child => {
+                  $(treeRef.current).jstree("select_node", child);
+                })
               }
             }
           }
         }
-      });
-    
-    $(treeRef.current).on('changed.jstree', function(e, data){
+      }
+    });
+
+    $(treeRef.current).on('changed.jstree', function (e, data) {
       onSelect($(treeRef.current).jstree(true).get_selected(true));
     });
 
