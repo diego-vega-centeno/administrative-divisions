@@ -40,7 +40,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
                   });
                 }
               },
-              "allChildss": {
+              "allChilds": {
                 "label": "select all childs",
                 "action": function (obj) {
                   node.children_d.forEach(child => {
