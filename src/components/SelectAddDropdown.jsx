@@ -122,7 +122,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         open={isSaveMenuOpen}
         onClose={() => setIsSaveMenuOpen(false)}
         onError={onError}
-        selectedNodes={treeRef.current?.getSelected()}
+        selectedNodes={selectedNodes}
       />
       <DownloadMenu
         open={isDownloadMenuOpen}
