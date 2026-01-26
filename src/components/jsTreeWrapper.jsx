@@ -5,7 +5,7 @@ window.$ = $;
 import "jstree";
 import 'jstree/dist/themes/default/style.min.css';
 
-const JsTreeWrapper = forwardRef(({ data, onSelect, filter }, ref) => {
+const JsTreeWrapper = forwardRef(({ data, onSelect }, ref) => {
 
   const treeRef = useRef(null);
 
