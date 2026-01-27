@@ -5,7 +5,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import JsTreeWrapper from './jsTreeWrapper.jsx';
-import treeData from '../add_tree.json'
+import addFlatData from '../add_flat.json'
 import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
 import TextField from '@mui/material/TextField';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -113,7 +113,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       </Box>
       <Box sx={treeContainer}>
         <JsTreeWrapper
-          data={treeData}
+          data={addFlatData}
           ref={treeRef}
           onSelect={handleSelect}
         />
@@ -122,7 +122,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         open={isSaveMenuOpen}
         onClose={() => setIsSaveMenuOpen(false)}
         onError={onError}
-        selectedNodes={treeRef.current?.getSelected()}
+        selectedNodes={selectedNodes}
       />
       <DownloadMenu
         open={isDownloadMenuOpen}
