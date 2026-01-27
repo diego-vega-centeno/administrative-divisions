@@ -5,6 +5,7 @@ import { progressDownloadIcon } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState, useRef } from "react";
 import { backdrop, basicMenu, textField, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
+import addFlatData from '../add_flat.json'
 
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
@@ -18,7 +19,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { saveLayerToDB } from '../utils/database.js'
 import { debugLog, errorLog } from "../utils/logger.js";
 
-export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
+let addTextIndex = {}
+for (const ele of addFlatData) {
+  addTextIndex[ele.id] = ele.text
+}
+
+
+export default function SaveMenu({ open, onClose, onError, selectedNodes}) {
   if (!open) return null;
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
@@ -27,7 +34,6 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (!title.trim()) {
       setError('Title is required');
       titleInputRef.current?.focus();
@@ -66,6 +72,15 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
     }
   };
 
+  function getParentNames(parentsIds) {
+    const parentNames = [];
+    parentsIds.forEach(id => {
+      if(id !== '#') parentNames.push(addTextIndex[id])
+    });
+    return parentNames;
+  }
+
+
   return createPortal(
     <>
       <Box
@@ -98,6 +113,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
               <TableRow >
                 <TableCell align="center" sx={headerCell}>id</TableCell>
                 <TableCell align="center" sx={headerCell}>name</TableCell>
+                <TableCell align="center" sx={headerCell}>parents</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -105,7 +121,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
                 <TableRow key={node.id}>
                   <TableCell align="center" sx={tableCell}>{node.id}</TableCell>
                   <TableCell align="center" sx={tableCell}>{node.text}</TableCell>
-                  <TableCell align="center" sx={tableCell}>{node.parentNames}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{getParentNames(node.parents).join('/')}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
