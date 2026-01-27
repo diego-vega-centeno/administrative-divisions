@@ -33,8 +33,8 @@ request.onupgradeneeded = (event) => {
   };
 }
 
-function makeTransaction(storeName) {
-  const transaction = db.transaction(storeName, 'readwrite')
+function makeTransaction(storeName, type) {
+  const transaction = db.transaction(storeName, type)
   transaction.oncomplete = (event) => {
     debugLog('Transaction successful');
   }
@@ -48,7 +48,7 @@ function makeTransaction(storeName) {
 }
 
 function putStoreRelations(relations) {
-  const store = makeTransaction(STORE_NAME);
+  const store = makeTransaction(STORE_NAME, 'readwrite');
 
   relations.forEach(rel => {
     const request = store.put(rel);
@@ -64,7 +64,7 @@ function putStoreRelations(relations) {
 
 function getStoreRelation(id) {
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME);
+    const store = makeTransaction(STORE_NAME, 'readonly');
     const request = store.get(id);
 
     request.onsuccess = () => {
@@ -83,7 +83,7 @@ function getStoreRelation(id) {
 
 function getAllStoredRelations() {
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME);
+    const store = makeTransaction(STORE_NAME, 'readonly');
     const request = store.getAll();
 
     request.onsuccess = () => {
@@ -101,7 +101,7 @@ function getAllStoredRelations() {
 
 function clearAllStoredRelations() {
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME);
+    const store = makeTransaction(STORE_NAME, 'readwrite');
     const request = store.clear();
 
     request.onsuccess = () => {
