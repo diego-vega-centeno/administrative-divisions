@@ -25,7 +25,7 @@ for (const ele of addFlatData) {
 }
 
 
-export default function SaveMenu({ open, onClose, onError, selectedNodes}) {
+export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
   if (!open) return null;
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
