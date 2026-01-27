@@ -31,7 +31,7 @@ const textField = {
 }
 
 const tableCell = {
-  padding: '.1rem 0rem'
+  padding: '.1rem .5rem'
 }
 
 const headerCell = {
