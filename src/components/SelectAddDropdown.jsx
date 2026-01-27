@@ -66,12 +66,6 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
     setIsSaveMenuOpen(true);
   }
 
-  useEffect(() => {
-    let addFlatJstreeData = addFlatData.map(ele => (
-      { id: ele.id, text: ele.text }
-    ))
-  }, [])
-
   return (
     <Box>
       <ListItemButton disableRipple sx={dropdown}>
@@ -119,7 +113,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       </Box>
       <Box sx={treeContainer}>
         <JsTreeWrapper
-          data={addFlatJstreeData}
+          data={addFlatData}
           ref={treeRef}
           onSelect={handleSelect}
         />
