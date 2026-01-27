@@ -73,10 +73,11 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes}) {
   };
 
   function getParentNames(parentsIds) {
-    const parentNames = [];
+    let parentNames = [];
     parentsIds.forEach(id => {
-      if(id !== '#') parentNames.push(addTextIndex[id])
+      if (id !== '#') parentNames.push(addTextIndex[id])
     });
+    if (!parentNames.length) parentNames = ['World'];
     return parentNames;
   }
 
