@@ -48,7 +48,7 @@ function makeTransaction(storeName, type) {
 }
 
 function putStoreRelations(relations) {
-  const store = makeTransaction(STORE_NAME, 'readWrite');
+  const store = makeTransaction(STORE_NAME, 'readwrite');
 
   relations.forEach(rel => {
     const request = store.put(rel);
@@ -64,7 +64,7 @@ function putStoreRelations(relations) {
 
 function getStoreRelation(id) {
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME, 'read');
+    const store = makeTransaction(STORE_NAME, 'readonly');
     const request = store.get(id);
 
     request.onsuccess = () => {
@@ -83,7 +83,7 @@ function getStoreRelation(id) {
 
 function getAllStoredRelations() {
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME, 'read');
+    const store = makeTransaction(STORE_NAME, 'readonly');
     const request = store.getAll();
 
     request.onsuccess = () => {
@@ -101,7 +101,7 @@ function getAllStoredRelations() {
 
 function clearAllStoredRelations() {
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME, 'readWrite');
+    const store = makeTransaction(STORE_NAME, 'readwrite');
     const request = store.clear();
 
     request.onsuccess = () => {
