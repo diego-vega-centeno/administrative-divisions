@@ -105,6 +105,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
                 <TableRow key={node.id}>
                   <TableCell align="center" sx={tableCell}>{node.id}</TableCell>
                   <TableCell align="center" sx={tableCell}>{node.text}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{node.parentNames}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
