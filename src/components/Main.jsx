@@ -27,6 +27,7 @@ export default function Main() {
   const [osmElements, setOsmElements] = useState(null);
   const [searchParams] = useSearchParams();
   const error = searchParams.get('error');
+  const message = searchParams.get('message');
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -50,7 +51,7 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    if (error === 'oauth_failed') setErrorMessage('Authentication failed');
+    if(error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
   }, [error]);
 
 
