@@ -50,11 +50,6 @@ export default function NavSidebar() {
         </ListItem>
         <ListItem disablePadding>
           <ListItemButton sx={navSideItem}>
-            About
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={navSideItem}>
             Favorites
           </ListItemButton>
         </ListItem>
