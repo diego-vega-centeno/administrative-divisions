@@ -9,6 +9,7 @@ export default function AlertDialog({ severity, message, open, onClose }) {
       <Alert
         severity={severity}
         onClose={onClose}
+        sx={{ whiteSpace: 'pre-line' }}
       >
         {message}
       </Alert>
