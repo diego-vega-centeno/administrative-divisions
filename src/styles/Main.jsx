@@ -9,7 +9,7 @@ const progressMapIcon = {
   zIndex: '1000'
 }
 
-const progressDownloadIcon = {
+const saveActionSection = {
   display: 'flex',
   alignItems: 'center',
   gap: '1rem',
@@ -18,4 +18,4 @@ const progressDownloadIcon = {
   }
 }
 
-export { progressMapIcon, progressDownloadIcon }
+export { progressMapIcon, saveActionSection }
