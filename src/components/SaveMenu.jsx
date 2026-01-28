@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { progressDownloadIcon } from "../styles/Main";
+import { saveActionSection } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState, useRef } from "react";
 import { backdrop, basicMenu, textField, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
@@ -128,7 +128,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={progressDownloadIcon}>
+        <Box sx={saveActionSection}>
           <Button
             sx={addToolsButton}
             size='small'
@@ -139,6 +139,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
           {isProgressIconActive && (
             <CircularProgress thickness={9} size={30} />
           )}
+        <Typography>Saved!</Typography>
         </Box>
       </Box>
     </>,
