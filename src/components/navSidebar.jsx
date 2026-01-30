@@ -10,12 +10,15 @@ import { IconButton } from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
 import LoginMenu from './LoginMenu.jsx'
 import useSession from "../utils/useSession.js";
+import FavoritesMenu from "./FavoritesMenu.jsx";
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
-  const toggleDrawer = (bool) => () => setOpen(bool);
+  const [isFavoritesMenuOpen, setIsFavoritesMenuOpen] = useState(false);
   const { user, loading } = useSession();
+
+  const toggleDrawer = (bool) => () => setOpen(bool);
 
   const handleUserStateButton = () => {
     if (user) {
@@ -23,6 +26,10 @@ export default function NavSidebar() {
     } else {
       setIsLoginMenuOpen(true);
     }
+  }
+
+  const handleFavoritesButton = () => {
+    setIsFavoritesMenuOpen(true);
   }
 
   const logoutUser = async () => {
@@ -49,7 +56,7 @@ export default function NavSidebar() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={navSideItem}>
+          <ListItemButton onClick={handleFavoritesButton} sx={navSideItem}>
             Favorites
           </ListItemButton>
         </ListItem>
@@ -72,6 +79,10 @@ export default function NavSidebar() {
       <LoginMenu
         open={isLoginMenuOpen}
         onClose={() => setIsLoginMenuOpen(false)}
+      />
+      <FavoritesMenu
+        open={isFavoritesMenuOpen}
+        onClose={() => setIsFavoritesMenuOpen(false)}
       />
     </div>
   )
