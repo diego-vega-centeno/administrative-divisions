@@ -27,6 +27,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
       } catch (error) {
         // ignore errors due to unmount in strict mode
         // if(error.name === 'AbortError') return;
+        console.log(error.name);
         errorLog(`Failed to fetch layer relations: ${error.message}`)
       }
     }
