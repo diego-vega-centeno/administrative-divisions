@@ -35,7 +35,7 @@ const tableCell = {
 }
 
 const headerCell = {
-  padding: '.1rem 0rem',
+  padding: '.1rem .7rem',
   backgroundColor: '#212529',
   color: 'white'
 }
