@@ -12,8 +12,6 @@ import { errorLog } from "../utils/logger.js";
 
 export default function LoginMenu({ open, onClose }) {
 
-  if (!open) return null;
-
   const handleClick = () => {
     const authUrl = import.meta.env.VITE_AUTH_URL;
     if (!authUrl) errorLog('Missing VITE_AUTH_URL');
