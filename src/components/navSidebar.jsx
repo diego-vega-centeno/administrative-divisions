@@ -76,14 +76,14 @@ export default function NavSidebar() {
       >
         {navList}
       </Drawer>
-      <LoginMenu
+      {isLoginMenuOpen && <LoginMenu
         open={isLoginMenuOpen}
         onClose={() => setIsLoginMenuOpen(false)}
-      />
-      <FavoritesMenu
+      />}
+      {isFavoritesMenuOpen && <FavoritesMenu
         open={isFavoritesMenuOpen}
         onClose={() => setIsFavoritesMenuOpen(false)}
-      />
+      />}
     </div>
   )
 }
