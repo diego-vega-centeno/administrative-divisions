@@ -31,6 +31,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
   const titleInputRef = useRef(null);
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -58,6 +59,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
     }
 
     setIsProgressIconActive(false);
+    setIsSaved(true);
   };
 
   const handleTitleChange = (event) => {
@@ -134,12 +136,12 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
             size='small'
             variant="contained"
             type="submit"
-            disabled={isProgressIconActive}
+            disabled={isProgressIconActive || isSaved}
           >Save</Button>
           {isProgressIconActive && (
             <CircularProgress thickness={9} size={30} />
           )}
-          <Typography>saved!</Typography>
+          {isSaved && <Typography>saved!</Typography>}
         </Box>
       </Box>
     </>,
