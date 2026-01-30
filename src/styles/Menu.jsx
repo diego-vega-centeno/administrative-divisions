@@ -11,8 +11,9 @@ const basicMenu = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   backgroundColor: '#F8F9FA',
-  minWidth: '300px',
-  zIndex: '1001',
+  minWidth: '30vw',
+  maxHeight: '80vh',
+  zIndex: 1001,
   padding: '.8rem 1rem',
   borderRadius: '5px',
   boxShadow: '3px 3px 3px 3px rgba(0, 0, 0, 0.5)',
@@ -20,7 +21,9 @@ const basicMenu = {
   '& > .MuiTypography-root, & > .MuiTextField-root, & > .MuiBox-root, & > .MuiTableContainer-root': {
     marginBottom: '.5rem',
     fontFamily: 'Oswald, sans-serif'
-  }
+  },
+  display: 'flex',
+  flexDirection: 'column'
 }
 
 const textField = {
@@ -37,13 +40,19 @@ const tableCell = {
 const headerCell = {
   padding: '.1rem .7rem',
   backgroundColor: '#212529',
-  color: 'white'
+  color: 'white',
 }
 
 const tableContainer = {
-  border: '1px solid black',
-  borderRadius: '5px',
-  overflow: 'hidden',
+  overflowY: 'auto',
+  flex: 1
 }
 
-export { backdrop, basicMenu, textField, tableCell, headerCell, tableContainer }
+const table = {
+  overflow: 'hidden',
+  border: '1px solid black',
+  borderRadius: '5px',
+  marginBottom: '1rem'
+}
+
+export { backdrop, basicMenu, textField, table, tableCell, headerCell, tableContainer }
