@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from '@mui/material/CircularProgress';
-import { progressDownloadIcon } from "../styles/Main";
+import { saveActionSection } from "../styles/Main";
 import { getRelationsDataWithCache, formatData } from '../utils/overpass';
 import { donwloadJSONData } from "../utils/overpass";
 import { debugLog, errorLog } from "../utils/logger";
@@ -154,7 +154,7 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
           </div>
         </fieldset>
         <hr />
-        <Box sx={progressDownloadIcon}>
+        <Box sx={saveActionSection}>
           <Button sx={addToolsButton}
             size='small'
             variant="contained"

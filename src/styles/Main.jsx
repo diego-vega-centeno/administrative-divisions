@@ -9,13 +9,17 @@ const progressMapIcon = {
   zIndex: '1000'
 }
 
-const progressDownloadIcon = {
+const saveActionSection = {
   display: 'flex',
   alignItems: 'center',
   gap: '1rem',
   '& .MuiCircularProgress-root': {
     color: '#3F7251',
+  },
+  '& > .MuiTypography-root': {
+    color: '#3F7251',
+    fontWeight: '600'
   }
 }
 
-export { progressMapIcon, progressDownloadIcon }
+export { progressMapIcon, saveActionSection }
