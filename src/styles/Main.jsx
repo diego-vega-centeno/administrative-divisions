@@ -15,6 +15,10 @@ const saveActionSection = {
   gap: '1rem',
   '& .MuiCircularProgress-root': {
     color: '#3F7251',
+  },
+  '& > .MuiTypography-root': {
+    color: '#3F7251',
+    fontWeight: '600'
   }
 }
 

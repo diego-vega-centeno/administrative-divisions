@@ -47,7 +47,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
       debugLog(saveResponse);
     } catch (error) {
       errorLog(error);
-      if (error?.code === 'DUPLICATE_TITLE') {
+      if (error?.code === 'duplicate_entry') {
         setError('This title already exists. Choose another one.');
         titleInputRef.current?.focus();
         setIsProgressIconActive(false);
@@ -139,7 +139,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
           {isProgressIconActive && (
             <CircularProgress thickness={9} size={30} />
           )}
-        <Typography>Saved!</Typography>
+          <Typography>saved!</Typography>
         </Box>
       </Box>
     </>,
