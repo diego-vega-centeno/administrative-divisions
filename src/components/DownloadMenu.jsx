@@ -1,4 +1,4 @@
-import { createPortal } from "react-dom";
+import Modal from '@mui/material/Modal';
 import styles from '../styles/DownloadMenu.module.css'
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import Button from "@mui/material/Button";
@@ -9,15 +9,6 @@ import { saveActionSection } from "../styles/Main";
 import { getRelationsDataWithCache, formatData } from '../utils/overpass';
 import { donwloadJSONData } from "../utils/overpass";
 import { debugLog, errorLog } from "../utils/logger";
-
-function Backdrop({ onClick }) {
-  return (
-    <div
-      onClick={onClick}
-      className={styles['backdrop']}
-    />
-  )
-}
 
 export default function DownloadMenu({ open, onClose, onError, selectedNodes }) {
 
@@ -70,9 +61,8 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
     })
   }
 
-  return createPortal(
-    <>
-      <Backdrop onClick={onClose} />
+  return (
+    <Modal open={open} onClose={onClose}>
       <div className={styles['menu-container']}>
         <div className={styles['section']}>
           <div>format:</div>
@@ -165,6 +155,6 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
           )}
         </Box>
       </div>
-    </>,
-    document.body);
+    </Modal>
+  );
 }

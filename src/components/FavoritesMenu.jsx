@@ -1,6 +1,8 @@
-import { createPortal } from "react-dom";
 import Box from "@mui/material/Box";
-import { backdrop, basicMenu, table, tableCell, headerCell, subHeaderCell, tableContainer } from "../styles/Menu.jsx";
+import {
+  basicMenu, table, tableCell, headerCell,
+  subHeaderCell, tableContainer, modalCenter
+} from "../styles/Menu.jsx";
 import { getUserLayersRelations } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
@@ -11,6 +13,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from "@mui/material/TableRow";
 import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect } from "react";
+import Modal from '@mui/material/Modal';
 
 export default function FavoritesMenu({ open, onClose, onError }) {
   const [relsLayers, setRelsLayers] = useState([]);
@@ -38,9 +41,8 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     };
   }, [])
 
-  return createPortal(
-    <>
-      <Box onClick={() => onClose()} sx={backdrop}/>
+  return (
+    <Modal open={open} onClose={onClose} sx={modalCenter}>
       <Box sx={basicMenu}>
         <Typography>Favorite layers</Typography>
         <TableContainer sx={tableContainer}>
@@ -75,6 +77,6 @@ export default function FavoritesMenu({ open, onClose, onError }) {
           })}
         </TableContainer>
       </Box>
-    </>,
-    document.body)
+    </Modal>
+  )
 }
