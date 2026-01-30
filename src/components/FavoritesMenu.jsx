@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import Box from "@mui/material/Box";
-import { backdrop, basicMenu, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
+import { backdrop, basicMenu, table, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
 import { getUserLayersRelations } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
@@ -40,39 +40,36 @@ export default function FavoritesMenu({ open, onClose, onError }) {
 
   return createPortal(
     <>
-      <Box
-        onClick={() => onClose()}
-        sx={backdrop}
-      />
-      <Box
-        component="form"
-        sx={basicMenu}
-      >
+      <Box onClick={() => onClose()} sx={backdrop}/>
+      <Box sx={basicMenu}>
         <Typography>Favorite layers</Typography>
         <TableContainer sx={tableContainer}>
           {Object.entries(relsLayers).map(([title, rels]) => {
             return (
-              <Table key={title}>
+              <Table key={title} sx={table}>
                 <TableHead >
                   <TableRow >
                     <TableCell
                       align="center"
                       sx={headerCell}
-                      colSpan={3}
+                      colSpan={2}
                     >{title}</TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell align="center" sx={headerCell}>id</TableCell>
+                    <TableCell align="center" sx={headerCell}>name</TableCell>
+                  </TableRow>
                 </TableHead>
-                {rels.map(rel => {
-                  return (
-                    <TableBody>
+                <TableBody>
+                  {rels.map(rel => {
+                    return (
                       <TableRow key={rel.id}>
-                        <TableCell align="center" sx={tableCell}>{rel.layer_title}</TableCell>
                         <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
                         <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
                       </TableRow>
-                    </TableBody>
-                  )
-                })}
+                    )
+                  })}
+                </TableBody>
               </Table>
             )
           })}
