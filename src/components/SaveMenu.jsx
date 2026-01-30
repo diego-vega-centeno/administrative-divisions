@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { progressDownloadIcon } from "../styles/Main";
+import { saveActionSection } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState, useRef } from "react";
 import { backdrop, basicMenu, textField, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
@@ -31,6 +31,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
   const titleInputRef = useRef(null);
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -47,7 +48,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
       debugLog(saveResponse);
     } catch (error) {
       errorLog(error);
-      if (error?.code === 'DUPLICATE_TITLE') {
+      if (error?.code === 'duplicate_entry') {
         setError('This title already exists. Choose another one.');
         titleInputRef.current?.focus();
         setIsProgressIconActive(false);
@@ -58,6 +59,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
     }
 
     setIsProgressIconActive(false);
+    setIsSaved(true);
   };
 
   const handleTitleChange = (event) => {
@@ -128,17 +130,18 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={progressDownloadIcon}>
+        <Box sx={saveActionSection}>
           <Button
             sx={addToolsButton}
             size='small'
             variant="contained"
             type="submit"
-            disabled={isProgressIconActive}
+            disabled={isProgressIconActive || isSaved}
           >Save</Button>
           {isProgressIconActive && (
             <CircularProgress thickness={9} size={30} />
           )}
+          {isSaved && <Typography>saved!</Typography>}
         </Box>
       </Box>
     </>,
