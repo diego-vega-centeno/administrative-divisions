@@ -1,19 +1,9 @@
-const backdrop = {
-  position: 'fixed',
-  inset: '0',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  zIndex: 1000
-}
-
 const basicMenu = {
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
   backgroundColor: '#F8F9FA',
+  width: '100%',
   minWidth: '30vw',
+  maxWidth: '35vw',
   maxHeight: '80vh',
-  zIndex: 1001,
   padding: '.8rem 1rem',
   borderRadius: '5px',
   boxShadow: '3px 3px 3px 3px rgba(0, 0, 0, 0.5)',
@@ -23,7 +13,7 @@ const basicMenu = {
     fontFamily: 'Oswald, sans-serif'
   },
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
 }
 
 const textField = {
@@ -65,4 +55,13 @@ const table = {
   borderSpacing: 0,
 }
 
-export { backdrop, basicMenu, textField, table, tableCell, headerCell, subHeaderCell, tableContainer }
+const modalCenter = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}
+
+export {
+  basicMenu, textField, table, tableCell, headerCell,
+  subHeaderCell, tableContainer, modalCenter
+}
