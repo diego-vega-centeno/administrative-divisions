@@ -48,8 +48,8 @@ export default function FavoritesMenu({ open, onClose, onError }) {
             <TableHead >
               <TableRow >
                 <TableCell align="center" sx={headerCell}>layer title</TableCell>
-                <TableCell align="center" sx={headerCell}>id</TableCell>
-                <TableCell align="center" sx={headerCell}>name</TableCell>
+                <TableCell align="center" sx={headerCell}>rel id</TableCell>
+                <TableCell align="center" sx={headerCell}>rel name</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
