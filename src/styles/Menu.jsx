@@ -43,6 +43,13 @@ const headerCell = {
   color: 'white',
 }
 
+const subHeaderCell = {
+  padding: 0,
+  backgroundColor: '#4a4f55',
+  color: 'white',
+  fontSize: '.75rem'
+}
+
 const tableContainer = {
   overflowY: 'auto',
   flex: 1
@@ -52,7 +59,10 @@ const table = {
   overflow: 'hidden',
   border: '1px solid black',
   borderRadius: '5px',
-  marginBottom: '1rem'
+  marginBottom: '1rem',
+
+  borderCollapse: 'separate',
+  borderSpacing: 0,
 }
 
-export { backdrop, basicMenu, textField, table, tableCell, headerCell, tableContainer }
+export { backdrop, basicMenu, textField, table, tableCell, headerCell, subHeaderCell, tableContainer }
