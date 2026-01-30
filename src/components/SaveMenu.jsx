@@ -1,10 +1,12 @@
-import { createPortal } from "react-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { saveActionSection } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState, useRef } from "react";
-import { backdrop, basicMenu, textField, table, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
+import {
+  basicMenu, textField, table, tableCell,
+  headerCell, tableContainer, modalCenter
+} from "../styles/Menu.jsx";
 import addFlatData from '../add_flat.json'
 
 import Typography from "@mui/material/Typography";
@@ -18,6 +20,7 @@ import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import { saveLayerToDB } from '../utils/database.js'
 import { debugLog, errorLog } from "../utils/logger.js";
+import Modal from '@mui/material/Modal';
 
 let addTextIndex = {}
 for (const ele of addFlatData) {
@@ -84,12 +87,8 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
   }
 
 
-  return createPortal(
-    <>
-      <Box
-        onClick={() => onClose()}
-        sx={backdrop}
-      />
+  return (
+    <Modal open={open} onClose={onClose} sx={modalCenter}>
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -144,6 +143,6 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
           {isSaved && <Typography>saved!</Typography>}
         </Box>
       </Box>
-    </>,
-    document.body)
+    </Modal>
+  )
 }
