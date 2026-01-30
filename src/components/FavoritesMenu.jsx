@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import Box from "@mui/material/Box";
-import { backdrop, basicMenu, table, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
+import { backdrop, basicMenu, table, tableCell, headerCell, subHeaderCell, tableContainer } from "../styles/Menu.jsx";
 import { getUserLayersRelations } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
@@ -56,8 +56,8 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                     >{title}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell align="center" sx={headerCell}>id</TableCell>
-                    <TableCell align="center" sx={headerCell}>name</TableCell>
+                    <TableCell align="center" sx={subHeaderCell}>id</TableCell>
+                    <TableCell align="center" sx={subHeaderCell}>name</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

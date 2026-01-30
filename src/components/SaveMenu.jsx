@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import { saveActionSection } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState, useRef } from "react";
-import { backdrop, basicMenu, textField, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
+import { backdrop, basicMenu, textField, table, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
 import addFlatData from '../add_flat.json'
 
 import Typography from "@mui/material/Typography";
@@ -111,7 +111,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
           autoFocus
         />
         <TableContainer sx={tableContainer}>
-          <Table>
+          <Table sx={table}>
             <TableHead >
               <TableRow >
                 <TableCell align="center" sx={headerCell}>id</TableCell>
