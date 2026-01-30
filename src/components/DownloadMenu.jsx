@@ -12,8 +12,6 @@ import { debugLog, errorLog } from "../utils/logger";
 
 export default function DownloadMenu({ open, onClose, onError, selectedNodes }) {
 
-  if (!open) return null;
-
   const [params, setParams] = useState(
     {
       format: 'osm',
