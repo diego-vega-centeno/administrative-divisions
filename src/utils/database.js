@@ -22,11 +22,11 @@ async function saveLayerToDB(title, selectedNodes) {
   return data;
 }
 
-async function getUserLayersRelations() {
+async function getUserLayersRelations({ signal }) {
 
   const response = await fetch(
     import.meta.env.VITE_BACKEND_URL + '/layer',
-    { credentials: 'include' }
+    { credentials: 'include', signal }
   );
   const data = await response.json();
 

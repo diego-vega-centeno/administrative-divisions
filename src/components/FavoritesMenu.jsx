@@ -16,21 +16,27 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   const [relations, setRelations] = useState([]);
 
   useEffect(() => {
+    // lets use a controller to stop the fetch in case of unmount
+    const controller = new AbortController();
+
     async function getUserRels() {
       try {
-        const relations = await getUserLayersRelations();
+        const relations = await getUserLayersRelations({ signal: controller.signal });
         debugLog(relations);
         setRelations(relations.data);
       } catch (error) {
+        // ignore errors due to unmount in strict mode
+        if(error.name === 'AbortError') return;
         errorLog(`Failed to fetch layer relations: ${error.message}`)
       }
     }
 
     getUserRels();
-  }, [])
 
-  // early returns should be after hooks
-  if (!open) return null;
+    return () => {
+      controller.abort();
+    };
+  }, [])
 
   return createPortal(
     <>
