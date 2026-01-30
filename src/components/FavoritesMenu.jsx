@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import Box from "@mui/material/Box";
-import { backdrop, basicMenu, tableCell, headerCell, tableContainer } from "../styles/Menu.jsx";
+import { backdrop, basicMenu, table, tableCell, headerCell, subHeaderCell, tableContainer } from "../styles/Menu.jsx";
 import { getUserLayersRelations } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
@@ -13,7 +13,7 @@ import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect } from "react";
 
 export default function FavoritesMenu({ open, onClose, onError }) {
-  const [relations, setRelations] = useState([]);
+  const [relsLayers, setRelsLayers] = useState([]);
 
   useEffect(() => {
     // lets use a controller to stop the fetch in case of unmount
@@ -22,11 +22,11 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     async function getUserRels() {
       try {
         const relations = await getUserLayersRelations({ signal: controller.signal });
-        debugLog(relations);
-        setRelations(relations.data);
+        const relsLayers = Object.groupBy(relations.data, ({ layer_title }) => layer_title)
+        setRelsLayers(relsLayers);
       } catch (error) {
         // ignore errors due to unmount in strict mode
-        if(error.name === 'AbortError') return;
+        if (error.name === 'AbortError') return;
         errorLog(`Failed to fetch layer relations: ${error.message}`)
       }
     }
@@ -40,36 +40,39 @@ export default function FavoritesMenu({ open, onClose, onError }) {
 
   return createPortal(
     <>
-      <Box
-        onClick={() => onClose()}
-        sx={backdrop}
-      />
-      <Box
-        component="form"
-        sx={basicMenu}
-      >
+      <Box onClick={() => onClose()} sx={backdrop}/>
+      <Box sx={basicMenu}>
         <Typography>Favorite layers</Typography>
         <TableContainer sx={tableContainer}>
-          <Table>
-            <TableHead >
-              <TableRow >
-                <TableCell align="center" sx={headerCell}>layer title</TableCell>
-                <TableCell align="center" sx={headerCell}>rel id</TableCell>
-                <TableCell align="center" sx={headerCell}>rel name</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {relations.map(rel => {
-                return (
-                  <TableRow key={rel.id}>
-                    <TableCell align="center" sx={tableCell}>{rel.layer_title}</TableCell>
-                    <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
-                    <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
+          {Object.entries(relsLayers).map(([title, rels]) => {
+            return (
+              <Table key={title} sx={table}>
+                <TableHead >
+                  <TableRow >
+                    <TableCell
+                      align="center"
+                      sx={headerCell}
+                      colSpan={2}
+                    >{title}</TableCell>
                   </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
+                  <TableRow>
+                    <TableCell align="center" sx={subHeaderCell}>id</TableCell>
+                    <TableCell align="center" sx={subHeaderCell}>name</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rels.map(rel => {
+                    return (
+                      <TableRow key={rel.id}>
+                        <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
+                        <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            )
+          })}
         </TableContainer>
       </Box>
     </>,
