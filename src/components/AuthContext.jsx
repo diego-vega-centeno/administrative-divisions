@@ -5,11 +5,11 @@ const AuthContext = createContext(null);
 
 // we need to fetch the user so use a wrapper as export
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function getUser() {
+    async function getUserData() {
       try {
         const response = await fetch(
           import.meta.env.VITE_BACKEND_URL + '/user/me',
@@ -17,11 +17,11 @@ const AuthProvider = ({ children }) => {
         );
 
         if (response.ok) {
-          const user = await response.json();
-          setUser(user)
+          const dataResponse = await response.json();
+          setUserData(dataResponse.data)
         } else {
           debugLog(`Auth failed: ${response.status} - ${response.statusText}`)
-          setUser(null)
+          setUserData(null)
         }
       } catch (error) {
         errorLog(`Failed user fetch: ${error}`)
@@ -30,11 +30,11 @@ const AuthProvider = ({ children }) => {
       }
     };
 
-    getUser();
+    getUserData();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ userData, setUserData, loading }}>
       {children}
     </AuthContext.Provider>
   )
