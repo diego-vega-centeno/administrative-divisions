@@ -25,13 +25,15 @@ function App() {
     }
 
   }, []);
-
-  return <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      {/* <Route path={import.meta.env.VITE_AUTH_CALLBACK_URL} element={<OAuthCallback />} /> */}
-    </Routes>
-  </BrowserRouter>
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  )
 }
 
 export default App

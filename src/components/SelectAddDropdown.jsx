@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dropdown } from '../styles/SearchDropdown';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import { addToolsButton, addTools, treeContainer, infoAddBox } from '../styles/SelectAddDropdown.jsx';
 import DownloadMenu from './DownloadMenu.jsx';
 import SaveMenu from './SaveMenu.jsx';
-import useSession from '../utils/useSession.js';
+import { AuthContext } from './AuthContext.jsx';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
@@ -22,7 +22,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState([]);
-  const { user, loading } = useSession();
+  const { user, loading } = useContext(AuthContext);
 
   function handlePlot() {
     if (!selectedNodes.length) {
