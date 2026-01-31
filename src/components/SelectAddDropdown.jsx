@@ -10,7 +10,7 @@ import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/Searc
 import TextField from '@mui/material/TextField';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Button from '@mui/material/Button';
-import { addToolsButton, addTools, treeContainer, infoAddBox } from '../styles/SelectAddDropdown.jsx';
+import { addToolsButton, addTools, treeContainer, infoAddBox, addPanel } from '../styles/SelectAddDropdown.jsx';
 import DownloadMenu from './DownloadMenu.jsx';
 import SaveMenu from './SaveMenu.jsx';
 import { AuthContext } from './AuthContext.jsx';
@@ -71,45 +71,47 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       <ListItemButton disableRipple sx={dropdown}>
         <ListItemText primary={text} />
       </ListItemButton>
-      <Box sx={searchFieldBox}>
-        <TextField
-          type="search"
-          sx={searchField}
-          placeholder="filter..."
-          value={filterInput}
-          onChange={(e) => setFilterInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleFilter(filterInput);
-          }}
-        />
-        <Box sx={searchFieldIconBox} onClick={() => handleFilter(filterInput)}>
-          <FontAwesomeIcon icon={faSearch} />
+      <Box sx={addPanel}>
+        <Box sx={searchFieldBox}>
+          <TextField
+            type="search"
+            sx={searchField}
+            placeholder="filter..."
+            value={filterInput}
+            onChange={(e) => setFilterInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleFilter(filterInput);
+            }}
+          />
+          <Box sx={searchFieldIconBox} onClick={() => handleFilter(filterInput)}>
+            <FontAwesomeIcon icon={faSearch} />
+          </Box>
         </Box>
-      </Box>
-      <Box sx={addTools}>
-        <Button sx={addToolsButton}
-          size='small'
-          variant="contained"
-          onClick={handleReset}
-        >Reset</Button>
-        <Button sx={addToolsButton}
-          size='small'
-          variant="contained"
-          onClick={handlePlot}
-        >Plot</Button>
-        <Button sx={addToolsButton}
-          size='small'
-          variant="contained"
-          onClick={handleDownload}
-        >Download</Button>
-        <Button sx={addToolsButton}
-          size='small'
-          variant="contained"
-          onClick={handleSave}
-        >Save</Button>
-      </Box>
-      <Box sx={infoAddBox}>
-        {selectedNodes.length || 0} nodes selected
+        <Box sx={addTools}>
+          <Button sx={addToolsButton}
+            size='small'
+            variant="contained"
+            onClick={handleReset}
+          >Reset</Button>
+          <Button sx={addToolsButton}
+            size='small'
+            variant="contained"
+            onClick={handlePlot}
+          >Plot</Button>
+          <Button sx={addToolsButton}
+            size='small'
+            variant="contained"
+            onClick={handleDownload}
+          >Download</Button>
+          <Button sx={addToolsButton}
+            size='small'
+            variant="contained"
+            onClick={handleSave}
+          >Save</Button>
+        </Box>
+        <Box sx={infoAddBox}>
+          {selectedNodes.length || 0} nodes selected
+        </Box>
       </Box>
       <Box sx={treeContainer}>
         <JsTreeWrapper

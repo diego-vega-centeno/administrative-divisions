@@ -29,10 +29,9 @@ const dropdownIcon = (isOpen) => ({
 
 const searchFieldBox = {
   display: 'flex',
-  margin: '0.4rem 1rem',
-  height: '2.2rem',
-  position: 'sticky',
-  top: '0',
+  margin: '0 1rem',
+  padding: '0.4rem 0',
+  height: '3rem',
   backgroundColor: 'var(--color-primary)',
   zIndex: '100'
 }
