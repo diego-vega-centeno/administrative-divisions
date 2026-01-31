@@ -22,7 +22,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState([]);
-  const { user, loading } = useContext(AuthContext);
+  const { user, setUser, loading } = useContext(AuthContext);
 
   function handlePlot() {
     if (!selectedNodes.length) {

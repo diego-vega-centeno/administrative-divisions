@@ -17,7 +17,7 @@ export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
   const [isFavoritesMenuOpen, setIsFavoritesMenuOpen] = useState(false);
-  const { user, loading } = useContext(AuthContext);
+  const { user, setUser, loading } = useContext(AuthContext);
 
   const toggleDrawer = (bool) => () => setOpen(bool);
 
@@ -38,6 +38,7 @@ export default function NavSidebar() {
       await fetch(import.meta.env.VITE_BACKEND_URL + '/user/logout',
         { credentials: 'include' }
       )
+      setUser(null);
       window.location.reload();
     } catch (error) {
       errorLog(`Logout failed: ${error}`)
