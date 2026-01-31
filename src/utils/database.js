@@ -1,7 +1,9 @@
+import { fetchWithUserUpdate } from "../utils/fetch.js";
+
 async function saveLayerToDB(title, selectedNodes) {
 
   const formattedRelations = selectedNodes.map(ele => ({ relId: ele.id, relName: ele.text }))
-  const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/layer', {
+  const response = await fetchWithUserUpdate(import.meta.env.VITE_BACKEND_URL + '/layer', {
     method: 'PUT',
     credentials: 'include',
     headers: { 'Content-type': 'application/json' },
@@ -24,7 +26,7 @@ async function saveLayerToDB(title, selectedNodes) {
 
 async function getUserLayersRelations({ signal }) {
 
-  const response = await fetch(
+  const response = await fetchWithUserUpdate(
     import.meta.env.VITE_BACKEND_URL + '/layer',
     { credentials: 'include', signal }
   );

@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { errorLog, debugLog } from "../utils/logger";
 
 const AuthContext = createContext(null);
+let logout = null;
 
 // we need to fetch the user so use a wrapper as export
 const AuthProvider = ({ children }) => {
@@ -30,6 +31,10 @@ const AuthProvider = ({ children }) => {
       }
     };
 
+    // set logout from outer scope
+    // so we can export it from this module and reference the setUserData
+    logout = () => setUserData(null);
+
     getUserData();
   }, []);
 
@@ -40,4 +45,4 @@ const AuthProvider = ({ children }) => {
   )
 }
 
-export { AuthProvider, AuthContext }
+export { AuthProvider, AuthContext, logout }
