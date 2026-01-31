@@ -1,5 +1,5 @@
 import Drawer from "@mui/material/Drawer";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -9,14 +9,15 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
 import LoginMenu from './LoginMenu.jsx'
-import useSession from "../utils/useSession.js";
 import FavoritesMenu from "./FavoritesMenu.jsx";
+
+import { AuthContext } from "./AuthContext.jsx";
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
   const [isFavoritesMenuOpen, setIsFavoritesMenuOpen] = useState(false);
-  const { user, loading } = useSession();
+  const { user, loading } = useContext(AuthContext);
 
   const toggleDrawer = (bool) => () => setOpen(bool);
 
