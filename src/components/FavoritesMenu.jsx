@@ -65,7 +65,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                 <TableBody>
                   {rels.map(rel => {
                     return (
-                      <TableRow key={rel.id}>
+                      <TableRow key={rel.osm_relation_id}>
                         <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
                         <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
                       </TableRow>
