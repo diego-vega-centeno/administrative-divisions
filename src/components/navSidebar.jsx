@@ -17,12 +17,12 @@ export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
   const [isFavoritesMenuOpen, setIsFavoritesMenuOpen] = useState(false);
-  const { user, setUser, loading } = useContext(AuthContext);
+  const { userData, setUserData, loading } = useContext(AuthContext);
 
   const toggleDrawer = (bool) => () => setOpen(bool);
 
   const handleUserStateButton = () => {
-    if (user) {
+    if (userData) {
       logoutUser();
     } else {
       setIsLoginMenuOpen(true);
@@ -38,7 +38,7 @@ export default function NavSidebar() {
       await fetch(import.meta.env.VITE_BACKEND_URL + '/user/logout',
         { credentials: 'include' }
       )
-      setUser(null);
+      setUserData(null);
       window.location.reload();
     } catch (error) {
       errorLog(`Logout failed: ${error}`)
@@ -47,7 +47,7 @@ export default function NavSidebar() {
 
   let userState;
   if (loading) userState = 'Loading ...'
-  else userState = user ? 'Log out' : 'Log in'
+  else userState = userData ? 'Log out' : 'Log in'
 
   const navList = (
     <Box sx={navSideBox} onClick={toggleDrawer(false)}>

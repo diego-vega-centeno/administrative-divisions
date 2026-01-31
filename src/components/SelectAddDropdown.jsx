@@ -22,7 +22,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState([]);
-  const { user, setUser, loading } = useContext(AuthContext);
+  const { userData, setUserData, loading } = useContext(AuthContext);
 
   function handlePlot() {
     if (!selectedNodes.length) {
@@ -55,7 +55,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   }
 
   function handleSave() {
-    if (loading || !user) {
+    if (loading || !userData) {
       onError('Log in to save layers');
       return;
     }
