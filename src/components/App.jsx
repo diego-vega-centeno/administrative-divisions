@@ -1,7 +1,7 @@
 import Home from "../pages/Home.jsx"
 import { BrowserRouter, Routes, Route } from "react-router"
 import { AuthProvider } from "./AuthContext.jsx"
-import { MapActionsProvider } from '../components/MapActiosnContext.jsx'
+import { MapActionsProvider } from './MapActionsContext.jsx'
 
 function App() {
 

@@ -17,7 +17,7 @@ import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import { errorLog } from '../utils/logger.js';
 import AlertDialog from './AlertDialog.jsx';
 import { useSearchParams } from "react-router";
-import { MapActionsContext } from './MapActiosnContext.jsx';
+import { MapActionsContext } from './MapActionsContext.jsx';
 
 export default function Main() {
 
