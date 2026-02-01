@@ -63,7 +63,10 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                     >
                       <Box sx={headerCellContent}>
                         <Typography>{title}</Typography>
-                        <Box sx={headerCellToolsContainer}>
+                        <Box
+                          sx={headerCellToolsContainer}
+                          className="header-cell-tools"
+                        >
                           <Tooltip title="Plot" placement="top" arrow>
                             <Button sx={headerCellToolsButton}>
                               <FontAwesomeIcon icon={faSquareUpRight} />
