@@ -6,9 +6,9 @@ function MapActionsProvider({ children }) {
   const [selected, setSelected] = useState([])
 
   return (
-    <MapActionsContext value={{ selected, setSelected }}>
+    <MapActionsContext.Provider value={{ selected, setSelected }}>
       {children}
-    </MapActionsContext>
+    </MapActionsContext.Provider>
   )
 }
 
