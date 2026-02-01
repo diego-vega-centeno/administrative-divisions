@@ -56,7 +56,8 @@ const headerCellToolsButton = {
   color: 'white',
   '&:hover': {
     backgroundColor: 'grey'
-  }
+  },
+  borderRadius: '5px'
 }
 
 const tableContainer = {
