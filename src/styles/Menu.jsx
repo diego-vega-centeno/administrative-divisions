@@ -29,6 +29,10 @@ const headerCell = {
   padding: '.1rem .7rem',
   backgroundColor: '#212529',
   color: 'white',
+  '&:hover .header-cell-tools': {
+    opacity: 1,
+    visibility: "visible",
+  }
 }
 
 const subHeaderCell = {
@@ -47,7 +51,9 @@ const headerCellToolsContainer = {
   display: 'flex',
   position: 'absolute',
   top: 0,
-  right: 0
+  right: 0,
+  opacity: 0,
+  visibility: "hidden",
 }
 
 const headerCellToolsButton = {
