@@ -13,6 +13,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect } from "react";
 import Modal from '@mui/material/Modal';
@@ -63,12 +64,16 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                       <Box sx={headerCellContent}>
                         <Typography>{title}</Typography>
                         <Box sx={headerCellToolsContainer}>
-                          <Button sx={headerCellToolsButton}>
-                            <FontAwesomeIcon icon={faSquareUpRight} />
-                          </Button>
-                          <Button sx={headerCellToolsButton}>
-                            <FontAwesomeIcon icon={faTrash} />
-                          </Button>
+                          <Tooltip title="Plot" placement="top" arrow>
+                            <Button sx={headerCellToolsButton}>
+                              <FontAwesomeIcon icon={faSquareUpRight} />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip title="Delete" placement="top" arrow>
+                            <Button sx={headerCellToolsButton}>
+                              <FontAwesomeIcon icon={faTrash} />
+                            </Button>
+                          </Tooltip>
                         </Box>
                       </Box>
                     </TableCell>
