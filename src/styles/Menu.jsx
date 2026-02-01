@@ -1,5 +1,3 @@
-import { width } from "@fortawesome/free-brands-svg-icons/fa42Group"
-
 const basicMenu = {
   backgroundColor: '#F8F9FA',
   width: 'clamp(300px, 35vw, 35vw)',
@@ -41,12 +39,15 @@ const subHeaderCell = {
 }
 
 const headerCellContent = {
-  display: 'grid',
-  gridTemplateColumns: '8fr 1fr'
+  position: 'relative',
+  padding: '.1rem 0'
 }
 
 const headerCellToolsContainer = {
-  display: 'flex'
+  display: 'flex',
+  position: 'absolute',
+  top: 0,
+  right: 0
 }
 
 const headerCellToolsButton = {
