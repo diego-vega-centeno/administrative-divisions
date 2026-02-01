@@ -44,7 +44,14 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     return () => {
       controller.abort();
     };
-  }, [])
+  }, []);
+
+
+  const plotLayer = async (title) => {
+    const relsIds = relsLayers[title].map(rel => rel['osm_relation_id']);
+    onClose();
+    console.log(relsIds);
+  }
 
   return (
     <Modal open={open} onClose={onClose} sx={modalCenter}>
@@ -68,12 +75,18 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                           className="header-cell-tools"
                         >
                           <Tooltip title="Plot" placement="top" arrow>
-                            <Button sx={headerCellToolsButton}>
+                            <Button
+                              sx={headerCellToolsButton}
+                              onClick={() => plotLayer(title)}
+                            >
                               <FontAwesomeIcon icon={faSquareUpRight} />
                             </Button>
                           </Tooltip>
                           <Tooltip title="Delete" placement="top" arrow>
-                            <Button sx={headerCellToolsButton}>
+                            <Button
+                              sx={headerCellToolsButton}
+                              onClick={() => plotLayer(title)}
+                            >
                               <FontAwesomeIcon icon={faTrash} />
                             </Button>
                           </Tooltip>
