@@ -19,10 +19,10 @@ import { useState, useEffect, useContext } from "react";
 import Modal from '@mui/material/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareUpRight, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { MapActionsContext } from "./MapActiosnContext.jsx";
+import { MapActionsContext } from "./MapActionsContext.jsx";
 
 export default function FavoritesMenu({ open, onClose, onError }) {
-  const [relsLayers, setRelsLayers] = useState([]);
+  const [relsLayers, setRelsLayers] = useState({});
   const { setSelected } = useContext(MapActionsContext)
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   }, []);
 
 
-  const plotLayer = async (title) => {
+  const plotLayer = (title) => {
     const rels = relsLayers[title].map(rel => ({id: rel['osm_relation_id']}));
     onClose();
     setSelected(rels);
