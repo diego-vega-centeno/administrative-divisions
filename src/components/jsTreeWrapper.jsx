@@ -31,7 +31,8 @@ const JsTreeWrapper = forwardRef(({ data, onSelect }, ref) => {
             ...child,
             children: Boolean(childrenIndex[child.id]) // O(1)
           }))
-          callback(childrenWithHas)
+          callback(childrenWithHas);
+          $(treeRef.current).trigger('lazy_load_done.jstree', [node]);
         },
         'themes': {
           'icons': false
@@ -54,18 +55,34 @@ const JsTreeWrapper = forwardRef(({ data, onSelect }, ref) => {
               "label": "select immediate childs",
               // obj is the button object
               "action": function (obj) {
-                // select only immediate children
-                node.children.forEach(child => {
-                  $(treeRef.current).jstree("select_node", child);
+                const tree = $(treeRef.current).jstree(true);
+                // manually open node instead of attaching events
+                tree.open_node(node, function () {
+                  const updatedNode = tree.get_node(node.id);
+                  updatedNode.children.forEach(child => {
+                    tree.select_node(child);
+                  });
                 });
               }
             },
             "allChilds": {
               "label": "select all childs",
               "action": function (obj) {
-                node.children_d.forEach(child => {
-                  $(treeRef.current).jstree("select_node", child);
-                })
+                const tree = $(treeRef.current).jstree(true);
+                // Manually open and select nodes
+                // to avoid race situation between lazy loading and events
+                function openNodeAndSelectChildren(nodeId) {
+                  tree.open_node(nodeId, function () {
+                    const updatedNode = tree.get_node(nodeId);
+                    updatedNode.children.forEach(childId => {
+                      tree.select_node(childId);
+                      if (childrenIndex[childId]) {
+                        openNodeAndSelectChildren(childId);
+                      }
+                    })
+                  });
+                }
+                openNodeAndSelectChildren(node.id);
               }
             }
           }
