@@ -1,8 +1,6 @@
 const basicMenu = {
   backgroundColor: '#F8F9FA',
-  width: '100%',
-  minWidth: '30vw',
-  maxWidth: '35vw',
+  width: 'clamp(300px, 35vw, 35vw)',
   maxHeight: '80vh',
   padding: '.8rem 1rem',
   borderRadius: '5px',
