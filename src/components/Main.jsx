@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styles from '../styles/Main.module.css'
 import Footer from './Footer.jsx'
 import SearchDropdown from './SearchDropdown.jsx'
@@ -17,6 +17,7 @@ import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import { errorLog } from '../utils/logger.js';
 import AlertDialog from './AlertDialog.jsx';
 import { useSearchParams } from "react-router";
+import { MapActionsContext } from './MapActiosnContext.jsx';
 
 export default function Main() {
 
@@ -28,6 +29,7 @@ export default function Main() {
   const [searchParams] = useSearchParams();
   const error = searchParams.get('error');
   const message = searchParams.get('message');
+  const { selected } = useContext(MapActionsContext)
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -51,7 +53,7 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    if(error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
+    if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
   }, [error]);
 
 
@@ -78,6 +80,7 @@ export default function Main() {
   // for add selection from tree
   async function handleADDPlot(selected) {
     try {
+      console.log(selected);
       setIsProgressIconActive(true);
       // getAllStoredRelations();
       // clearAllStoredRelations();
@@ -101,6 +104,12 @@ export default function Main() {
   const handleError = (errorMessage) => {
     setErrorMessage(errorMessage);
   }
+
+  useEffect(() => {
+    if (!selected.length) return;
+    console.log(selected);
+    handleADDPlot(selected)
+  }, [selected])
 
   return (
     <main className={styles.main}>
