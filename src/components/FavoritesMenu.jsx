@@ -15,13 +15,15 @@ import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import { debugLog, errorLog } from "../utils/logger.js";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Modal from '@mui/material/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareUpRight, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { MapActionsContext } from "./MapActiosnContext.jsx";
 
 export default function FavoritesMenu({ open, onClose, onError }) {
   const [relsLayers, setRelsLayers] = useState([]);
+  const { setSelected } = useContext(MapActionsContext)
 
   useEffect(() => {
     // lets use a controller to stop the fetch in case of unmount
@@ -48,9 +50,9 @@ export default function FavoritesMenu({ open, onClose, onError }) {
 
 
   const plotLayer = async (title) => {
-    const relsIds = relsLayers[title].map(rel => rel['osm_relation_id']);
+    const rels = relsLayers[title].map(rel => ({id: rel['osm_relation_id']}));
     onClose();
-    console.log(relsIds);
+    setSelected(rels);
   }
 
   return (
