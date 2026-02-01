@@ -1,3 +1,5 @@
+import { width } from "@fortawesome/free-brands-svg-icons/fa42Group"
+
 const basicMenu = {
   backgroundColor: '#F8F9FA',
   width: 'clamp(300px, 35vw, 35vw)',
@@ -38,6 +40,25 @@ const subHeaderCell = {
   fontSize: '.75rem'
 }
 
+const headerCellContent = {
+  display: 'grid',
+  gridTemplateColumns: '8fr 1fr'
+}
+
+const headerCellToolsContainer = {
+  display: 'flex'
+}
+
+const headerCellToolsButton = {
+  width: '1.5rem',
+  minWidth: 0,
+  fontSize: '.9rem',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: 'grey'
+  }
+}
+
 const tableContainer = {
   overflowY: 'auto',
   flex: 1
@@ -61,5 +82,6 @@ const modalCenter = {
 
 export {
   basicMenu, textField, table, tableCell, headerCell,
-  subHeaderCell, tableContainer, modalCenter
+  subHeaderCell, tableContainer, modalCenter,
+  headerCellContent, headerCellToolsContainer, headerCellToolsButton
 }

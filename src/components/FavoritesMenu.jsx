@@ -1,7 +1,8 @@
 import Box from "@mui/material/Box";
 import {
   basicMenu, table, tableCell, headerCell,
-  subHeaderCell, tableContainer, modalCenter
+  subHeaderCell, tableContainer, modalCenter,
+  headerCellContent, headerCellToolsContainer, headerCellToolsButton
 } from "../styles/Menu.jsx";
 import { getUserLayersRelations } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
@@ -11,9 +12,12 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from "@mui/material/TableRow";
+import Button from "@mui/material/Button";
 import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect } from "react";
 import Modal from '@mui/material/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquareUpRight, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function FavoritesMenu({ open, onClose, onError }) {
   const [relsLayers, setRelsLayers] = useState([]);
@@ -55,7 +59,19 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                       align="center"
                       sx={headerCell}
                       colSpan={2}
-                    >{title}</TableCell>
+                    >
+                      <Box sx={headerCellContent}>
+                        <Typography>{title}</Typography>
+                        <Box sx={headerCellToolsContainer}>
+                          <Button sx={headerCellToolsButton}>
+                            <FontAwesomeIcon icon={faSquareUpRight} />
+                          </Button>
+                          <Button sx={headerCellToolsButton}>
+                            <FontAwesomeIcon icon={faTrash} />
+                          </Button>
+                        </Box>
+                      </Box>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell align="center" sx={subHeaderCell}>id</TableCell>
