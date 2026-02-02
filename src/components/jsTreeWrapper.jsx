@@ -62,6 +62,7 @@ const JsTreeWrapper = forwardRef(({ data, onSelect }, ref) => {
                   updatedNode.children.forEach(child => {
                     tree.select_node(child);
                   });
+                  tree.deselect_node(node.id);
                 });
               }
             },
