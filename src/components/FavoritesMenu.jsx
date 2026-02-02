@@ -61,7 +61,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
       const newLayers = { ...prev }
       for (const key in newLayers) {
         const [_, id] = key.split('|');
-        if (id === layerId) delete newLayers [key]
+        if (id === layerId) delete newLayers[key]
       }
       return newLayers
     });
