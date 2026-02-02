@@ -29,7 +29,7 @@ export default function Main() {
   const [searchParams] = useSearchParams();
   const error = searchParams.get('error');
   const message = searchParams.get('message');
-  const { selected } = useContext(MapActionsContext)
+  const { selected, setSelected } = useContext(MapActionsContext)
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -80,7 +80,6 @@ export default function Main() {
   // for add selection from tree
   async function handleADDPlot(selected) {
     try {
-      console.log(selected);
       setIsProgressIconActive(true);
       // getAllStoredRelations();
       // clearAllStoredRelations();
@@ -107,7 +106,6 @@ export default function Main() {
 
   useEffect(() => {
     if (!selected.length) return;
-    console.log(selected);
     handleADDPlot(selected)
   }, [selected])
 
