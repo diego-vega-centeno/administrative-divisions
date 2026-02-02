@@ -1,6 +1,6 @@
 const basicMenu = {
   backgroundColor: '#F8F9FA',
-  width: 'clamp(300px, 35vw, 35vw)',
+  width: 'clamp(500px, 35vw, 35vw)',
   maxHeight: '80vh',
   padding: '.8rem 1rem',
   borderRadius: '5px',
@@ -12,6 +12,12 @@ const basicMenu = {
   },
   display: 'flex',
   flexDirection: 'column',
+  '@media (max-width:600px)': {
+    width: '100vw',
+    minWidth: '350px',
+    borderRadius: 0,
+    padding: '1rem',
+  },
 }
 
 const textField = {

@@ -112,6 +112,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
           <Table sx={table}>
             <TableHead >
               <TableRow >
+                <TableCell align="center" sx={headerCell}>admin level</TableCell>
                 <TableCell align="center" sx={headerCell}>id</TableCell>
                 <TableCell align="center" sx={headerCell}>name</TableCell>
                 <TableCell align="center" sx={headerCell}>parents</TableCell>
@@ -120,6 +121,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
             <TableBody>
               {selectedNodes.map((node) => (
                 <TableRow key={node.id}>
+                  <TableCell align="center" sx={tableCell}>{node.original.admin_level}</TableCell>
                   <TableCell align="center" sx={tableCell}>{node.id}</TableCell>
                   <TableCell align="center" sx={tableCell}>{node.text}</TableCell>
                   <TableCell align="center" sx={tableCell}>{getParentNames(node.parents).join('/')}</TableCell>
