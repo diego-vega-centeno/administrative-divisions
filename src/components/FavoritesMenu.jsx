@@ -52,8 +52,8 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   }, []);
 
 
-  const plotLayer = (title) => {
-    const rels = relsLayers[title].map(rel => ({ id: rel['osm_relation_id'] }));
+  const plotLayer = (groupKey) => {
+    const rels = relsLayers[groupKey].map(rel => ({ id: rel['osm_relation_id'] }));
     onClose();
     setSelected(rels);
   }
@@ -114,7 +114,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                             <Tooltip title="Plot" placement="top" arrow>
                               <Button
                                 sx={headerCellToolsButton}
-                                onClick={() => plotLayer(layerTitle)}
+                                onClick={() => plotLayer(groupKey)}
                               >
                                 <FontAwesomeIcon icon={faSquareUpRight} />
                               </Button>
