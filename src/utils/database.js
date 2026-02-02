@@ -41,4 +41,21 @@ async function getUserLayersRelations({ signal }) {
   return data;
 }
 
-export { saveLayerToDB, getUserLayersRelations }
+async function deleteLayer(layerId) {
+  const response = await fetchWithUserUpdate(
+    import.meta.env.VITE_BACKEND_URL + `/layer/${layerId}`,
+    {
+      method: 'DELETE',
+      credentials: 'include'
+    }
+  );
+
+  if (!response.ok) {
+    const error = new Error('Request failed');
+    throw error;
+  }
+
+  return;
+}
+
+export { saveLayerToDB, getUserLayersRelations, deleteLayer }

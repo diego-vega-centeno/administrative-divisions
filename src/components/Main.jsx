@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styles from '../styles/Main.module.css'
 import Footer from './Footer.jsx'
 import SearchDropdown from './SearchDropdown.jsx'
@@ -17,6 +17,7 @@ import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import { errorLog } from '../utils/logger.js';
 import AlertDialog from './AlertDialog.jsx';
 import { useSearchParams } from "react-router";
+import { MapActionsContext } from './MapActionsContext.jsx';
 
 export default function Main() {
 
@@ -28,6 +29,7 @@ export default function Main() {
   const [searchParams] = useSearchParams();
   const error = searchParams.get('error');
   const message = searchParams.get('message');
+  const { selected, setSelected } = useContext(MapActionsContext)
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -51,7 +53,7 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
-    if(error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
+    if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
   }, [error]);
 
 
@@ -101,6 +103,11 @@ export default function Main() {
   const handleError = (errorMessage) => {
     setErrorMessage(errorMessage);
   }
+
+  useEffect(() => {
+    if (!selected.length) return;
+    handleADDPlot(selected)
+  }, [selected])
 
   return (
     <main className={styles.main}>

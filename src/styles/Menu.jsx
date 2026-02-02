@@ -29,6 +29,10 @@ const headerCell = {
   padding: '.1rem .7rem',
   backgroundColor: '#212529',
   color: 'white',
+  '&:hover .header-cell-tools': {
+    opacity: 1,
+    visibility: "visible",
+  }
 }
 
 const subHeaderCell = {
@@ -36,6 +40,31 @@ const subHeaderCell = {
   backgroundColor: '#4a4f55',
   color: 'white',
   fontSize: '.75rem'
+}
+
+const headerCellContent = {
+  position: 'relative',
+  padding: '.1rem 0'
+}
+
+const headerCellToolsContainer = {
+  display: 'flex',
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  opacity: 0,
+  visibility: "hidden",
+}
+
+const headerCellToolsButton = {
+  width: '1.5rem',
+  minWidth: 0,
+  fontSize: '.9rem',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: 'grey'
+  },
+  borderRadius: '5px'
 }
 
 const tableContainer = {
@@ -61,5 +90,6 @@ const modalCenter = {
 
 export {
   basicMenu, textField, table, tableCell, headerCell,
-  subHeaderCell, tableContainer, modalCenter
+  subHeaderCell, tableContainer, modalCenter,
+  headerCellContent, headerCellToolsContainer, headerCellToolsButton
 }

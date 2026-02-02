@@ -5,7 +5,7 @@ const AuthContext = createContext(null);
 let logout = null;
 
 // we need to fetch the user so use a wrapper as export
-const AuthProvider = ({ children }) => {
+function AuthProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
