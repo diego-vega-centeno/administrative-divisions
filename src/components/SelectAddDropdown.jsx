@@ -120,18 +120,18 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
           onSelect={handleSelect}
         />
       </Box>
-      <SaveMenu
+      {isSaveMenuOpen && <SaveMenu
         open={isSaveMenuOpen}
         onClose={() => setIsSaveMenuOpen(false)}
         onError={onError}
         selectedNodes={selectedNodes}
-      />
-      <DownloadMenu
+      />}
+      {isDownloadMenuOpen && <DownloadMenu
         open={isDownloadMenuOpen}
         onClose={() => setIsDownloadMenuOpen(false)}
         onError={onError}
         selectedNodes={selectedNodes}
-      />
+      />}
     </Box>
   )
 }
