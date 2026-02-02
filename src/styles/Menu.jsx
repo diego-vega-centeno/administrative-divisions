@@ -56,6 +56,13 @@ const headerCellToolsContainer = {
   visibility: "hidden",
 }
 
+const headerCellConfirmContainer = {
+  display: 'flex',
+  position: 'absolute',
+  top: 0,
+  right: 0,
+}
+
 const headerCellToolsButton = {
   width: '1.5rem',
   minWidth: 0,
@@ -91,5 +98,6 @@ const modalCenter = {
 export {
   basicMenu, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
-  headerCellContent, headerCellToolsContainer, headerCellToolsButton
+  headerCellContent, headerCellToolsContainer, headerCellToolsButton,
+  headerCellConfirmContainer
 }

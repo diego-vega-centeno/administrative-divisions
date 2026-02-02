@@ -2,7 +2,8 @@ import Box from "@mui/material/Box";
 import {
   basicMenu, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
-  headerCellContent, headerCellToolsContainer, headerCellToolsButton
+  headerCellContent, headerCellToolsContainer, headerCellToolsButton,
+  headerCellConfirmContainer
 } from "../styles/Menu.jsx";
 import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
@@ -18,12 +19,14 @@ import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect, useContext } from "react";
 import Modal from '@mui/material/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquareUpRight, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faSquareUpRight, faTrash, faX } from '@fortawesome/free-solid-svg-icons';
 import { MapActionsContext } from "./MapActionsContext.jsx";
+
 
 export default function FavoritesMenu({ open, onClose, onError }) {
   const [relsLayers, setRelsLayers] = useState({});
-  const { setSelected } = useContext(MapActionsContext)
+  const { setSelected } = useContext(MapActionsContext);
+  const [confirm, setConfirm] = useState(null);
 
   useEffect(() => {
     // lets use a controller to stop the fetch in case of unmount
@@ -55,7 +58,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     setSelected(rels);
   }
 
-  const deletLayer = (layerId) => {
+  const deleteSelectedLayer = (layerId) => {
     deleteLayer(layerId);
     setRelsLayers(prev => {
       const newLayers = { ...prev }
@@ -65,6 +68,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
       }
       return newLayers
     });
+    setConfirm(false);
   }
 
   return (
@@ -85,27 +89,47 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                     >
                       <Box sx={headerCellContent}>
                         <Typography>{layerTitle}</Typography>
-                        <Box
-                          sx={headerCellToolsContainer}
-                          className="header-cell-tools"
-                        >
-                          <Tooltip title="Plot" placement="top" arrow>
+                        {confirm === layerId ?
+                          <Box
+                            sx={headerCellConfirmContainer}
+                            className="header-cell-tools"
+                          >
                             <Button
-                              sx={headerCellToolsButton}
-                              onClick={() => plotLayer(layerTitle)}
-                            >
-                              <FontAwesomeIcon icon={faSquareUpRight} />
-                            </Button>
-                          </Tooltip>
-                          <Tooltip title="Delete" placement="top" arrow>
-                            <Button
-                              sx={headerCellToolsButton}
-                              onClick={() => deletLayer(layerId)}
+                              sx={{ ...headerCellToolsButton, color: 'rgb(218 9 9)' }}
+                              onClick={() => deleteSelectedLayer(layerId)}
                             >
                               <FontAwesomeIcon icon={faTrash} />
                             </Button>
-                          </Tooltip>
-                        </Box>
+                            <Button
+                              sx={{ ...headerCellToolsButton }}
+                              onClick={() => setConfirm(false)}
+                            >
+                              <FontAwesomeIcon icon={faX} />
+                            </Button>
+                          </Box> :
+                          <Box
+                            sx={headerCellToolsContainer}
+                            className="header-cell-tools"
+                          >
+                            <Tooltip title="Plot" placement="top" arrow>
+                              <Button
+                                sx={headerCellToolsButton}
+                                onClick={() => plotLayer(layerTitle)}
+                              >
+                                <FontAwesomeIcon icon={faSquareUpRight} />
+                              </Button>
+                            </Tooltip>
+                            <Tooltip title="Delete" placement="top" arrow>
+                              <Button
+                                sx={headerCellToolsButton}
+                                onClick={() => setConfirm(layerId)}
+                              >
+                                <FontAwesomeIcon icon={faTrash} />
+                              </Button>
+                            </Tooltip>
+                          </Box>
+                        }
+
                       </Box>
                     </TableCell>
                   </TableRow>
