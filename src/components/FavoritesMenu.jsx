@@ -4,7 +4,7 @@ import {
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton
 } from "../styles/Menu.jsx";
-import { getUserLayersRelations } from "../utils/database.js";
+import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -32,7 +32,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     async function getUserRels() {
       try {
         const relations = await getUserLayersRelations({ signal: controller.signal });
-        const relsLayers = Object.groupBy(relations.data, ({ layer_title }) => layer_title)
+        const relsLayers = Object.groupBy(relations.data, ({ layer_title, layer_id }) => `${layer_title}|${layer_id}`)
         setRelsLayers(relsLayers);
       } catch (error) {
         // ignore errors due to unmount in strict mode
@@ -50,9 +50,21 @@ export default function FavoritesMenu({ open, onClose, onError }) {
 
 
   const plotLayer = (title) => {
-    const rels = relsLayers[title].map(rel => ({id: rel['osm_relation_id']}));
+    const rels = relsLayers[title].map(rel => ({ id: rel['osm_relation_id'] }));
     onClose();
     setSelected(rels);
+  }
+
+  const deletLayer = (layerId) => {
+    deleteLayer(layerId);
+    setRelsLayers(prev => {
+      const newLayers = { ...prev }
+      for (const key in newLayers) {
+        const [_, id] = key.split('|');
+        if (id === layerId) delete newLayers [key]
+      }
+      return newLayers
+    });
   }
 
   return (
@@ -60,9 +72,10 @@ export default function FavoritesMenu({ open, onClose, onError }) {
       <Box sx={basicMenu}>
         <Typography>Favorite layers</Typography>
         <TableContainer sx={tableContainer}>
-          {Object.entries(relsLayers).map(([title, rels]) => {
+          {Object.entries(relsLayers).map(([groupKey, rels]) => {
+            const [layerTitle, layerId] = groupKey.split('|');
             return (
-              <Table key={title} sx={table}>
+              <Table key={layerId} sx={table}>
                 <TableHead >
                   <TableRow >
                     <TableCell
@@ -71,7 +84,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                       colSpan={2}
                     >
                       <Box sx={headerCellContent}>
-                        <Typography>{title}</Typography>
+                        <Typography>{layerTitle}</Typography>
                         <Box
                           sx={headerCellToolsContainer}
                           className="header-cell-tools"
@@ -79,7 +92,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                           <Tooltip title="Plot" placement="top" arrow>
                             <Button
                               sx={headerCellToolsButton}
-                              onClick={() => plotLayer(title)}
+                              onClick={() => plotLayer(layerTitle)}
                             >
                               <FontAwesomeIcon icon={faSquareUpRight} />
                             </Button>
@@ -87,7 +100,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                           <Tooltip title="Delete" placement="top" arrow>
                             <Button
                               sx={headerCellToolsButton}
-                              onClick={() => plotLayer(title)}
+                              onClick={() => deletLayer(layerId)}
                             >
                               <FontAwesomeIcon icon={faTrash} />
                             </Button>
