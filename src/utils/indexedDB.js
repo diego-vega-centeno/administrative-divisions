@@ -39,10 +39,17 @@ function initDB() {
     // triggered when higher version is used in open() than the one used previously 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
+      let store;
 
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-      };
+      } else {
+        const store = event.target.result.createObjectStore(STORE_NAME, { keyPath: 'id' })
+      }
+
+      if (!store.indexNames.contains('storedAtIndex')) {
+        store.createIndex('storedAtIndex', 'storedAt');
+      }
     }
 
   });
