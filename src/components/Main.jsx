@@ -20,7 +20,6 @@ import { useSearchParams } from "react-router";
 import { MapActionsContext } from './MapActionsContext.jsx';
 
 export default function Main() {
-
   const mapRef = useRef(null); // will hold map instance from leaflet
   const mapContainerRef = useRef(null); // will hold map container dom element
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
