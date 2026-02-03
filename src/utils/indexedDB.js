@@ -149,7 +149,7 @@ function cleanDBCache() {
   countReq.onsuccess = () => {
     // skip based on object counts
     if (countReq.result <= MAX_OBJECTS_COUNT) {
-      debugLog(`IndexedDB: object count: ${count}; No cleanup needed`);
+      debugLog(`IndexedDB: object count: ${countReq.result}; No cleanup needed`);
       return;
     }
 
