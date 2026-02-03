@@ -68,8 +68,12 @@ function putStoreRelations(relations) {
   }
 
   relations.forEach(rel => {
+
     // add stored time
     rel.storedAt = Date.now();
+    // add size
+    // rel.size = new Blob([JSON.stringify(rel)]).size / 1024; // KB
+
     const request = store.put(rel);
 
     request.onerror = () => {
@@ -143,10 +147,14 @@ function cleanDBCache() {
   let ageCount = 0, objectsCount = 0, sizeCount = 0;
 
   countReq.onsuccess = () => {
+    // skip based on object counts
     if (countReq.result <= MAX_OBJECTS_COUNT) {
-      debugLog(`IndexedDB: object count: ${countReq.result}; No cleanup needed`);
+      debugLog(`IndexedDB: object count: ${count}; No cleanup needed`);
       return;
     }
+
+    // clean up needed
+    debugLog(`IndexedDB: doing cache clean up ...`);
 
     const req = store.getAll();
     req.onsuccess = (e) => {
@@ -159,10 +167,10 @@ function cleanDBCache() {
       // clean based on count
       // let it try to delete already delete realtions 
       // because is faster than filtering
-      // objectsCount = cleanDBCacheObjectsCount(rels, store);
+      objectsCount = cleanDBCacheObjectsCount(rels, store);
 
-      // clean base on total size
-      sizeCount = cleanDBCacheTotalSize(rels, store);
+      // clean based on total size
+      // sizeCount = cleanDBCacheTotalSize(rels, store);
     };
   }
 
@@ -210,7 +218,7 @@ function cleanDBCacheObjectsCount(rels, store) {
 function cleanDBCacheTotalSize(rels, store) {
   let totalSize = 0;
   const relsWithSize = rels.map(rel => {
-    const size = new Blob([JSON.stringify(rel)]).size / (1024*1024); // Convert to MB
+    const size = new Blob([JSON.stringify(rel)]).size / (1024 * 1024); // Convert to MB
     totalSize += size;
     return { ...rel, size };
   });
