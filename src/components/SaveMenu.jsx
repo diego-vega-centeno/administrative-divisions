@@ -7,8 +7,6 @@ import {
   basicMenu, textField, table, tableCell,
   headerCell, tableContainer, modalCenter
 } from "../styles/Menu.jsx";
-import addFlatData from '../add_flat.json'
-
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -21,12 +19,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { saveLayerToDB } from '../utils/database.js'
 import { debugLog, errorLog } from "../utils/logger.js";
 import Modal from '@mui/material/Modal';
-
-let addTextIndex = {}
-for (const ele of addFlatData) {
-  addTextIndex[ele.id] = ele.text
-}
-
+import { dataIndex } from "../utils/addData.js";
 
 export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
@@ -79,7 +72,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
   function getParentNames(parentsIds) {
     let parentNames = [];
     parentsIds.forEach(id => {
-      if (id !== '#') parentNames.push(addTextIndex[id])
+      if (id !== '#') parentNames.push(dataIndex[id]['text'])
     });
     if (!parentNames.length) parentNames = ['World'];
     return parentNames;
