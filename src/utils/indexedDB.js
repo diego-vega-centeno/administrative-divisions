@@ -11,55 +11,66 @@ const MAX_TOTAL_SIZE = 100; // MB
 const MS_PER_DAY = 24 * 60 * 60 * 1000
 
 //* initialize database
-let db;
 
-if (!indexedDB) {
+let dbPromise;
+
+if (!('indexedDB' in window)) {
   debugLog("Your browser doesn't support IndexedDB.");
 }
 
-const request = indexedDB.open(DB_NAME, DB_VERSION);
+function initDB() {
+  if (dbPromise) return dbPromise;
 
-request.onerror = (event) => {
-  errorLog(`Database error: ${event.target.errorCode}`);
-}
+  dbPromise = new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-request.onsuccess = (event) => {
-  db = request.result;
-  debugLog(`Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`);
+    request.onerror = (event) => {
+      dbPromise = null;
+      errorLog(`Database error: ${event.target.errorCode}`);
+      reject(event.target);
+    }
 
-  // clean DB cache
-  cleanDBCache()
-}
+    request.onsuccess = (event) => {
+      const db = request.result;
+      debugLog(`Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`);
+      resolve(db);
+    }
 
-// triggered when higher version is used in open() than the one used previously 
-request.onupgradeneeded = (event) => {
-  db = event.target.result;
+    // triggered when higher version is used in open() than the one used previously 
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
 
-  if (!db.objectStoreNames.contains(STORE_NAME)) {
-    const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-  };
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
+      };
+    }
+
+  });
+
+  return dbPromise;
 }
 
 
 //* create transaction utility
 
-function makeTransaction(storeName, type) {
-  const transaction = db.transaction(storeName, type)
-  transaction.oncomplete = (event) => {
-    debugLog('Transaction successful');
-  }
-  transaction.onerror = (event) => {
-    event.stopPropagation();
-    errorLog(`There was an error: ${event.message}`);
-  }
+// function makeTransaction(storeName, type) {
+//   const transaction = db.transaction(storeName, type)
+//   transaction.oncomplete = (event) => {
+//     debugLog('Transaction successful');
+//   }
+//   transaction.onerror = (event) => {
+//     event.stopPropagation();
+//     errorLog(`There was an error: ${event.message}`);
+//   }
 
-  const store = transaction.objectStore(storeName);
-  return store;
-}
+//   const store = transaction.objectStore(storeName);
+//   return store;
+// }
 
 //* read/write functions
 
-function putStoreRelations(relations) {
+async function putStoreRelations(relations) {
+  const db = await initDB();
   const tx = db.transaction(STORE_NAME, 'readwrite');
   const store = tx.objectStore(STORE_NAME);
 
@@ -70,11 +81,10 @@ function putStoreRelations(relations) {
   relations.forEach(rel => {
 
     // add stored time
-    rel.storedAt = Date.now();
-    // add size
-    // rel.size = new Blob([JSON.stringify(rel)]).size / 1024; // KB
+    const request = store.put({ ...rel, storedAt: Date.now() });
 
-    const request = store.put(rel);
+    // add stored time and size
+    // const request = store.put({ ...rel, storedAt: Date.now(), size: (new Blob([JSON.stringify(rel)]).size)});
 
     request.onerror = () => {
       errorLog(`Error while adding relation: ${request.error}`);
@@ -82,9 +92,12 @@ function putStoreRelations(relations) {
   });
 }
 
-function getStoreRelation(id) {
+async function getStoreRelation(id) {
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, 'readonly');
+  const store = tx.objectStore(STORE_NAME);
+
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME, 'readonly');
     const request = store.get(id);
 
     request.onsuccess = () => {
@@ -102,9 +115,12 @@ function getStoreRelation(id) {
 }
 
 
-function getAllStoredRelations() {
+async function getAllStoredRelations() {
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, 'readonly');
+  const store = tx.objectStore(STORE_NAME);
+
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME, 'readonly');
     const request = store.getAll();
 
     request.onsuccess = () => {
@@ -120,9 +136,12 @@ function getAllStoredRelations() {
   });
 }
 
-function clearAllStoredRelations() {
+async function clearAllStoredRelations() {
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+
   return new Promise((resolve, reject) => {
-    const store = makeTransaction(STORE_NAME, 'readwrite');
     const request = store.clear();
 
     request.onsuccess = () => {
@@ -139,8 +158,9 @@ function clearAllStoredRelations() {
 
 //* Clean database cache
 
-function cleanDBCache() {
+async function cleanDBCache() {
   // clearAllStoredRelations();
+  const db = await initDB();
   const tx = db.transaction(STORE_NAME, 'readwrite');
   const store = tx.objectStore(STORE_NAME);
   const countReq = store.count();
@@ -150,6 +170,7 @@ function cleanDBCache() {
     // skip based on object counts
     if (countReq.result <= MAX_OBJECTS_COUNT) {
       debugLog(`IndexedDB: object count: ${countReq.result}; No cleanup needed`);
+      tx.abort();
       return;
     }
 
@@ -243,5 +264,5 @@ function cleanDBCacheTotalSize(rels, store) {
 
 export {
   putStoreRelations, getStoreRelation, getAllStoredRelations,
-  clearAllStoredRelations, cleanDBCache
+  clearAllStoredRelations, cleanDBCache, initDB
 }
