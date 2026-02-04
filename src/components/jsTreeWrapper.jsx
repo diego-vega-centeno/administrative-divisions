@@ -4,17 +4,9 @@ window.jQuery = $;
 window.$ = $;
 import "jstree";
 import 'jstree/dist/themes/default/style.min.css';
-import addFlatData from '../add_flat.json'
+import { childrenIndex } from "../utils/addData.js";
 
-// help jstree by creating a children index
-// O(1) lookup
-const childrenIndex = {};
-addFlatData.forEach(ele => {
-  if (!childrenIndex[ele.parent]) childrenIndex[ele.parent] = [];
-  childrenIndex[ele.parent].push(ele);
-});
-
-const JsTreeWrapper = forwardRef(({ data, onSelect }, ref) => {
+const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
 
   const treeRef = useRef(null);
 
@@ -23,7 +15,9 @@ const JsTreeWrapper = forwardRef(({ data, onSelect }, ref) => {
       'core': {
         // jsTree calls this function whenever it needs data
         // passes the node on the 'node' parameter
-        // tc: O(m) ; m is number of childs
+
+        // help jstree by using childrenIndex wich is O(1) lookup
+        // tc: O(m); m is number of childs
         'data': function (node, callback) {
           const children = childrenIndex[node.id] || []; // O(1)
           // O(m)
