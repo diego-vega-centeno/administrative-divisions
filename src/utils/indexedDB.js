@@ -195,11 +195,11 @@ async function cleanDBCache() {
       .catch(err => errorLog(err));
 
     // clean based on age, LRU object
-    // cleanDBCacheMaxAge(store)
-    //   .then(count => {
-    //     ageDeleteCount = count;
-    //   })
-    //   .catch(err => errorLog(err));
+    cleanDBCacheMaxAge(store)
+      .then(count => {
+        ageDeleteCount = count;
+      })
+      .catch(err => errorLog(err));
 
     // clean based on total size
     // cleanDBCacheTotalSize(store)
