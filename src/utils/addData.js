@@ -41,4 +41,9 @@ function getParentNames(id) {
   return result;
 }
 
+// free the array
+// it's not actually duplicate data
+// the object references still exists but the original array is not needed
+addFlatData.length = 0;
+
 export { childrenIndex, dataIndex, getParentNames }
