@@ -1,7 +1,5 @@
 import addFlatData from '../add_flat.json'
 
-console.log('H');
-
 const childrenIndex = {};
 const dataIndex = {};
 
