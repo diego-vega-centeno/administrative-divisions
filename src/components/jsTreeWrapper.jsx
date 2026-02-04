@@ -60,26 +60,26 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
                 });
               }
             },
-            "allChilds": {
-              "label": "select all childs",
-              "action": function (obj) {
-                const tree = $(treeRef.current).jstree(true);
-                // Manually open and select nodes
-                // to avoid race situation between lazy loading and events
-                function openNodeAndSelectChildren(nodeId) {
-                  tree.open_node(nodeId, function () {
-                    const updatedNode = tree.get_node(nodeId);
-                    updatedNode.children.forEach(childId => {
-                      tree.select_node(childId);
-                      if (childrenIndex[childId]) {
-                        openNodeAndSelectChildren(childId);
-                      }
-                    })
-                  });
-                }
-                openNodeAndSelectChildren(node.id);
-              }
-            }
+            // "allChilds": {
+            //   "label": "select all childs",
+            //   "action": function (obj) {
+            //     const tree = $(treeRef.current).jstree(true);
+            //     // Manually open and select nodes
+            //     // to avoid race situation between lazy loading and events
+            //     function openNodeAndSelectChildren(nodeId) {
+            //       tree.open_node(nodeId, function () {
+            //         const updatedNode = tree.get_node(nodeId);
+            //         updatedNode.children.forEach(childId => {
+            //           tree.select_node(childId);
+            //           if (childrenIndex[childId]) {
+            //             openNodeAndSelectChildren(childId);
+            //           }
+            //         })
+            //       });
+            //     }
+            //     openNodeAndSelectChildren(node.id);
+            //   }
+            // }
           }
         }
       }
