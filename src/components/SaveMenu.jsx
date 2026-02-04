@@ -40,7 +40,6 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
     setIsProgressIconActive(true);
     try {
       const saveResponse = await saveLayerToDB(title, selectedNodes);
-      debugLog(saveResponse);
     } catch (error) {
       errorLog(error);
       if (error?.code === 'duplicate_entry') {
