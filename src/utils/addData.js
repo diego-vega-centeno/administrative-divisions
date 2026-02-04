@@ -13,5 +13,32 @@ addFlatData.forEach(ele => {
   dataIndex[ele.id] = ele;
 });
 
+let parentIndexCache = {}
 
-export { childrenIndex, dataIndex }
+// get parent names wihout creating a complete index
+function getParentNames(id) {
+
+  if (parentIndexCache[id]) return parentIndexCache[id];
+
+  let parentNames = [];
+  let currId = id;
+  // O(k) ; k number of parents
+  while (currId != '#') {
+    const curr = dataIndex[currId];
+    if (!curr) break;
+
+    // O(1)
+    const parentId = curr.parent;
+    if (parentId !== '#') {
+      parentNames.push(dataIndex[parentId]?.text);
+    }
+    currId = parentId;
+  }
+
+  const result = parentNames.length ? parentNames.join('/') : 'World';
+  parentIndexCache[id] = result;
+
+  return result;
+}
+
+export { childrenIndex, dataIndex, getParentNames }
