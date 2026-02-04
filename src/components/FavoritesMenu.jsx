@@ -21,6 +21,7 @@ import Modal from '@mui/material/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareUpRight, faTrash, faX } from '@fortawesome/free-solid-svg-icons';
 import { MapActionsContext } from "./MapActionsContext.jsx";
+import { dataIndex, getParentNames } from "../utils/addData.js";
 
 
 export default function FavoritesMenu({ open, onClose, onError }) {
@@ -85,7 +86,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                     <TableCell
                       align="center"
                       sx={headerCell}
-                      colSpan={2}
+                      colSpan={4}
                     >
                       <Box sx={headerCellContent}>
                         <Typography>{layerTitle}</Typography>
@@ -134,16 +135,20 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                     </TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableCell align="center" sx={subHeaderCell}>admin level</TableCell>
                     <TableCell align="center" sx={subHeaderCell}>id</TableCell>
                     <TableCell align="center" sx={subHeaderCell}>name</TableCell>
+                    <TableCell align="center" sx={subHeaderCell}>parents</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {rels.map(rel => {
                     return (
                       <TableRow key={rel.osm_relation_id}>
+                        <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell>
                         <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
                         <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
+                        <TableCell align="center" sx={tableCell}>{getParentNames(rel.osm_relation_id)}</TableCell>
                       </TableRow>
                     )
                   })}
