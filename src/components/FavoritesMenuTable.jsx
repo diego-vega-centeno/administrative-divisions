@@ -136,6 +136,7 @@ export default function FavoritesMenuTable({
                         sx={headerCellToolsButton}
                         onClick={() => {
                           setConfirm(true);
+                          setEditMode(false);
                           setActiveLayer(layerId);
                         }}
                       >
