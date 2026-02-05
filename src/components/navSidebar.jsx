@@ -82,10 +82,10 @@ export default function NavSidebar() {
         open={isLoginMenuOpen}
         onClose={() => setIsLoginMenuOpen(false)}
       />}
-      {isFavoritesMenuOpen && <FavoritesMenu
+      <FavoritesMenu
         open={isFavoritesMenuOpen}
         onClose={() => setIsFavoritesMenuOpen(false)}
-      />}
+      />
     </div>
   )
 }
