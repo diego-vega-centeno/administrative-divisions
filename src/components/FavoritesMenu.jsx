@@ -8,36 +8,22 @@ import {
 } from "../styles/Menu.jsx";
 import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableRow from "@mui/material/TableRow";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect, useContext } from "react";
 import Modal from '@mui/material/Modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSquareUpRight, faTrash, faX,
-  faPenToSquare
-} from '@fortawesome/free-solid-svg-icons';
-import { faSquare, faCheckSquare } from '@fortawesome/free-regular-svg-icons'
 import { MapActionsContext } from "./MapActionsContext.jsx";
-import { dataIndex, getParentNames } from "../utils/addData.js";
-import { addToolsButton } from '../styles/SelectAddDropdown.jsx';
+import FavoritesMenuTable from "./FavoritesMenuTable.jsx";
 
 
 export default function FavoritesMenu({ open, onClose, onError }) {
-  const [relsLayers, setRelsLayers] = useState({});
+  const [relsPerLayer, setRelsPerLayer] = useState({});
   const { setSelected } = useContext(MapActionsContext);
-  const [confirm, setConfirm] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeLayer, setActiveLayer] = useState('');
   const [editMode, setEditMode] = useState(false);
-  const [toDeleteIds, setToDeleteIds] = useState(new Set());
-  const [selectedLayer, setSelectedLayer] = useState('');
+  const [confirm, setConfirm] = useState(false);
+  const [selectedLayerRels, setSelectedLayerRels] = useState(new Set());
 
   useEffect(() => {
     if (!open) return;
@@ -48,13 +34,13 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     async function getUserRels() {
       try {
         if (!open) return;
-        setRelsLayers({});
+        setRelsPerLayer({});
         setLoading(true);
 
         const relations = await getUserLayersRelations({ signal: controller.signal });
-        const relsLayers = Object.groupBy(relations.data, ({ layer_title, layer_id }) => `${layer_title}|${layer_id}`)
+        const relsPerLayer = Object.groupBy(relations.data, ({ layer_title, layer_id }) => `${layer_title}|${layer_id}`)
 
-        setRelsLayers(relsLayers);
+        setRelsPerLayer(relsPerLayer);
 
       } catch (error) {
         // ignore errors due to unmount in strict mode
@@ -72,14 +58,16 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   }, [open]);
 
   const plotLayer = (groupKey) => {
-    const rels = relsLayers[groupKey].map(rel => ({ id: rel['osm_relation_id'] }));
+    const rels = relsPerLayer[groupKey].map(rel => ({ id: rel['osm_relation_id'] }));
     onClose();
     setSelected(rels);
   }
 
   const deleteSelectedLayer = (layerId) => {
+    // send delete request to backend
     deleteLayer(layerId);
-    setRelsLayers(prev => {
+    // update react status
+    setRelsPerLayer(prev => {
       const newLayers = { ...prev }
       for (const key in newLayers) {
         const [_, id] = key.split('|');
@@ -87,17 +75,14 @@ export default function FavoritesMenu({ open, onClose, onError }) {
       }
       return newLayers
     });
-    setConfirm(false);
   }
 
-  const toggle = (osmId) => {
-    setToDeleteIds(prev => {
-      const newSelected = new Set(prev);
-      newSelected.has(osmId) ? newSelected.delete(osmId) : newSelected.add(osmId);
-      return newSelected;
-    });
+  const deleteLayerRels = (selectedLayerRels) => {
+    // TODO: Implement actual deletion logic
+    console.log('Deleting layer relations:', selectedLayerRels);
+    setSelectedLayerRels(new Set());
+    setEditMode(false);
   }
-
 
   return (
     <Modal open={open} onClose={onClose} sx={modalCenter}>
@@ -111,136 +96,28 @@ export default function FavoritesMenu({ open, onClose, onError }) {
               <Typography>Loading ...</Typography>
               :
               (
-                Object.entries(relsLayers).length === 0 ?
+                Object.entries(relsPerLayer).length === 0 ?
                   <Typography>No favorites found</Typography>
                   :
-                  Object.entries(relsLayers).map(([groupKey, rels]) => {
+                  Object.entries(relsPerLayer).map(([groupKey, layerRels]) => {
                     const [layerTitle, layerId] = groupKey.split('|');
                     return (
-                      <Table key={layerId} sx={table}>
-                        <TableHead >
-                          <TableRow >
-                            <TableCell
-                              align="center"
-                              sx={headerCell}
-                              colSpan={5}
-                            >
-                              <Box sx={headerCellContent}>
-                                <Typography>{layerTitle}</Typography>
-                                {confirm && selectedLayer === layerId ?
-                                  <Box
-                                    sx={headerCellConfirmContainer}
-                                    className="header-cell-tools"
-                                  >
-                                    <Button
-                                      sx={{ ...headerCellToolsButton, color: 'rgb(218 9 9)' }}
-                                      onClick={() => deleteSelectedLayer(layerId)}
-                                    >
-                                      <FontAwesomeIcon icon={faTrash} />
-                                    </Button>
-                                    <Button
-                                      sx={{ ...headerCellToolsButton }}
-                                      onClick={() => setConfirm(false)}
-                                    >
-                                      <FontAwesomeIcon icon={faX} />
-                                    </Button>
-                                  </Box> :
-                                  (editMode && selectedLayer == layerId ?
-                                    <Box >
-                                      <Button sx={addToolsButton}
-                                        size='small'
-                                        variant="contained"
-                                      >
-                                        delete
-                                      </Button>
-                                      <Button sx={addToolsButton}
-                                        size='small'
-                                        variant="contained"
-                                        onClick={() => {
-                                          setEditMode(false);
-                                          setToDeleteIds(new Set())
-                                        }}
-                                      >
-                                        cancel
-                                      </Button>
-                                    </Box>
-                                    :
-                                    <Box
-                                      sx={headerCellToolsContainer}
-                                      className="header-cell-tools"
-                                    >
-                                      <Tooltip title="Edit" placement="top" arrow>
-                                        <Button
-                                          sx={headerCellToolsButton}
-                                          onClick={() => {
-                                            setEditMode(true);
-                                            setSelectedLayer(layerId);
-                                            setToDeleteIds(new Set());
-                                          }}
-                                        >
-                                          <FontAwesomeIcon icon={faPenToSquare} />
-                                        </Button>
-                                      </Tooltip>
-                                      <Tooltip title="Plot" placement="top" arrow>
-                                        <Button
-                                          sx={headerCellToolsButton}
-                                          onClick={() => plotLayer(groupKey)}
-                                        >
-                                          <FontAwesomeIcon icon={faSquareUpRight} />
-                                        </Button>
-                                      </Tooltip>
-                                      <Tooltip title="Delete" placement="top" arrow>
-                                        <Button
-                                          sx={headerCellToolsButton}
-                                          onClick={() => {
-                                            setConfirm(layerId);
-                                            setSelectedLayer(layerId);
-                                          }}
-                                        >
-                                          <FontAwesomeIcon icon={faTrash} />
-                                        </Button>
-                                      </Tooltip>
-                                    </Box>
-                                  )
-                                }
-                              </Box>
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="center" sx={subHeaderCell}></TableCell>
-                            <TableCell align="center" sx={subHeaderCell}>admin level</TableCell>
-                            <TableCell align="center" sx={subHeaderCell}>id</TableCell>
-                            <TableCell align="center" sx={subHeaderCell}>name</TableCell>
-                            <TableCell align="center" sx={subHeaderCell}>parents</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {rels.map(rel => {
-                            return (
-                              <TableRow key={rel.osm_relation_id}>
-                                <TableCell align="center" sx={favoritesMenuCheckboxCell}>
-                                  {editMode && selectedLayer === layerId && (
-                                    <Button
-                                      size='small'
-                                      sx={favoritesMenuCheckbox}
-                                      onClick={() => toggle(rel.osm_relation_id)}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={toDeleteIds.has(rel.osm_relation_id) ? faCheckSquare : faSquare} />
-                                    </Button>
-                                  )}
-                                </TableCell>
-                                <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell>
-                                <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
-                                <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
-                                <TableCell align="center" sx={tableCell}>
-                                  {getParentNames(rel.osm_relation_id)}
-                                </TableCell>
-                              </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
+                      <FavoritesMenuTable
+                        key={layerId}
+                        groupKey={groupKey}
+                        activeLayer={activeLayer}
+                        setActiveLayer={setActiveLayer}
+                        editMode={editMode}
+                        setEditMode={setEditMode}
+                        confirm={confirm}
+                        setConfirm={setConfirm}
+                        selectedLayerRels={selectedLayerRels}
+                        setSelectedLayerRels={setSelectedLayerRels}
+                        deleteSelectedLayer={deleteSelectedLayer}
+                        deleteLayerRels={deleteLayerRels}
+                        layerRels={layerRels}
+                        plotLayer={plotLayer}
+                      />
                     )
                   })
               )
