@@ -3,7 +3,7 @@ import {
   basicMenu, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
-  headerCellConfirmContainer
+  headerCellConfirmContainer, menuheader
 } from "../styles/Menu.jsx";
 import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
@@ -84,7 +84,9 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   return (
     <Modal open={open} onClose={onClose} sx={modalCenter}>
       <Box sx={basicMenu}>
-        <Typography>Favorite layers</Typography>
+        <Box sx={menuheader}>
+          <Typography>Favorite layers</Typography>
+        </Box>
         <TableContainer sx={tableContainer}>
           {
             loading ?
