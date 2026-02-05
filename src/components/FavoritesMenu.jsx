@@ -1,10 +1,6 @@
 import Box from "@mui/material/Box";
 import {
-  basicMenu, table, tableCell, headerCell,
-  subHeaderCell, tableContainer, modalCenter,
-  headerCellContent, headerCellToolsContainer, headerCellToolsButton,
-  headerCellConfirmContainer, menuHeader, favoritesMenuCheckbox,
-  favoritesMenuCheckboxCell
+  basicMenu, tableContainer, modalCenter, menuHeader
 } from "../styles/Menu.jsx";
 import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
 import Typography from "@mui/material/Typography";

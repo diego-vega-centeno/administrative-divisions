@@ -1,8 +1,7 @@
 import {
-  basicMenu, table, tableCell, headerCell,
-  subHeaderCell, tableContainer, modalCenter,
+  table, tableCell, headerCell, subHeaderCell,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
-  headerCellConfirmContainer, menuHeader, favoritesMenuCheckbox,
+  headerCellConfirmContainer, favoritesMenuCheckbox,
   favoritesMenuCheckboxCell
 } from "../styles/Menu.jsx";
 import Table from '@mui/material/Table';
