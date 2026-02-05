@@ -58,4 +58,26 @@ async function deleteLayer(layerId) {
   return;
 }
 
-export { saveLayerToDB, getUserLayersRelations, deleteLayer }
+async function dbDeleteLayerRels(layerId, ids) {
+  const response = await fetchWithUserUpdate(
+    import.meta.env.VITE_BACKEND_URL + `/layer/${layerId}/rels`,
+    {
+      method: 'DELETE',
+      headers: { 'Content-type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        relsIds: [...ids]
+      })
+    }
+  );
+
+  if (!response.ok) {
+    const error = new Error('Request failed');
+    throw error;
+  }
+
+  return;
+}
+
+
+export { saveLayerToDB, getUserLayersRelations, deleteLayer, dbDeleteLayerRels }
