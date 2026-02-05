@@ -20,7 +20,7 @@ const basicMenu = {
   },
 }
 
-const menuheader = {
+const menuHeader = {
   padding: '.2rem 1rem',
   backgroundColor: 'var(--color-primary)',
   color: 'white',
@@ -109,7 +109,7 @@ const modalCenter = {
 }
 
 export {
-  basicMenu, menuheader, textField, table, tableCell, headerCell,
+  basicMenu, menuHeader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer
