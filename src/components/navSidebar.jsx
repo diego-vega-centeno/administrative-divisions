@@ -59,7 +59,10 @@ export default function NavSidebar() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={handleFavoritesButton} sx={navSideItem}>
+          <ListItemButton
+            onClick={handleFavoritesButton}
+            sx={navSideItem}
+            disabled={!Boolean(userData)}>
             Favorites
           </ListItemButton>
         </ListItem>
