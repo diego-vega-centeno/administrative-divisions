@@ -8,13 +8,13 @@ import {
 } from "../styles/LoginMenu.jsx";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { errorLog } from "../utils/logger.js";
+import logger from "../utils/logger.js";
 
 export default function LoginMenu({ open, onClose }) {
 
   const handleClick = () => {
     const authUrl = import.meta.env.VITE_AUTH_URL;
-    if (!authUrl) errorLog('Missing VITE_AUTH_URL');
+    if (!authUrl) logger.error('Missing VITE_AUTH_URL');
     location.href = authUrl;
   }
 

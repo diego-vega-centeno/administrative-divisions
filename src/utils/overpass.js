@@ -1,6 +1,6 @@
 import osmtogeojson from "osmtogeojson";
 import { putStoreRelations, getStoreRelation } from '../utils/indexedDB.js';
-import { debugLog } from "./logger.js";
+import logger from './logger';
 
 async function getRelationsOSMData(ids, out = "geom") {
 
@@ -145,7 +145,7 @@ async function getRelationsDataWithCache(nodes) {
   }
 
   // join cached data
-  debugLog(`Relations: In cache ${cachedRels.length}, non-cached: ${queryRels.length}`);
+  logger.info(`IndexedDB: Relations: In cache ${cachedRels.length}, non-cached: ${queryRels.length}`);
   const osmRels = [...queryRels, ...cachedRels];
 
   // store >= 400KB relations
@@ -158,11 +158,11 @@ async function getRelationsDataWithCache(nodes) {
   //   const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
   //   return sizeInBytes < 400 * 1024;
   // });
-  // debugLog(`Relations: Added to cache: ${largeRels.length}, skipped: ${smallRels.length}`);
+  // logger.info(`Relations: Added to cache: ${largeRels.length}, skipped: ${smallRels.length}`);
 
   // store query rels
   putStoreRelations(queryRels);
-  debugLog(`Relations: Added to cache: ${queryRels.length}`);
+  logger.info(`IndexedDB: Relations: Added to cache: ${queryRels.length}`);
 
   return osmRels
 }
@@ -172,12 +172,12 @@ function profileSize(rels) {
   rels.forEach(elem => {
     let sizeInBytes = new Blob([JSON.stringify(elem)]).size;
     sum += sizeInBytes / 1024;
-    debugLog(`elem id: ${elem.id}, size (KB): ${sizeInBytes / 1024}`);
+    logger.info(`Poly profile: elem id: ${elem.id}, size (KB): ${sizeInBytes / 1024}`);
   });
   let sizeInBytes = new Blob([JSON.stringify(rels)]).size;
-  debugLog(`Total rels size (KB): ${sizeInBytes / 1024}`);
+  logger.info(`Poly profile: Total rels size (KB): ${sizeInBytes / 1024}`);
 
-  debugLog(`Average size (KB): ${sum / rels.length}`)
+  logger.info(`Poly profile: Average size (KB): ${sum / rels.length}`)
 }
 
 export { getRelationsOSMData, formatData, donwloadJSONData, getRelationsDataWithCache, profileSize }

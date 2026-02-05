@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { errorLog, debugLog } from "../utils/logger";
+import logger from "../utils/logger";
 
 const AuthContext = createContext(null);
 let logout = null;
@@ -21,11 +21,11 @@ function AuthProvider({ children }) {
           const dataResponse = await response.json();
           setUserData(dataResponse.data)
         } else {
-          debugLog(`Auth failed: ${response.status} - ${response.statusText}`)
+          logger.info(`Auth failed: ${response.status} - ${response.statusText}`)
           setUserData(null)
         }
       } catch (error) {
-        errorLog(`Failed user fetch: ${error}`)
+        logger.error(`Failed user fetch: ${error}`)
       } finally {
         setLoading(false);
       }

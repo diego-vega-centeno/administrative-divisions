@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import { getNominatimSearch } from '../utils/nominatim.js';
 import SearchResultList from './SearchResultList.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
-import { debugLog, errorLog } from "../utils/logger";
+import logger from "../utils/logger.js";
 
 export default function SearchDropdown({ text = '', onSelect, onError }) {
 
@@ -36,7 +36,7 @@ export default function SearchDropdown({ text = '', onSelect, onError }) {
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
-      debugLog(error);
+      logger.error(error);
     }
   }
 

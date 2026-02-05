@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { debugLog, errorLog } from "../utils/logger";
+import logger from '../utils/logger.js';
 
 export default function OSMTagsDropDown({ elementData }) {
 
@@ -64,7 +64,7 @@ export default function OSMTagsDropDown({ elementData }) {
         filteredTags[key] = value;
       }
     }
-    // debugLog('matchedTags: ', matchedTags);
+    // logger.debug('matchedTags: ', matchedTags);
 
     // Define SubTable and add to corresponding key
     for (const [key, tags] of Object.entries(matchedTags)) {
@@ -79,7 +79,7 @@ export default function OSMTagsDropDown({ elementData }) {
     return filteredTags
   }, [elementData]);
 
-  // debugLog('filteredTags: ', filteredTags);
+  // logger.debug('filteredTags: ', filteredTags);
 
   return <Box>
     <ListItemButton sx={dropdown} disableRipple onClick={handleClick}>

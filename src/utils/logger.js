@@ -1,11 +1,5 @@
-const DEBUG = process.env.NODE_ENV === 'development'
+import logger from 'loglevel';
 
-function debugLog(...args) {
-  if (DEBUG) console.log(...args);
-}
+logger.setLevel(process.env.NODE_ENV === 'development' ? 'debug' : 'silent');
 
-function errorLog(...args) {
-  console.error(...args);
-}
-
-export { debugLog, errorLog }
+export default logger;
