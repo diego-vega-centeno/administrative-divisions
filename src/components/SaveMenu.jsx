@@ -5,7 +5,7 @@ import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState, useRef } from "react";
 import {
   basicMenu, textField, table, tableCell,
-  headerCell, tableContainer, modalCenter
+  headerCell, tableContainer, modalCenter, menuHeader
 } from "../styles/Menu.jsx";
 import Typography from "@mui/material/Typography";
 import Table from '@mui/material/Table';
@@ -85,7 +85,9 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
         onSubmit={handleSubmit}
         sx={basicMenu}
       >
-        <Typography>Save layer</Typography>
+        <Box sx={menuHeader}>
+          <Typography>Save layer</Typography>
+        </Box>
         <Typography variant="body2">Title</Typography>
         <TextField
           inputRef={titleInputRef}
