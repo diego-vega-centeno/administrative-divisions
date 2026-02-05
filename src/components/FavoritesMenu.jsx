@@ -72,7 +72,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
         }
         return newLayers
       });
-    }catch(error){
+    } catch (error) {
       errorLog(`Failed to delete layer: ${errror}`)
     }
   }
@@ -84,8 +84,16 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     setEditMode(false);
   }
 
+  const handleClose = () => {
+    setLoading(false);
+    setActiveLayer('');
+    setConfirm(false);
+    setEditMode(false);
+    onClose();
+  }
+
   return (
-    <Modal open={open} onClose={onClose} sx={modalCenter}>
+    <Modal open={open} onClose={handleClose} sx={modalCenter}>
       <Box sx={basicMenu}>
         <Box sx={menuHeader}>
           <Typography>Favorite layers</Typography>
