@@ -1,4 +1,4 @@
-import { debugLog, errorLog } from "./logger";
+import logger from './logger';
 
 // databse config
 const DB_NAME = 'osm-cache';
@@ -15,7 +15,7 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000
 let dbPromise;
 
 if (!('indexedDB' in window)) {
-  debugLog("Your browser doesn't support IndexedDB.");
+  logger.info("Your browser doesn't support IndexedDB.");
 }
 
 function initDB() {
@@ -26,13 +26,13 @@ function initDB() {
 
     request.onerror = (event) => {
       dbPromise = null;
-      errorLog(`Database error: ${event.target.errorCode}`);
+      logger.info(`Database error: ${event.target.errorCode}`);
       reject(event.target);
     }
 
     request.onsuccess = (event) => {
       const db = request.result;
-      debugLog(`Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`);
+      logger.info(`Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`);
       resolve(db);
     }
 
@@ -63,11 +63,11 @@ function initDB() {
 // function makeTransaction(storeName, type) {
 //   const transaction = db.transaction(storeName, type)
 //   transaction.oncomplete = (event) => {
-//     debugLog('Transaction successful');
+//     logger.info('Transaction successful');
 //   }
 //   transaction.onerror = (event) => {
 //     event.stopPropagation();
-//     errorLog(`There was an error: ${event.message}`);
+//     logger.error(`There was an error: ${event.message}`);
 //   }
 
 //   const store = transaction.objectStore(storeName);
@@ -82,7 +82,7 @@ async function putStoreRelations(relations) {
   const store = tx.objectStore(STORE_NAME);
 
   tx.oncomplete = (event) => {
-    debugLog(`Transaction successful: ${relations.length} relations stored`);
+    logger.info(`IndexedDB: Transaction successful: ${relations.length} relations stored`);
   }
 
   relations.forEach(rel => {
@@ -94,7 +94,7 @@ async function putStoreRelations(relations) {
     // const request = store.put({ ...rel, storedAt: Date.now(), size: (new Blob([JSON.stringify(rel)]).size)});
 
     request.onerror = () => {
-      errorLog(`Error while adding relation: ${request.error}`);
+      logger.error(`Error while adding relation: ${request.error}`);
     }
   });
 }
@@ -109,13 +109,13 @@ async function getStoreRelation(id) {
 
     request.onsuccess = () => {
       if (request.result) {
-        debugLog(`Relation obtained: id = ${request.result.id}`);
+        logger.info(`IndexedDB: Relation obtained: id = ${request.result.id}`);
       }
       resolve(request.result);
     };
 
     request.onerror = () => {
-      errorLog(`Error while getting relation: ${request.error}`);
+      logger.error(`IndexedDB: Error while getting relation: ${request.error}`);
       reject(request.error);
     }
   });
@@ -131,13 +131,13 @@ async function getAllStoredRelations() {
     const request = store.getAll();
 
     request.onsuccess = () => {
-      debugLog(`All stored relations: ${request.result.length} items`);
+      logger.info(`IndexedDB: All stored relations: ${request.result.length} items`);
       console.table(request.result);
       resolve(request.result);
     };
 
     request.onerror = () => {
-      errorLog(`Error getting all relations: ${request.error}`);
+      logger.error(`IndexedDB: Error getting all relations: ${request.error}`);
       reject(request.error);
     }
   });
@@ -152,12 +152,12 @@ async function clearAllStoredRelations() {
     const request = store.clear();
 
     request.onsuccess = () => {
-      debugLog('All stored relations cleared');
+      logger.info('IndexedDB: All stored relations cleared');
       resolve();
     };
 
     request.onerror = () => {
-      errorLog(`Error clearing relations: ${request.error}`);
+      logger.error(`IndexedDB: Error clearing relations: ${request.error}`);
       reject(request.error);
     }
   });
@@ -174,16 +174,16 @@ async function cleanDBCache() {
   let ageDeleteCount = 0, objectsDeletedCount = 0, sizeDeleteCount = 0;
 
   countReq.onsuccess = () => {
-    debugLog(`IndexedDB: object count: ${countReq.result}`);
+    logger.info(`IndexedDB: object count: ${countReq.result}`);
     // skip based on object counts
     if (countReq.result <= MAX_OBJECTS_COUNT) {
-      debugLog(`IndexedDB: no cleanup needed`);
+      logger.info(`IndexedDB: no cleanup needed`);
       tx.abort();
       return;
     }
 
     // clean up needed
-    debugLog(`IndexedDB: doing cache clean up ...`);
+    logger.info(`IndexedDB: doing cache clean up ...`);
 
     // clean based on count
     // let it try to delete already delete realtions 
@@ -192,31 +192,31 @@ async function cleanDBCache() {
       .then(count => {
         objectsDeletedCount = count;
       })
-      .catch(err => errorLog(err));
+      .catch(err => logger.error(err));
 
     // clean based on age, LRU object
     cleanDBCacheMaxAge(store)
       .then(count => {
         ageDeleteCount = count;
       })
-      .catch(err => errorLog(err));
+      .catch(err => logger.error(err));
 
     // clean based on total size
     // cleanDBCacheTotalSize(store)
     //   .then(count => {
     //     ageDeleteCount = count;
     //   })
-    //   .catch(err => errorLog(err));
+    //   .catch(err => logger.error(err));
   }
 
   tx.onerror = () => {
-    errorLog(tx.error);
+    logger.error(tx.error);
   };
 
   tx.oncomplete = () => {
-    if (ageDeleteCount > 0) debugLog(`IndexedDB: cleanup done MAX_AGE_DAYS: ${ageDeleteCount} deleted`);
-    if (objectsDeletedCount > 0) debugLog(`IndexedDB: cleanup done MAX_OBJECTS_COUNT: ${objectsDeletedCount} deleted`);
-    if (sizeDeleteCount > 0) debugLog(`IndexedDB: cleanup done MAX_TOTAL_SIZE: ${sizeDeleteCount} deleted`);
+    if (ageDeleteCount > 0) logger.info(`IndexedDB: cleanup done MAX_AGE_DAYS: ${ageDeleteCount} deleted`);
+    if (objectsDeletedCount > 0) logger.info(`IndexedDB: cleanup done MAX_OBJECTS_COUNT: ${objectsDeletedCount} deleted`);
+    if (sizeDeleteCount > 0) logger.info(`IndexedDB: cleanup done MAX_TOTAL_SIZE: ${sizeDeleteCount} deleted`);
   };
 }
 
@@ -288,7 +288,7 @@ function cleanDBCacheTotalSize(store) {
         totalSize += size;
         return { ...rel, size };
       });
-      debugLog(`IndexedDB: current total size: ${totalSize} (MB)`)
+      logger.info(`IndexedDB: current total size: ${totalSize} (MB)`)
       if (totalSize <= MAX_TOTAL_SIZE) return 0;
 
       // Sort from youngest to oldest (keep newest)
