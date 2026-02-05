@@ -12,6 +12,7 @@ import LoginMenu from './LoginMenu.jsx'
 import FavoritesMenu from "./FavoritesMenu.jsx";
 
 import { AuthContext } from "./AuthContext.jsx";
+import logger from "../utils/logger.js";
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
@@ -41,7 +42,7 @@ export default function NavSidebar() {
       setUserData(null);
       window.location.reload();
     } catch (error) {
-      errorLog(`Logout failed: ${error}`)
+      logger.error(`Logout failed: ${error}`)
     }
   }
 
