@@ -3,7 +3,7 @@ import {
   basicMenu, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
-  headerCellConfirmContainer, menuheader
+  headerCellConfirmContainer, menuHeader
 } from "../styles/Menu.jsx";
 import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
@@ -19,7 +19,7 @@ import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect, useContext } from "react";
 import Modal from '@mui/material/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquareUpRight, faTrash, faX } from '@fortawesome/free-solid-svg-icons';
+import { faSquareUpRight, faTrash, faX, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { MapActionsContext } from "./MapActionsContext.jsx";
 import { dataIndex, getParentNames } from "../utils/addData.js";
 
@@ -84,7 +84,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   return (
     <Modal open={open} onClose={onClose} sx={modalCenter}>
       <Box sx={basicMenu}>
-        <Box sx={menuheader}>
+        <Box sx={menuHeader}>
           <Typography>Favorite layers</Typography>
         </Box>
         <TableContainer sx={tableContainer}>
@@ -131,6 +131,13 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                                     sx={headerCellToolsContainer}
                                     className="header-cell-tools"
                                   >
+                                    <Tooltip title="Edit" placement="top" arrow>
+                                      <Button
+                                        sx={headerCellToolsButton}
+                                      >
+                                        <FontAwesomeIcon icon={faPenToSquare} />
+                                      </Button>
+                                    </Tooltip>
                                     <Tooltip title="Plot" placement="top" arrow>
                                       <Button
                                         sx={headerCellToolsButton}
