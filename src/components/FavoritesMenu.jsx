@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import {
   basicMenu, tableContainer, modalCenter, menuHeader
 } from "../styles/Menu.jsx";
-import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
+import { getUserLayersRelations, deleteLayer, dbDeleteLayerRels } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import TableContainer from '@mui/material/TableContainer';
 import { debugLog, errorLog } from "../utils/logger.js";
@@ -19,7 +19,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   const [activeLayer, setActiveLayer] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const [selectedLayerRels, setSelectedLayerRels] = useState(new Set());
+  const [selectedLayerRelsIds, setSelectedLayerRelsIds] = useState(new Set());
 
   useEffect(() => {
     if (!open) return;
@@ -73,15 +73,28 @@ export default function FavoritesMenu({ open, onClose, onError }) {
         return newLayers
       });
     } catch (error) {
-      errorLog(`Failed to delete layer: ${errror}`)
+      errorLog(`Failed to delete layer: ${error}`)
     }
   }
 
-  const deleteLayerRels = (selectedLayerRels) => {
-    // TODO: Implement actual deletion logic
-    console.log('Deleting layer relations:', selectedLayerRels);
-    setSelectedLayerRels(new Set());
-    setEditMode(false);
+  const deleteLayerRels = (groupKey, layerId, selectedLayerRelsIds) => {
+    try {
+      // delete rel in database
+      dbDeleteLayerRels(layerId, selectedLayerRelsIds)
+      // clean selected layers
+      setSelectedLayerRelsIds(new Set());
+      // reset editmode
+      setEditMode(false);
+      // update react status
+      setRelsPerLayer(prev => {
+        const newRelsPerLayer = { ...prev }
+        const newLayerRels = relsPerLayer[groupKey].filter(rel => !selectedLayerRelsIds.has(rel.id));
+        newRelsPerLayer[groupKey] = newLayerRels;
+        return newRelsPerLayer;
+      });
+    } catch (error) {
+      errorLog(`Failed to delete relations: ${error}`)
+    }
   }
 
   const handleClose = () => {
@@ -119,8 +132,8 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                         setEditMode={setEditMode}
                         confirm={confirm}
                         setConfirm={setConfirm}
-                        selectedLayerRels={selectedLayerRels}
-                        setSelectedLayerRels={setSelectedLayerRels}
+                        selectedLayerRelsIds={selectedLayerRelsIds}
+                        setSelectedLayerRelsIds={setSelectedLayerRelsIds}
                         deleteSelectedLayer={deleteSelectedLayer}
                         deleteLayerRels={deleteLayerRels}
                         layerRels={layerRels}
