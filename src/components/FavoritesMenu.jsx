@@ -90,6 +90,19 @@ export default function FavoritesMenu({ open, onClose, onError }) {
         const newRelsPerLayer = { ...prev }
         const newLayerRels = relsPerLayer[groupKey].filter(rel => !selectedLayerRelsIds.has(rel.id));
         newRelsPerLayer[groupKey] = newLayerRels;
+
+        // if layer is empty remove layer in react.
+        // database will handle the delete
+        if (!newLayerRels.length) {
+          setRelsPerLayer(prev => {
+            const newLayers = { ...prev }
+            for (const key in newLayers) {
+              const [_, id] = key.split('|');
+              if (id === layerId) delete newLayers[key]
+            }
+            return newLayers
+          })
+        }
         return newRelsPerLayer;
       });
     } catch (error) {
