@@ -28,30 +28,39 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   const [relsLayers, setRelsLayers] = useState({});
   const { setSelected } = useContext(MapActionsContext);
   const [confirm, setConfirm] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (!open) return;
+
     // lets use a controller to stop the fetch in case of unmount
     const controller = new AbortController();
 
     async function getUserRels() {
       try {
+        if (!open) return;
+        setRelsLayers({});
+        setLoading(true);
+
         const relations = await getUserLayersRelations({ signal: controller.signal });
         const relsLayers = Object.groupBy(relations.data, ({ layer_title, layer_id }) => `${layer_title}|${layer_id}`)
+
         setRelsLayers(relsLayers);
+
       } catch (error) {
         // ignore errors due to unmount in strict mode
         if (error.name === 'AbortError') return;
         errorLog(`Failed to fetch layer relations: ${error.message}`)
+      } finally {
+        setLoading(false)
       }
     }
 
     getUserRels();
 
-    return () => {
-      controller.abort();
-    };
-  }, []);
+    return () => controller.abort();
 
+  }, [open]);
 
   const plotLayer = (groupKey) => {
     const rels = relsLayers[groupKey].map(rel => ({ id: rel['osm_relation_id'] }));
@@ -77,85 +86,95 @@ export default function FavoritesMenu({ open, onClose, onError }) {
       <Box sx={basicMenu}>
         <Typography>Favorite layers</Typography>
         <TableContainer sx={tableContainer}>
-          {Object.entries(relsLayers).map(([groupKey, rels]) => {
-            const [layerTitle, layerId] = groupKey.split('|');
-            return (
-              <Table key={layerId} sx={table}>
-                <TableHead >
-                  <TableRow >
-                    <TableCell
-                      align="center"
-                      sx={headerCell}
-                      colSpan={4}
-                    >
-                      <Box sx={headerCellContent}>
-                        <Typography>{layerTitle}</Typography>
-                        {confirm === layerId ?
-                          <Box
-                            sx={headerCellConfirmContainer}
-                            className="header-cell-tools"
-                          >
-                            <Button
-                              sx={{ ...headerCellToolsButton, color: 'rgb(218 9 9)' }}
-                              onClick={() => deleteSelectedLayer(layerId)}
-                            >
-                              <FontAwesomeIcon icon={faTrash} />
-                            </Button>
-                            <Button
-                              sx={{ ...headerCellToolsButton }}
-                              onClick={() => setConfirm(false)}
-                            >
-                              <FontAwesomeIcon icon={faX} />
-                            </Button>
-                          </Box> :
-                          <Box
-                            sx={headerCellToolsContainer}
-                            className="header-cell-tools"
-                          >
-                            <Tooltip title="Plot" placement="top" arrow>
-                              <Button
-                                sx={headerCellToolsButton}
-                                onClick={() => plotLayer(groupKey)}
-                              >
-                                <FontAwesomeIcon icon={faSquareUpRight} />
-                              </Button>
-                            </Tooltip>
-                            <Tooltip title="Delete" placement="top" arrow>
-                              <Button
-                                sx={headerCellToolsButton}
-                                onClick={() => setConfirm(layerId)}
-                              >
-                                <FontAwesomeIcon icon={faTrash} />
-                              </Button>
-                            </Tooltip>
-                          </Box>
-                        }
-
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="center" sx={subHeaderCell}>admin level</TableCell>
-                    <TableCell align="center" sx={subHeaderCell}>id</TableCell>
-                    <TableCell align="center" sx={subHeaderCell}>name</TableCell>
-                    <TableCell align="center" sx={subHeaderCell}>parents</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rels.map(rel => {
+          {
+            loading ?
+              <Typography>Loading ...</Typography>
+              :
+              (
+                Object.entries(relsLayers).length === 0 ?
+                  <Typography>No favorites found</Typography>
+                  :
+                  Object.entries(relsLayers).map(([groupKey, rels]) => {
+                    const [layerTitle, layerId] = groupKey.split('|');
                     return (
-                      <TableRow key={rel.osm_relation_id}>
-                        <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell>
-                        <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
-                        <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
-                        <TableCell align="center" sx={tableCell}>{getParentNames(rel.osm_relation_id)}</TableCell>
-                      </TableRow>
+                      <Table key={layerId} sx={table}>
+                        <TableHead >
+                          <TableRow >
+                            <TableCell
+                              align="center"
+                              sx={headerCell}
+                              colSpan={4}
+                            >
+                              <Box sx={headerCellContent}>
+                                <Typography>{layerTitle}</Typography>
+                                {confirm === layerId ?
+                                  <Box
+                                    sx={headerCellConfirmContainer}
+                                    className="header-cell-tools"
+                                  >
+                                    <Button
+                                      sx={{ ...headerCellToolsButton, color: 'rgb(218 9 9)' }}
+                                      onClick={() => deleteSelectedLayer(layerId)}
+                                    >
+                                      <FontAwesomeIcon icon={faTrash} />
+                                    </Button>
+                                    <Button
+                                      sx={{ ...headerCellToolsButton }}
+                                      onClick={() => setConfirm(false)}
+                                    >
+                                      <FontAwesomeIcon icon={faX} />
+                                    </Button>
+                                  </Box> :
+                                  <Box
+                                    sx={headerCellToolsContainer}
+                                    className="header-cell-tools"
+                                  >
+                                    <Tooltip title="Plot" placement="top" arrow>
+                                      <Button
+                                        sx={headerCellToolsButton}
+                                        onClick={() => plotLayer(groupKey)}
+                                      >
+                                        <FontAwesomeIcon icon={faSquareUpRight} />
+                                      </Button>
+                                    </Tooltip>
+                                    <Tooltip title="Delete" placement="top" arrow>
+                                      <Button
+                                        sx={headerCellToolsButton}
+                                        onClick={() => setConfirm(layerId)}
+                                      >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                      </Button>
+                                    </Tooltip>
+                                  </Box>
+                                }
+
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell align="center" sx={subHeaderCell}>admin level</TableCell>
+                            <TableCell align="center" sx={subHeaderCell}>id</TableCell>
+                            <TableCell align="center" sx={subHeaderCell}>name</TableCell>
+                            <TableCell align="center" sx={subHeaderCell}>parents</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {rels.map(rel => {
+                            return (
+                              <TableRow key={rel.osm_relation_id}>
+                                <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell>
+                                <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
+                                <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
+                                <TableCell align="center" sx={tableCell}>{getParentNames(rel.osm_relation_id)}</TableCell>
+                              </TableRow>
+                            )
+                          })}
+                        </TableBody>
+                      </Table>
                     )
-                  })}
-                </TableBody>
-              </Table>
-            )
-          })}
+                  })
+              )
+          }
         </TableContainer>
       </Box>
     </Modal>
