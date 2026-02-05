@@ -25,7 +25,7 @@ import { addToolsButton } from '../styles/SelectAddDropdown.jsx';
 export default function FavoritesMenuTable({
   activeLayer, layerRels, setActiveLayer, plotLayer, groupKey,
   deleteSelectedLayer, deleteLayerRels, editMode, setEditMode,
-  confirm, setConfirm, selectedLayerRels, setSelectedLayerRels
+  confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds
 }) {
 
   const [layerTitle, layerId] = groupKey.split('|');
@@ -42,20 +42,20 @@ export default function FavoritesMenuTable({
   }
 
   const handleDeleteLayerRels = () => {
-    deleteLayerRels(selectedLayerRels);
+    deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
   }
 
-  const toggle = (osmId) => {
-    setSelectedLayerRels(prev => {
+  const toggle = (id) => {
+    setSelectedLayerRelsIds(prev => {
       const newSelected = new Set(prev);
-      newSelected.has(osmId) ? newSelected.delete(osmId) : newSelected.add(osmId);
+      newSelected.has(id) ? newSelected.delete(id) : newSelected.add(id);
       return newSelected;
     });
   }
 
   const handleCancel = () => {
     setEditMode(false);
-    setSelectedLayerRels(new Set());
+    setSelectedLayerRelsIds(new Set());
     setConfirm(false)
   }
 
@@ -117,7 +117,7 @@ export default function FavoritesMenuTable({
                           setEditMode(true);
                           setConfirm(false);
                           setActiveLayer(layerId);
-                          setSelectedLayerRels(new Set());
+                          setSelectedLayerRelsIds(new Set());
                         }}
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
@@ -159,16 +159,16 @@ export default function FavoritesMenuTable({
       <TableBody>
         {layerRels.map(rel => {
           return (
-            <TableRow key={rel.osm_relation_id}>
+            <TableRow key={rel.id}>
               <TableCell align="center" sx={favoritesMenuCheckboxCell}>
                 {editMode && activeLayer === layerId && (
                   <Button
                     size='small'
                     sx={favoritesMenuCheckbox}
-                    onClick={() => toggle(rel.osm_relation_id)}
+                    onClick={() => toggle(rel.id)}
                   >
                     <FontAwesomeIcon
-                      icon={selectedLayerRels.has(rel.osm_relation_id) ? faCheckSquare : faSquare} />
+                      icon={selectedLayerRelsIds.has(rel.id) ? faCheckSquare : faSquare} />
                   </Button>
                 )}
               </TableCell>
