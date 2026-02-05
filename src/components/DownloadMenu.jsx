@@ -8,7 +8,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { saveActionSection } from "../styles/Main";
 import { getRelationsDataWithCache, formatData } from '../utils/overpass';
 import { donwloadJSONData } from "../utils/overpass";
-import { debugLog, errorLog } from "../utils/logger";
 
 export default function DownloadMenu({ open, onClose, onError, selectedNodes }) {
 
@@ -39,7 +38,7 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
     } catch (error) {
       setIsProgressIconActive(false);
       onError(error.message);
-      errorLog('An error ocurred: ', error);
+      logger.error('An error ocurred: ', error);
     }
   }
 

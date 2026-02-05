@@ -14,7 +14,7 @@ import OSMTagsDropDown from './OSMTagsDropDown.jsx';
 import ListItem from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { dropdown } from '../styles/OSMTagsDropDown.jsx';
-import { errorLog } from '../utils/logger.js';
+import logger from '../utils/logger.js';
 import AlertDialog from './AlertDialog.jsx';
 import { useSearchParams } from "react-router";
 import { MapActionsContext } from './MapActionsContext.jsx';
@@ -72,7 +72,7 @@ export default function Main() {
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
-      errorLog('An error ocurred: ', error);
+      logger.error('An error ocurred: ', error);
     }
   }
 
@@ -95,7 +95,7 @@ export default function Main() {
     } catch (error) {
       setIsProgressIconActive(false);
       setErrorMessage(error.message);
-      errorLog('An error ocurred: ', error);
+      logger.error('An error ocurred: ', error);
     }
   }
 

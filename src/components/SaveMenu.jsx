@@ -17,7 +17,7 @@ import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import { saveLayerToDB } from '../utils/database.js'
-import { debugLog, errorLog } from "../utils/logger.js";
+import logger from "../utils/logger.js";
 import Modal from '@mui/material/Modal';
 import { dataIndex } from "../utils/addData.js";
 
@@ -41,7 +41,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
     try {
       const saveResponse = await saveLayerToDB(title, selectedNodes);
     } catch (error) {
-      errorLog(error);
+      logger.error(error);
       if (error?.code === 'duplicate_entry') {
         setError('This title already exists. Choose another one.');
         titleInputRef.current?.focus();

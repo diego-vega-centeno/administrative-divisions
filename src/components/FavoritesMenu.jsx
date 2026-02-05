@@ -5,12 +5,11 @@ import {
 import { getUserLayersRelations, deleteLayer, dbDeleteLayerRels } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import TableContainer from '@mui/material/TableContainer';
-import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect, useContext } from "react";
 import Modal from '@mui/material/Modal';
 import { MapActionsContext } from "./MapActionsContext.jsx";
 import FavoritesMenuTable from "./FavoritesMenuTable.jsx";
-
+import logger from "../utils/logger.js";
 
 export default function FavoritesMenu({ open, onClose, onError }) {
   const [relsPerLayer, setRelsPerLayer] = useState({});
@@ -41,7 +40,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
       } catch (error) {
         // ignore errors due to unmount in strict mode
         if (error.name === 'AbortError') return;
-        errorLog(`Failed to fetch layer relations: ${error.message}`)
+        logger.error(`Failed to fetch layer relations: ${error.message}`)
       } finally {
         setLoading(false)
       }
@@ -73,7 +72,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
         return newLayers
       });
     } catch (error) {
-      errorLog(`Failed to delete layer: ${error}`)
+      logger.error(`Failed to delete layer: ${error}`)
     }
   }
 
@@ -106,7 +105,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
         return newRelsPerLayer;
       });
     } catch (error) {
-      errorLog(`Failed to delete relations: ${error}`)
+      logger.error(`Failed to delete relations: ${error}`)
     }
   }
 
