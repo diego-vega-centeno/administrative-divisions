@@ -1,34 +1,25 @@
 import Box from "@mui/material/Box";
 import {
-  basicMenu, table, tableCell, headerCell,
-  subHeaderCell, tableContainer, modalCenter,
-  headerCellContent, headerCellToolsContainer, headerCellToolsButton,
-  headerCellConfirmContainer, menuheader
+  basicMenu, tableContainer, modalCenter, menuHeader
 } from "../styles/Menu.jsx";
-import { getUserLayersRelations, deleteLayer } from "../utils/database.js";
+import { getUserLayersRelations, deleteLayer, dbDeleteLayerRels } from "../utils/database.js";
 import Typography from "@mui/material/Typography";
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableRow from "@mui/material/TableRow";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import { debugLog, errorLog } from "../utils/logger.js";
 import { useState, useEffect, useContext } from "react";
 import Modal from '@mui/material/Modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquareUpRight, faTrash, faX } from '@fortawesome/free-solid-svg-icons';
 import { MapActionsContext } from "./MapActionsContext.jsx";
-import { dataIndex, getParentNames } from "../utils/addData.js";
+import FavoritesMenuTable from "./FavoritesMenuTable.jsx";
 
 
 export default function FavoritesMenu({ open, onClose, onError }) {
-  const [relsLayers, setRelsLayers] = useState({});
+  const [relsPerLayer, setRelsPerLayer] = useState({});
   const { setSelected } = useContext(MapActionsContext);
-  const [confirm, setConfirm] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeLayer, setActiveLayer] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [selectedLayerRelsIds, setSelectedLayerRelsIds] = useState(new Set());
 
   useEffect(() => {
     if (!open) return;
@@ -39,13 +30,13 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     async function getUserRels() {
       try {
         if (!open) return;
-        setRelsLayers({});
+        setRelsPerLayer({});
         setLoading(true);
 
         const relations = await getUserLayersRelations({ signal: controller.signal });
-        const relsLayers = Object.groupBy(relations.data, ({ layer_title, layer_id }) => `${layer_title}|${layer_id}`)
+        const relsPerLayer = Object.groupBy(relations.data, ({ layer_title, layer_id }) => `${layer_title}|${layer_id}`)
 
-        setRelsLayers(relsLayers);
+        setRelsPerLayer(relsPerLayer);
 
       } catch (error) {
         // ignore errors due to unmount in strict mode
@@ -63,28 +54,74 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   }, [open]);
 
   const plotLayer = (groupKey) => {
-    const rels = relsLayers[groupKey].map(rel => ({ id: rel['osm_relation_id'] }));
+    const rels = relsPerLayer[groupKey].map(rel => ({ id: rel['osm_relation_id'] }));
     onClose();
     setSelected(rels);
   }
 
   const deleteSelectedLayer = (layerId) => {
-    deleteLayer(layerId);
-    setRelsLayers(prev => {
-      const newLayers = { ...prev }
-      for (const key in newLayers) {
-        const [_, id] = key.split('|');
-        if (id === layerId) delete newLayers[key]
-      }
-      return newLayers
-    });
+    try {
+      // send delete request to backend
+      deleteLayer(layerId);
+      // update react status
+      setRelsPerLayer(prev => {
+        const newLayers = { ...prev }
+        for (const key in newLayers) {
+          const [_, id] = key.split('|');
+          if (id === layerId) delete newLayers[key]
+        }
+        return newLayers
+      });
+    } catch (error) {
+      errorLog(`Failed to delete layer: ${error}`)
+    }
+  }
+
+  const deleteLayerRels = (groupKey, layerId, selectedLayerRelsIds) => {
+    try {
+      // delete rel in database
+      dbDeleteLayerRels(layerId, selectedLayerRelsIds)
+      // clean selected layers
+      setSelectedLayerRelsIds(new Set());
+      // reset editmode
+      setEditMode(false);
+      // update react status
+      setRelsPerLayer(prev => {
+        const newRelsPerLayer = { ...prev }
+        const newLayerRels = relsPerLayer[groupKey].filter(rel => !selectedLayerRelsIds.has(rel.id));
+        newRelsPerLayer[groupKey] = newLayerRels;
+
+        // if layer is empty remove layer in react.
+        // database will handle the delete
+        if (!newLayerRels.length) {
+          setRelsPerLayer(prev => {
+            const newLayers = { ...prev }
+            for (const key in newLayers) {
+              const [_, id] = key.split('|');
+              if (id === layerId) delete newLayers[key]
+            }
+            return newLayers
+          })
+        }
+        return newRelsPerLayer;
+      });
+    } catch (error) {
+      errorLog(`Failed to delete relations: ${error}`)
+    }
+  }
+
+  const handleClose = () => {
+    setLoading(false);
+    setActiveLayer('');
     setConfirm(false);
+    setEditMode(false);
+    onClose();
   }
 
   return (
-    <Modal open={open} onClose={onClose} sx={modalCenter}>
+    <Modal open={open} onClose={handleClose} sx={modalCenter}>
       <Box sx={basicMenu}>
-        <Box sx={menuheader}>
+        <Box sx={menuHeader}>
           <Typography>Favorite layers</Typography>
         </Box>
         <TableContainer sx={tableContainer}>
@@ -93,86 +130,28 @@ export default function FavoritesMenu({ open, onClose, onError }) {
               <Typography>Loading ...</Typography>
               :
               (
-                Object.entries(relsLayers).length === 0 ?
+                Object.entries(relsPerLayer).length === 0 ?
                   <Typography>No favorites found</Typography>
                   :
-                  Object.entries(relsLayers).map(([groupKey, rels]) => {
+                  Object.entries(relsPerLayer).map(([groupKey, layerRels]) => {
                     const [layerTitle, layerId] = groupKey.split('|');
                     return (
-                      <Table key={layerId} sx={table}>
-                        <TableHead >
-                          <TableRow >
-                            <TableCell
-                              align="center"
-                              sx={headerCell}
-                              colSpan={4}
-                            >
-                              <Box sx={headerCellContent}>
-                                <Typography>{layerTitle}</Typography>
-                                {confirm === layerId ?
-                                  <Box
-                                    sx={headerCellConfirmContainer}
-                                    className="header-cell-tools"
-                                  >
-                                    <Button
-                                      sx={{ ...headerCellToolsButton, color: 'rgb(218 9 9)' }}
-                                      onClick={() => deleteSelectedLayer(layerId)}
-                                    >
-                                      <FontAwesomeIcon icon={faTrash} />
-                                    </Button>
-                                    <Button
-                                      sx={{ ...headerCellToolsButton }}
-                                      onClick={() => setConfirm(false)}
-                                    >
-                                      <FontAwesomeIcon icon={faX} />
-                                    </Button>
-                                  </Box> :
-                                  <Box
-                                    sx={headerCellToolsContainer}
-                                    className="header-cell-tools"
-                                  >
-                                    <Tooltip title="Plot" placement="top" arrow>
-                                      <Button
-                                        sx={headerCellToolsButton}
-                                        onClick={() => plotLayer(groupKey)}
-                                      >
-                                        <FontAwesomeIcon icon={faSquareUpRight} />
-                                      </Button>
-                                    </Tooltip>
-                                    <Tooltip title="Delete" placement="top" arrow>
-                                      <Button
-                                        sx={headerCellToolsButton}
-                                        onClick={() => setConfirm(layerId)}
-                                      >
-                                        <FontAwesomeIcon icon={faTrash} />
-                                      </Button>
-                                    </Tooltip>
-                                  </Box>
-                                }
-
-                              </Box>
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="center" sx={subHeaderCell}>admin level</TableCell>
-                            <TableCell align="center" sx={subHeaderCell}>id</TableCell>
-                            <TableCell align="center" sx={subHeaderCell}>name</TableCell>
-                            <TableCell align="center" sx={subHeaderCell}>parents</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {rels.map(rel => {
-                            return (
-                              <TableRow key={rel.osm_relation_id}>
-                                <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell>
-                                <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
-                                <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
-                                <TableCell align="center" sx={tableCell}>{getParentNames(rel.osm_relation_id)}</TableCell>
-                              </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
+                      <FavoritesMenuTable
+                        key={layerId}
+                        groupKey={groupKey}
+                        activeLayer={activeLayer}
+                        setActiveLayer={setActiveLayer}
+                        editMode={editMode}
+                        setEditMode={setEditMode}
+                        confirm={confirm}
+                        setConfirm={setConfirm}
+                        selectedLayerRelsIds={selectedLayerRelsIds}
+                        setSelectedLayerRelsIds={setSelectedLayerRelsIds}
+                        deleteSelectedLayer={deleteSelectedLayer}
+                        deleteLayerRels={deleteLayerRels}
+                        layerRels={layerRels}
+                        plotLayer={plotLayer}
+                      />
                     )
                   })
               )
