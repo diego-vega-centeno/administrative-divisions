@@ -87,6 +87,18 @@ const headerCellToolsButton = {
   borderRadius: '5px'
 }
 
+const favoritesMenuCheckbox = {
+  width: '3rem',
+  minWidth: 0,
+  fontSize: '1rem',
+  borderRadius: '5px',
+}
+
+const favoritesMenuCheckboxCell = {
+  width: 0,
+  padding: 0
+}
+
 const tableContainer = {
   overflowY: 'auto',
   flex: 1
@@ -112,5 +124,5 @@ export {
   basicMenu, menuHeader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
-  headerCellConfirmContainer
+  headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell
 }
