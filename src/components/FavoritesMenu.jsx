@@ -60,17 +60,21 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   }
 
   const deleteSelectedLayer = (layerId) => {
-    // send delete request to backend
-    deleteLayer(layerId);
-    // update react status
-    setRelsPerLayer(prev => {
-      const newLayers = { ...prev }
-      for (const key in newLayers) {
-        const [_, id] = key.split('|');
-        if (id === layerId) delete newLayers[key]
-      }
-      return newLayers
-    });
+    try {
+      // send delete request to backend
+      deleteLayer(layerId);
+      // update react status
+      setRelsPerLayer(prev => {
+        const newLayers = { ...prev }
+        for (const key in newLayers) {
+          const [_, id] = key.split('|');
+          if (id === layerId) delete newLayers[key]
+        }
+        return newLayers
+      });
+    }catch(error){
+      errorLog(`Failed to delete layer: ${errror}`)
+    }
   }
 
   const deleteLayerRels = (selectedLayerRels) => {
