@@ -20,6 +20,13 @@ const basicMenu = {
   },
 }
 
+const menuheader = {
+  padding: '.2rem 1rem',
+  backgroundColor: 'var(--color-primary)',
+  color: 'white',
+  borderRadius: '5px'
+}
+
 const textField = {
   '& .MuiInputBase-input': {
     fontSize: '0.875rem',
@@ -102,7 +109,7 @@ const modalCenter = {
 }
 
 export {
-  basicMenu, textField, table, tableCell, headerCell,
+  basicMenu, menuheader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer
