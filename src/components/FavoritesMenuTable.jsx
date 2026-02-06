@@ -45,9 +45,8 @@ export default function FavoritesMenuTable({
   }
 
   const handleEditSave = () => {
-    console.log('H');
-    // deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
-    changeLayerTitle(newTitle)
+    deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
+    changeLayerTitle(layerId, layerTitle, newTitle)
   }
 
   const toggle = (id) => {
