@@ -2,7 +2,7 @@ import {
   table, tableCell, headerCell, subHeaderCell,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer, favoritesMenuCheckbox,
-  favoritesMenuCheckboxCell
+  favoritesMenuCheckboxCell, saveMenuEditText
 } from "../styles/Menu.jsx";
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -21,14 +21,18 @@ import {
 import { faSquare, faCheckSquare } from '@fortawesome/free-regular-svg-icons'
 import { dataIndex, getParentNames } from "../utils/addData.js";
 import { addToolsButton } from '../styles/SelectAddDropdown.jsx';
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
 
 export default function FavoritesMenuTable({
   activeLayer, layerRels, setActiveLayer, plotLayer, groupKey,
-  deleteSelectedLayer, deleteLayerRels, editMode, setEditMode,
-  confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds
+  deleteSelectedLayer, editMode, setEditMode,
+  confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds,
+  error, setError, handleEditSave
 }) {
 
   const [layerTitle, layerId] = groupKey.split('|');
+  const [newTitle, setNewTitle] = useState(layerTitle);
 
   const handleDeleteLayer = (layerId) => {
     // send delete request to parent
@@ -39,10 +43,6 @@ export default function FavoritesMenuTable({
 
   const handlePlotLayer = (groupKey) => {
     plotLayer(groupKey)
-  }
-
-  const handleDeleteLayerRels = () => {
-    deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
   }
 
   const toggle = (id) => {
@@ -56,7 +56,9 @@ export default function FavoritesMenuTable({
   const handleCancel = () => {
     setEditMode(false);
     setSelectedLayerRelsIds(new Set());
-    setConfirm(false)
+    setConfirm(false);
+    setNewTitle(layerTitle);
+    setError('');
   }
 
   return (
@@ -69,7 +71,18 @@ export default function FavoritesMenuTable({
             colSpan={5}
           >
             <Box sx={headerCellContent}>
-              <Typography>{layerTitle}</Typography>
+              {editMode && !confirm && activeLayer == layerId ? (
+                <TextField
+                  value={newTitle}
+                  onChange={(e) => {
+                    setNewTitle(e.target.value);
+                    if (error) setError('');
+                  }}
+                  sx={saveMenuEditText}
+                  error={Boolean(error)}
+                  helperText={error}
+                />
+              ) : <Typography>{layerTitle}</Typography>}
               {confirm && !editMode && activeLayer === layerId ?
                 <Box
                   sx={headerCellConfirmContainer}
@@ -82,28 +95,34 @@ export default function FavoritesMenuTable({
                     <FontAwesomeIcon icon={faTrash} />
                   </Button>
                   <Button
-                    sx={{ ...headerCellToolsButton }}
+                    sx={headerCellToolsButton}
                     onClick={() => setConfirm(false)}
                   >
                     <FontAwesomeIcon icon={faX} />
                   </Button>
                 </Box> :
                 (editMode && !confirm && activeLayer == layerId ?
-                  <Box >
-                    <Button sx={addToolsButton}
-                      size='small'
-                      variant="contained"
-                      onClick={() => handleDeleteLayerRels()}
-                    >
-                      delete
-                    </Button>
-                    <Button sx={addToolsButton}
-                      size='small'
-                      variant="contained"
-                      onClick={() => handleCancel()}
-                    >
-                      cancel
-                    </Button>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box>
+                      <Box component={'span'}>{selectedLayerRelsIds.size} relations will be deleted</Box>
+                    </Box>
+                    <Box>
+
+                      <Button sx={addToolsButton}
+                        size='small'
+                        variant="contained"
+                        onClick={() => handleEditSave(groupKey, layerId, layerTitle, newTitle)}
+                      >
+                        save
+                      </Button>
+                      <Button sx={addToolsButton}
+                        size='small'
+                        variant="contained"
+                        onClick={() => handleCancel()}
+                      >
+                        cancel
+                      </Button>
+                    </Box>
                   </Box>
                   :
                   <Box
@@ -169,7 +188,9 @@ export default function FavoritesMenuTable({
                     onClick={() => toggle(rel.id)}
                   >
                     <FontAwesomeIcon
-                      icon={selectedLayerRelsIds.has(rel.id) ? faCheckSquare : faSquare} />
+                      icon={selectedLayerRelsIds.has(rel.id) ? faTrash : faSquare}
+                      style={{ color: selectedLayerRelsIds.has(rel.id) ? 'red' : null }}
+                    />
                   </Button>
                 )}
               </TableCell>
