@@ -2,7 +2,7 @@ import {
   table, tableCell, headerCell, subHeaderCell,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer, favoritesMenuCheckbox,
-  favoritesMenuCheckboxCell
+  favoritesMenuCheckboxCell, saveMenuEditText
 } from "../styles/Menu.jsx";
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -78,16 +78,7 @@ export default function FavoritesMenuTable({
                 <TextField
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  sx={{
-                    width: '100%',
-                    margin: '.8rem 0',
-                    backgroundColor: 'white',
-                    '& .MuiInputBase-input': {
-                      fontSize: '1rem',
-                      padding: '.2rem 0.5rem',
-                    },
-                    borderRadius: '5px',
-                  }}
+                  sx={saveMenuEditText}
                 />
               ) : <Typography>{layerTitle}</Typography>}
               {confirm && !editMode && activeLayer === layerId ?
