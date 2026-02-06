@@ -79,5 +79,32 @@ async function dbDeleteLayerRels(layerId, ids) {
   return;
 }
 
+async function dbUpdateLayerTitle(layerId, newTitle) {
+  const response = await fetchWithUserUpdate(
+    import.meta.env.VITE_BACKEND_URL + `/layer/${layerId}/update/title`,
+    {
+      method: 'PUT',
+      headers: { 'Content-type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        newTitle: newTitle
+      })
+    }
+  );
 
-export { saveLayerToDB, getUserLayersRelations, deleteLayer, dbDeleteLayerRels }
+  const responseBody = await response.json();
+
+  if (!response.ok) {
+    const error = new Error(responseBody.message || 'Request failed');
+    error.code = responseBody.code;
+    throw error;
+  }
+
+  return;
+}
+
+
+export {
+  saveLayerToDB, getUserLayersRelations, deleteLayer,
+  dbDeleteLayerRels, dbUpdateLayerTitle
+}

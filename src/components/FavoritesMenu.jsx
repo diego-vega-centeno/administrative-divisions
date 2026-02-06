@@ -2,7 +2,10 @@ import Box from "@mui/material/Box";
 import {
   basicMenu, tableContainer, modalCenter, menuHeader
 } from "../styles/Menu.jsx";
-import { getUserLayersRelations, deleteLayer, dbDeleteLayerRels } from "../utils/database.js";
+import {
+  getUserLayersRelations, deleteLayer, dbDeleteLayerRels,
+  dbUpdateLayerTitle
+} from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import TableContainer from '@mui/material/TableContainer';
 import { useState, useEffect, useContext } from "react";
@@ -19,6 +22,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   const [editMode, setEditMode] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [selectedLayerRelsIds, setSelectedLayerRelsIds] = useState(new Set());
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!open) return;
@@ -58,10 +62,10 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     setSelected(rels);
   }
 
-  const deleteSelectedLayer = (layerId) => {
+  const deleteSelectedLayer = async (layerId) => {
     try {
       // send delete request to backend
-      deleteLayer(layerId);
+      await deleteLayer(layerId);
       // update react status
       setRelsPerLayer(prev => {
         const newLayers = { ...prev }
@@ -76,45 +80,90 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     }
   }
 
-  const deleteLayerRels = (groupKey, layerId, selectedLayerRelsIds) => {
-    try {
-      // delete rel in database
-      dbDeleteLayerRels(layerId, selectedLayerRelsIds)
-      // clean selected layers
-      setSelectedLayerRelsIds(new Set());
-      // reset editmode
-      setEditMode(false);
-      // update react status
-      setRelsPerLayer(prev => {
-        const newRelsPerLayer = { ...prev }
-        const newLayerRels = relsPerLayer[groupKey].filter(rel => !selectedLayerRelsIds.has(rel.id));
-        newRelsPerLayer[groupKey] = newLayerRels;
-
-        // if layer is empty remove layer in react.
-        // database will handle the delete
-        if (!newLayerRels.length) {
-          setRelsPerLayer(prev => {
-            const newLayers = { ...prev }
-            for (const key in newLayers) {
-              const [_, id] = key.split('|');
-              if (id === layerId) delete newLayers[key]
-            }
-            return newLayers
-          })
-        }
-        return newRelsPerLayer;
-      });
-    } catch (error) {
-      logger.error(`Failed to delete relations: ${error}`)
-    }
-  }
-
   const handleClose = () => {
     setLoading(false);
     setActiveLayer('');
     setConfirm(false);
     setEditMode(false);
     onClose();
+    setError('');
+    setSelectedLayerRelsIds(new Set());
+  }
+
+  const handleEditSave = async (groupKey, layerId, layerTitle, newTitle) => {
+
+    try {
+
+      //* update title
+      if (newTitle !== layerTitle) {
+
+        if (!newTitle.trim()) {
+          setError('Title is required');
+          return;
+        }
+        // update in database
+        await dbUpdateLayerTitle(layerId, newTitle);
+
+        // update react state
+        setRelsPerLayer(prev => {
+          const newRelsPerLayer = {};
+
+          const oldKey = `${layerTitle}|${layerId}`;
+          const newKey = `${newTitle}|${layerId}`;
+
+          for (const key in prev) {
+            if (key === oldKey) {
+              newRelsPerLayer[newKey] = prev[oldKey].map(rel => ({
+                ...rel,
+                layer_title: newTitle
+              }));
+            } else {
+              newRelsPerLayer[key] = prev[key];
+            }
+          }
+          return newRelsPerLayer;
+        });
+      }
+
+      //* delete rels 
+
+      if (selectedLayerRelsIds.size != 0) {
+        // delete rel in database
+        await dbDeleteLayerRels(layerId, selectedLayerRelsIds);
+
+        // update react state
+        setRelsPerLayer(prev => {
+          const newRelsPerLayer = { ...prev }
+          const newLayerRels = relsPerLayer[groupKey].filter(rel => !selectedLayerRelsIds.has(rel.id));
+          newRelsPerLayer[groupKey] = newLayerRels;
+
+          // if layer is empty remove layer in react.
+          // database will handle the delete
+          if (!newLayerRels.length) {
+            setRelsPerLayer(prev => {
+              const newLayers = { ...prev }
+              for (const key in newLayers) {
+                const [_, id] = key.split('|');
+                if (id === layerId) delete newLayers[key]
+              }
+              return newLayers
+            })
+          }
+          return newRelsPerLayer;
+        });
+      };
+
+      // reset editmode
+      setEditMode(false);
+      // clean selected layers
+      setSelectedLayerRelsIds(new Set());
+    } catch (error) {
+      if (error?.code === 'duplicate_entry') {
+        setError('This title already exists. Choose another one.');
+        return;
+      }
+      logger.error(`Failed to update update layer title: ${error}`);
+    }
   }
 
   return (
@@ -136,7 +185,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                     const [layerTitle, layerId] = groupKey.split('|');
                     return (
                       <FavoritesMenuTable
-                        key={layerId}
+                        key={groupKey}
                         groupKey={groupKey}
                         activeLayer={activeLayer}
                         setActiveLayer={setActiveLayer}
@@ -147,9 +196,11 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                         selectedLayerRelsIds={selectedLayerRelsIds}
                         setSelectedLayerRelsIds={setSelectedLayerRelsIds}
                         deleteSelectedLayer={deleteSelectedLayer}
-                        deleteLayerRels={deleteLayerRels}
                         layerRels={layerRels}
                         plotLayer={plotLayer}
+                        error={error}
+                        setError={setError}
+                        handleEditSave={handleEditSave}
                       />
                     )
                   })
