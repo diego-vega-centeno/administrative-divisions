@@ -26,14 +26,13 @@ import { useState } from "react";
 
 export default function FavoritesMenuTable({
   activeLayer, layerRels, setActiveLayer, plotLayer, groupKey,
-  deleteSelectedLayer, editMode, setEditMode, deleteLayerRels,
+  deleteSelectedLayer, editMode, setEditMode,
   confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds,
-  changeLayerTitle
+  error, setError, handleEditSave
 }) {
 
   const [layerTitle, layerId] = groupKey.split('|');
   const [newTitle, setNewTitle] = useState(layerTitle);
-  const [error, setError] = useState('');
 
   const handleDeleteLayer = (layerId) => {
     // send delete request to parent
@@ -44,15 +43,6 @@ export default function FavoritesMenuTable({
 
   const handlePlotLayer = (groupKey) => {
     plotLayer(groupKey)
-  }
-
-  const handleEditSave = () => {
-    if (!newTitle.trim()) {
-      setError('Title is required');
-      return;
-    }
-    deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
-    changeLayerTitle(layerId, layerTitle, newTitle)
   }
 
   const toggle = (id) => {
@@ -121,7 +111,7 @@ export default function FavoritesMenuTable({
                       <Button sx={addToolsButton}
                         size='small'
                         variant="contained"
-                        onClick={() => handleEditSave()}
+                        onClick={() => handleEditSave(groupKey, layerId, layerTitle, newTitle)}
                       >
                         save
                       </Button>
