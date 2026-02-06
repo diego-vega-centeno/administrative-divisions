@@ -140,6 +140,8 @@ leafletState.mapControl.onAdd = function (map) {
   return this.div;
 }
 
+
+// handle the update of the control panel with new tags and id
 leafletState.mapControl.updatePanel = function (tags, id) {
 
   let rows = "";
