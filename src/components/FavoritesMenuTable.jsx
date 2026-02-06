@@ -27,11 +27,13 @@ import { useState } from "react";
 export default function FavoritesMenuTable({
   activeLayer, layerRels, setActiveLayer, plotLayer, groupKey,
   deleteSelectedLayer, editMode, setEditMode, deleteLayerRels,
-  confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds, changeLayerTitle
+  confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds,
+  changeLayerTitle
 }) {
 
   const [layerTitle, layerId] = groupKey.split('|');
   const [newTitle, setNewTitle] = useState(layerTitle);
+  const [error, setError] = useState('');
 
   const handleDeleteLayer = (layerId) => {
     // send delete request to parent
@@ -45,6 +47,10 @@ export default function FavoritesMenuTable({
   }
 
   const handleEditSave = () => {
+    if (!newTitle.trim()) {
+      setError('Title is required');
+      return;
+    }
     deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
     changeLayerTitle(layerId, layerTitle, newTitle)
   }
@@ -61,7 +67,8 @@ export default function FavoritesMenuTable({
     setEditMode(false);
     setSelectedLayerRelsIds(new Set());
     setConfirm(false);
-    setNewTitle(layerTitle)
+    setNewTitle(layerTitle);
+    setError('');
   }
 
   return (
@@ -77,8 +84,13 @@ export default function FavoritesMenuTable({
               {editMode && !confirm && activeLayer == layerId ? (
                 <TextField
                   value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
+                  onChange={(e) => {
+                    setNewTitle(e.target.value);
+                    if (error) setError('');
+                  }}
                   sx={saveMenuEditText}
+                  error={Boolean(error)}
+                  helperText={error}
                 />
               ) : <Typography>{layerTitle}</Typography>}
               {confirm && !editMode && activeLayer === layerId ?
