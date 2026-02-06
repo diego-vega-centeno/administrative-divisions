@@ -58,7 +58,6 @@ export default function Main() {
 
   // for relation search query
   async function handleItemSelect(entity) {
-    console.log(entity);
     try {
       setIsProgressIconActive(true);
       // get osm data and add to map
