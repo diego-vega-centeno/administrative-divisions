@@ -79,7 +79,9 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   const deleteLayerRels = (groupKey, layerId, selectedLayerRelsIds) => {
     try {
       // delete rel in database
-      dbDeleteLayerRels(layerId, selectedLayerRelsIds)
+      if (selectedLayerRelsIds.size != 0) {
+        dbDeleteLayerRels(layerId, selectedLayerRelsIds)
+      }
       // clean selected layers
       setSelectedLayerRelsIds(new Set());
       // reset editmode
@@ -109,12 +111,17 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     }
   }
 
+  const changeLayerTitle = (newTitle) => {
+    logger.debug(newTitle)
+  }
+
   const handleClose = () => {
     setLoading(false);
     setActiveLayer('');
     setConfirm(false);
     setEditMode(false);
     onClose();
+    setSelectedLayerRelsIds(new Set());
   }
 
   return (
@@ -150,6 +157,7 @@ export default function FavoritesMenu({ open, onClose, onError }) {
                         deleteLayerRels={deleteLayerRels}
                         layerRels={layerRels}
                         plotLayer={plotLayer}
+                        changeLayerTitle={changeLayerTitle}
                       />
                     )
                   })

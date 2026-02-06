@@ -21,14 +21,17 @@ import {
 import { faSquare, faCheckSquare } from '@fortawesome/free-regular-svg-icons'
 import { dataIndex, getParentNames } from "../utils/addData.js";
 import { addToolsButton } from '../styles/SelectAddDropdown.jsx';
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
 
 export default function FavoritesMenuTable({
   activeLayer, layerRels, setActiveLayer, plotLayer, groupKey,
-  deleteSelectedLayer, deleteLayerRels, editMode, setEditMode,
-  confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds
+  deleteSelectedLayer, editMode, setEditMode, deleteLayerRels,
+  confirm, setConfirm, selectedLayerRelsIds, setSelectedLayerRelsIds, changeLayerTitle
 }) {
 
   const [layerTitle, layerId] = groupKey.split('|');
+  const [newTitle, setNewTitle] = useState(layerTitle);
 
   const handleDeleteLayer = (layerId) => {
     // send delete request to parent
@@ -41,8 +44,10 @@ export default function FavoritesMenuTable({
     plotLayer(groupKey)
   }
 
-  const handleDeleteLayerRels = () => {
-    deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
+  const handleEditSave = () => {
+    console.log('H');
+    // deleteLayerRels(groupKey, layerId, selectedLayerRelsIds);
+    changeLayerTitle(newTitle)
   }
 
   const toggle = (id) => {
@@ -56,7 +61,8 @@ export default function FavoritesMenuTable({
   const handleCancel = () => {
     setEditMode(false);
     setSelectedLayerRelsIds(new Set());
-    setConfirm(false)
+    setConfirm(false);
+    setNewTitle(layerTitle)
   }
 
   return (
@@ -69,7 +75,22 @@ export default function FavoritesMenuTable({
             colSpan={5}
           >
             <Box sx={headerCellContent}>
-              <Typography>{layerTitle}</Typography>
+              {editMode && !confirm && activeLayer == layerId ? (
+                <TextField
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  sx={{
+                    width: '100%',
+                    margin: '.8rem 0',
+                    backgroundColor: 'white',
+                    '& .MuiInputBase-input': {
+                      fontSize: '1rem',
+                      padding: '.2rem 0.5rem',
+                    },
+                    borderRadius: '5px',
+                  }}
+                />
+              ) : <Typography>{layerTitle}</Typography>}
               {confirm && !editMode && activeLayer === layerId ?
                 <Box
                   sx={headerCellConfirmContainer}
@@ -89,21 +110,27 @@ export default function FavoritesMenuTable({
                   </Button>
                 </Box> :
                 (editMode && !confirm && activeLayer == layerId ?
-                  <Box >
-                    <Button sx={addToolsButton}
-                      size='small'
-                      variant="contained"
-                      onClick={() => handleDeleteLayerRels()}
-                    >
-                      delete
-                    </Button>
-                    <Button sx={addToolsButton}
-                      size='small'
-                      variant="contained"
-                      onClick={() => handleCancel()}
-                    >
-                      cancel
-                    </Button>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box>
+                      <Box component={'span'}>{selectedLayerRelsIds.size} relations will be deleted</Box>
+                    </Box>
+                    <Box>
+
+                      <Button sx={addToolsButton}
+                        size='small'
+                        variant="contained"
+                        onClick={() => handleEditSave()}
+                      >
+                        save
+                      </Button>
+                      <Button sx={addToolsButton}
+                        size='small'
+                        variant="contained"
+                        onClick={() => handleCancel()}
+                      >
+                        cancel
+                      </Button>
+                    </Box>
                   </Box>
                   :
                   <Box
@@ -169,7 +196,9 @@ export default function FavoritesMenuTable({
                     onClick={() => toggle(rel.id)}
                   >
                     <FontAwesomeIcon
-                      icon={selectedLayerRelsIds.has(rel.id) ? faCheckSquare : faSquare} />
+                      icon={selectedLayerRelsIds.has(rel.id) ? faTrash : faSquare}
+                      style={{ color: selectedLayerRelsIds.has(rel.id) ? 'red' : null }}
+                    />
                   </Button>
                 )}
               </TableCell>
