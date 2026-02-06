@@ -67,6 +67,7 @@ export default function Main() {
 
       // add display name before passing to tags table
       const osmElements = osmData.elements;
+      console.log(osmElements); 
       osmElements[0].display_name = entity.display_name;
       setOsmElements(osmElements);
     } catch (error) {
