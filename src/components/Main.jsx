@@ -58,6 +58,7 @@ export default function Main() {
 
   // for relation search query
   async function handleItemSelect(entity) {
+    console.log(entity);
     try {
       setIsProgressIconActive(true);
       // get osm data and add to map
@@ -67,8 +68,6 @@ export default function Main() {
 
       // add display name before passing to tags table
       const osmElements = osmData.elements;
-      console.log(osmElements); 
-      osmElements[0].display_name = entity.display_name;
       setOsmElements(osmElements);
     } catch (error) {
       setIsProgressIconActive(false);
