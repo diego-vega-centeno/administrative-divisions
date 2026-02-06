@@ -121,9 +121,21 @@ const modalCenter = {
   justifyContent: 'center',
 }
 
+const saveMenuEditText = {
+  width: '100%',
+  margin: '.8rem 0',
+  backgroundColor: 'white',
+  '& .MuiInputBase-input': {
+    fontSize: '1rem',
+    padding: '.2rem 0.5rem',
+  },
+  borderRadius: '5px',
+}
+
 export {
   basicMenu, menuHeader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
-  headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell
+  headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell,
+  saveMenuEditText
 }
