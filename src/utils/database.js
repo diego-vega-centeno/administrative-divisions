@@ -92,8 +92,11 @@ async function dbUpdateLayerTitle(layerId, newTitle) {
     }
   );
 
+  const responseBody = await response.json();
+
   if (!response.ok) {
-    const error = new Error('Request failed');
+    const error = new Error(responseBody.message || 'Request failed');
+    error.code = responseBody.code;
     throw error;
   }
 
