@@ -39,18 +39,18 @@
   border: 1px solid black;
 }
 
-.leaflet-control-panel {
+.leaflet-control-table {
   border-collapse: collapse;
 }
 
-.leaflet-control-panel-row {
+.leaflet-control-table-row {
   background-color: #F8F9FA;
   font-size: 0.9em;
   text-align: left;
   border-bottom: 0.5px solid #dee2e6;
 }
 
-.leaflet-control-panel-cell {
+.leaflet-control-table-cell {
   padding: .5rem .5rem;
 }
 
@@ -66,4 +66,25 @@
     border-right: none;
     border-bottom: 1px solid black;
   }
+}
+
+.btn-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: white;
+  box-shadow: 0 0 10px black;
+  border: none;
+  outline: none;
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.btn-toggle:hover {
+  background-color: rgb(219, 199, 199);
+}
+
+.btn-toggle-container {
+  text-align: right;
 }

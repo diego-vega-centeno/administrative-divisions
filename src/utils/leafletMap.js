@@ -122,6 +122,7 @@ function highlightFeature(event) {
 
   // update info panel
   const tags = layer.feature.properties;
+  // custom function added to control object
   leafletState.mapControl.updatePanel(tags, layer.feature.id);
 
 }
@@ -134,11 +135,15 @@ leafletState.mapControl = L.control();
 leafletState.mapControl.onAdd = function (map) {
   this.div = L.DomUtil.create('div');
   this.div.innerHTML = "";
-  // prevent map click when clicking on control panel
-  L.DomEvent.on(this.div, 'click', L.DomEvent.stopPropagation);
+  // prevent map other click events
+  L.DomEvent.disableClickPropagation(this.div); // Handles mousedown, touchstart, dblclick, etc.
+  L.DomEvent.disableScrollPropagation(this.div); // Handles mousewheel
+
   return this.div;
 }
 
+
+// handle the update of the control panel with new tags and id
 leafletState.mapControl.updatePanel = function (tags, id) {
 
   let rows = "";
@@ -167,20 +172,54 @@ leafletState.mapControl.updatePanel = function (tags, id) {
         break;
     }
 
-    let row = `<tr class="${styles['leaflet-control-panel-row']}">
-            <th class="${styles['leaflet-control-panel-cell']}">${key}</th>
-            <td class="${styles['leaflet-control-panel-cell']}">${value}</td>
+    let row = `<tr class="${styles['leaflet-control-table-row']}">
+            <th class="${styles['leaflet-control-table-cell']}">${key}</th>
+            <td class="${styles['leaflet-control-table-cell']}">${value}</td>
         </tr>`
 
     rows += row;
   }
 
+  // add control panel with updated info
   leafletState.mapControl.div.innerHTML =
-    `<table class="${styles['leaflet-control-panel']}">
+    `<div>
+      <div class="${styles['btn-toggle-container']}">
+        <button id='btn-toggle' class="${styles['btn-toggle']}">➖</button>
+      </div>
+      <table id='leaflet-control-table' class="${styles['leaflet-control-table']}">
         <tbody>
             ${rows}
         </tbody>
-    </table>`;
+      </table>
+    </div>
+    `;
+
+  //* button to hide table
+  const btn = document.getElementById('btn-toggle');
+  // previous listener is gone because button is destroyed by using innerHTML
+
+  // disable other mouse events
+  L.DomEvent.disableClickPropagation(btn);
+  L.DomEvent.disableScrollPropagation(btn);
+
+  // add new event listener
+  L.DomEvent.on(btn, 'click', buttonClickHandler);
+
+}
+
+function buttonClickHandler() {
+  const table = document.getElementById('leaflet-control-table');
+  const btn = document.getElementById('btn-toggle');
+
+  if (table.style.display !== 'none') {
+    table.style.display = 'none'
+    btn.innerText = '➕'  // collapsed
+
+  } else {
+    table.style.display = 'table';
+    btn.innerText = '➖'  // expanded
+
+  }
 }
 
 export { addToLeafletMap }
