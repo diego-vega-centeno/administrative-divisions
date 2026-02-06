@@ -1,5 +1,5 @@
 const listItem = {
-  backgroundColor: 'var(--color-primary)',
+  backgroundColor: '#5b5b62',
   '&:hover': {
     backgroundColor: 'color-mix(in srgb, var(--color-secondary) 90%, white)'
   },
