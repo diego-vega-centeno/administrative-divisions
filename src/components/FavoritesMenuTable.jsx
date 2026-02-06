@@ -93,7 +93,7 @@ export default function FavoritesMenuTable({
                     <FontAwesomeIcon icon={faTrash} />
                   </Button>
                   <Button
-                    sx={{ ...headerCellToolsButton }}
+                    sx={headerCellToolsButton}
                     onClick={() => setConfirm(false)}
                   >
                     <FontAwesomeIcon icon={faX} />
