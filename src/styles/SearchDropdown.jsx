@@ -47,7 +47,11 @@ const searchField = {
   },
   '& .MuiInputBase-root': {
     height: '100%'
-  }
+  },
+  '& input:-webkit-autofill': {
+    WebkitBoxShadow: '0 0 0 1000px var(--color-secondary) inset',
+    WebkitTextFillColor: 'white'
+  },
 }
 
 const searchFieldIconBox = {
