@@ -122,6 +122,7 @@ function highlightFeature(event) {
 
   // update info panel
   const tags = layer.feature.properties;
+  // custom function added to control object
   leafletState.mapControl.updatePanel(tags, layer.feature.id);
 
 }
@@ -177,10 +178,19 @@ leafletState.mapControl.updatePanel = function (tags, id) {
 
   leafletState.mapControl.div.innerHTML =
     `<table class="${styles['leaflet-control-panel']}">
+      <button id='btn-toogle'>damn</button>
         <tbody>
             ${rows}
         </tbody>
     </table>`;
+
+  L.DomEvent.on(document.getElementById('btn-toogle'), 'click', function () {
+    L.DomEvent.stopPropagation;
+    // $(".leaflet-layers").removeClass("leaflet-control-expanded")
+    console.log($(".leaflet-control"));
+    console.log('H');
+  });
+
 }
 
 export { addToLeafletMap }
