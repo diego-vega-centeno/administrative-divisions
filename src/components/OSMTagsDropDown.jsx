@@ -85,7 +85,6 @@ export default function OSMTagsDropDown({ elementData }) {
     <ListItemButton sx={dropdown} disableRipple onClick={handleClick}>
       <FontAwesomeIcon style={dropdownIcon(isOpen)} icon={faChevronRight} />
       <ListItemText primary={
-        elementData.display_name ??
         elementData.tags?.['name:en'] ??
         elementData.tags?.['alt_name:en'] ??
         elementData.tags?.['name']
