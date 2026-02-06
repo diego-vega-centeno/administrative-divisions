@@ -1,6 +1,6 @@
 const basicMenu = {
   backgroundColor: '#F8F9FA',
-  width: 'clamp(500px, 35vw, 35vw)',
+  width: 'clamp(500px, 45vw, 45vw)',
   maxHeight: '80vh',
   padding: '.8rem 1rem',
   borderRadius: '5px',
@@ -56,8 +56,9 @@ const subHeaderCell = {
 }
 
 const headerCellContent = {
+  minHeight: '2rem',
   position: 'relative',
-  padding: '.1rem 0'
+  padding: '.1rem 0',
 }
 
 const headerCellToolsContainer = {
