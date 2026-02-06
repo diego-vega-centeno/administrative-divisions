@@ -1,4 +1,5 @@
 import osmtogeojson from 'osmtogeojson';
+import L from 'leaflet';
 import styles from '../styles/Main.module.css'
 
 // initial map state
@@ -11,6 +12,11 @@ const leafletState = {
 /* main leaflet map creation */
 
 async function addToLeafletMap(osmBaseData, map) {
+  // remove previous layer
+  if (leafletState.geojsonLayer) {
+    map.removeLayer(leafletState.geojsonLayer);
+  }
+
   // create layer from geojson data
   leafletState.geojsonLayer = L.geoJSON(osmtogeojson(osmBaseData), {
     filter: function (feature, layer) {
@@ -20,22 +26,32 @@ async function addToLeafletMap(osmBaseData, map) {
     onEachFeature: onEachFeature,
   });
 
-  // remove previous layers
+  // remove previous layers except tile layers
   map.eachLayer(function (layer) {
-    map.removeLayer(layer);
+    if (!(layer instanceof L.TileLayer)) {
+      map.removeLayer(layer);
+    }
   });
 
   // fit bounds to new layer
   map.fitBounds(leafletState.geojsonLayer.getBounds());
 
-  // populate with tiles
-  const layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 15,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  // check if tile layer exists, if not create one
+  let tileLayer;
+  map.eachLayer(function (layer) {
+    if (layer instanceof L.TileLayer) {
+      tileLayer = layer;
+    }
   });
 
-  // add all layers
-  layer.addTo(map);
+  if (!tileLayer) {
+    tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 15,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+    tileLayer.addTo(map);
+    leafletState.tileLayer = tileLayer;
+  }
   leafletState.geojsonLayer.addTo(map);
 
   // check and add control panel
@@ -46,13 +62,15 @@ async function addToLeafletMap(osmBaseData, map) {
   leafletState.mapControl.div.innerHTML = "";
 
   // unhighlight on click outside a feature
-  map.on('click', function (e) {
+  function handleMapClick(e) {
     if (leafletState.highlightedLayer) {
       leafletState.geojsonLayer.resetStyle(leafletState.highlightedLayer);
       leafletState.highlightedLayer = null;
       leafletState.mapControl.div.innerHTML = "";
     }
-  });
+  }
+  map.off('click', handleMapClick);
+  map.on('click', handleMapClick);
 }
 
 /* Custom tooltip function */
