@@ -14,13 +14,7 @@ export default function SearchResultList({ entities, onSelect }) {
           sx={listItem} key={ent['osm_id']}
           onClick={() => onSelect(ent)}
         >
-          <ListItemText primary={
-            <>
-              {ent['display_name']}{" "}
-              <span style={{ color: "black" }}>({ent['addresstype']} - rel:{ent['osm_id']})</span>
-              <span style={{ color: "black" }}></span>
-            </>
-          } />
+          <ListItemText>{`${ent['display_name']} (${ent['addresstype']} - ${ent['osm_id']})`}</ListItemText>
         </ListItem>
       ))}
     </Box>
