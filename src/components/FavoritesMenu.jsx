@@ -2,7 +2,10 @@ import Box from "@mui/material/Box";
 import {
   basicMenu, tableContainer, modalCenter, menuHeader
 } from "../styles/Menu.jsx";
-import { getUserLayersRelations, deleteLayer, dbDeleteLayerRels } from "../utils/database.js";
+import {
+  getUserLayersRelations, deleteLayer, dbDeleteLayerRels,
+  dbUpdateLayerTitle
+} from "../utils/database.js";
 import Typography from "@mui/material/Typography";
 import TableContainer from '@mui/material/TableContainer';
 import { useState, useEffect, useContext } from "react";
@@ -111,8 +114,36 @@ export default function FavoritesMenu({ open, onClose, onError }) {
     }
   }
 
-  const changeLayerTitle = (newTitle) => {
-    logger.debug(newTitle)
+  const changeLayerTitle = (layerId, layerTitle, newTitle) => {
+    try {
+      // update in database
+      dbUpdateLayerTitle(layerId, newTitle);
+      // clean selected layers
+      setSelectedLayerRelsIds(new Set());
+      // disable edit mode
+      setEditMode(false);
+      // update react state
+      setRelsPerLayer(prev => {
+        const newRelsPerLayer = {};
+
+        const oldKey = `${layerTitle}|${layerId}`;
+        const newKey = `${newTitle}|${layerId}`;
+
+        for (const key in prev) {
+          if (key === oldKey) {
+            newRelsPerLayer[newKey] = prev[oldKey].map(rel => ({
+              ...rel,
+              layer_title: newTitle
+            }));
+          } else {
+            newRelsPerLayer[key] = prev[key];
+          }
+        }
+        return newRelsPerLayer;
+      });
+    } catch (error) {
+      logger.error(`Failed to update update layer title: ${error}`)
+    }
   }
 
   const handleClose = () => {
