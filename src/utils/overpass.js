@@ -127,21 +127,21 @@ function donwloadJSONData(content, filename) {
   a.click();
 }
 
-async function getRelationsDataWithCache(nodes) {
+async function getRelationsDataWithCache(ids) {
   // obtain relation from cache if present
   const cachedRels = [];
-  for (const node of nodes) {
+  for (const id of ids) {
     // object key is id(int), node is id(string)
-    const rel = await getStoreRelation(parseInt(node.id));
+    const rel = await getStoreRelation(parseInt(id));
     if (rel) cachedRels.push(rel);
   }
   const cachedIds = cachedRels.map(rel => rel.id.toString());
-  const nonCached = nodes.filter(node => !cachedIds.includes(node.id));
+  const nonCachedIds = ids.filter(id => !cachedIds.includes(id));
 
   // get osm data
   let queryRels = [];
-  if (nonCached.length) {
-    queryRels = (await getRelationsOSMData(nonCached.map(node => node.id)))['elements'];
+  if (nonCachedIds.length) {
+    queryRels = (await getRelationsOSMData(nonCachedIds))['elements'];
   }
 
   // join cached data
