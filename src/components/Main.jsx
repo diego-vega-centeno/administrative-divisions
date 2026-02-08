@@ -87,9 +87,11 @@ export default function Main() {
               osmRels={osmRels}
             />
           )}
-          <DataTable 
-            osmRels={osmRels}
-          />
+          {Boolean(osmRels.length != 0) && (
+            <DataTable
+              osmRels={osmRels}
+            />
+          )}
         </div>
         <Footer />
       </section>

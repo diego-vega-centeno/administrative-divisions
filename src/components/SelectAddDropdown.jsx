@@ -20,16 +20,16 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const [filterInput, setFilterInput] = useState('');
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
-  const [selectedRels, setSelectedRels] = useState([]);
+  const [selectedNodes, setSelectedNodes] = useState([]);
   const { userData, setUserData, loading } = useContext(AuthContext);
 
   function handlePlot() {
-    if (!selectedRels.length) {
+    if (!selectedNodes.length) {
       onError('Select a division');
       return;
     };
     // plot request only pass ids
-    onPlotRequest(selectedRels.map(rel => rel.id));
+    onPlotRequest(selectedNodes.map(rel => rel.id));
   }
 
   function handleFilter(filterInput) {
@@ -43,21 +43,13 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   }
 
   function handleSelect() {
-    // nodes select uses all data from jstree
-    // convert to formatted rels
-    const formattedRels = []
-    for (const node of treeRef.current?.getSelected()) {
-      const { id, text, parents } = node;
-      formattedRels.push({
-        id, text, parents,
-        admin_level: node.original.admin_level
-      })
-    }
-    setSelectedRels(formattedRels)
+    // nodes select uses all data from jstree and original
+    // so just use and pass that
+    setSelectedNodes(treeRef.current?.getSelected())
   }
 
   function handleDownload() {
-    if (!selectedRels.length) {
+    if (!selectedNodes.length) {
       onError('Select a division');
       return;
     };
@@ -69,7 +61,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       onError('Log in to save layers');
       return;
     }
-    if (!selectedRels.length) {
+    if (!selectedNodes.length) {
       onError('Select a division');
       return;
     };
@@ -120,7 +112,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
           >Save</Button>
         </Box>
         <Box sx={infoAddBox}>
-          {selectedRels.length || 0} nodes selected
+          {selectedNodes.length || 0} nodes selected
         </Box>
       </Box>
       <Box sx={treeContainer}>
@@ -133,13 +125,13 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         open={isSaveMenuOpen}
         onClose={() => setIsSaveMenuOpen(false)}
         onError={onError}
-        selectedRels={selectedRels}
+        selectedNodes={selectedNodes}
       />}
       {isDownloadMenuOpen && <DownloadMenu
         open={isDownloadMenuOpen}
         onClose={() => setIsDownloadMenuOpen(false)}
         onError={onError}
-        selectedRels={selectedRels}
+        selectedNodes={selectedNodes}
       />}
     </Box>
   )
