@@ -4,26 +4,49 @@ import Footer from './Footer.jsx'
 import SearchDropdown from './SearchDropdown.jsx'
 import SelectAddDropdown from './SelectAddDropdown.jsx'
 import 'leaflet/dist/leaflet.css';
-import OSMTagsDropDown from './OSMTagsDropDown.jsx';
-import ListItem from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import AlertDialog from './AlertDialog.jsx';
 import { useSearchParams } from "react-router";
 import Map from './Map.jsx';
 import { MapActionsContext } from './MapActionsContext.jsx';
+import TagsTable from './TagsTable.jsx';
+import logger from '../utils/logger.js';
+import { getRelationsDataWithCache } from '../utils/overpass';
+import { profileSize } from '../utils/overpass';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
-  const [osmElements, setOsmElements] = useState(null);
   const [searchParams] = useSearchParams();
   const error = searchParams.get('error');
   const message = searchParams.get('message');
-  const { setSelected } = useContext(MapActionsContext)
+  const { selected, setSelected } = useContext(MapActionsContext);
+  const [osmRels, setOsmRels] = useState([]);
+  const [isProgressIconActive, setIsProgressIconActive] = useState(false);
 
   useEffect(() => {
     if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
   }, [error]);
+
+
+  useEffect(() => {
+    if (!selected.length) return;
+    handleADDPlot(selected);
+  }, [selected]);
+
+
+  // for add selection from tree
+  async function handleADDPlot(ids) {
+    try {
+      setIsProgressIconActive(true)
+      const queryOSMRels = await getRelationsDataWithCache(ids);
+      // aproximate size in KB
+      if (process.env.NODE_ENV === 'development') profileSize(queryOSMRels);
+      setOsmRels(queryOSMRels)
+      setIsProgressIconActive(false)
+    } catch (error) {
+      handleError(error.message);
+      logger.error('An error ocurred: ', error);
+    }
+  }
 
   const handleError = (errorMessage) => {
     setErrorMessage(errorMessage);
@@ -54,13 +77,14 @@ export default function Main() {
       <section className={styles['main-body']}>
         <div className={styles['main-content']}>
           <Map
+            osmRels={osmRels}
             onError={handleError}
+            isProgressIconActive={isProgressIconActive}
           />
-          {Boolean(osmElements) && <ListItem disableRipple sx={dropdown}>
-            <ListItemText primary={"Selected divisions tags"} />
-          </ListItem>}
-          {Boolean(osmElements) && osmElements.map(
-            elementData => <OSMTagsDropDown key={elementData.id} elementData={elementData} />
+          {Boolean(osmRels.length != 0) && (
+            <TagsTable
+              osmRels={osmRels}
+            />
           )}
         </div>
         <Footer />
