@@ -12,6 +12,7 @@ import TagsTable from './TagsTable.jsx';
 import logger from '../utils/logger.js';
 import { getRelationsDataWithCache } from '../utils/overpass';
 import { profileSize } from '../utils/overpass';
+import DataTable from './DataTable.jsx';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -86,6 +87,9 @@ export default function Main() {
               osmRels={osmRels}
             />
           )}
+          <DataTable 
+            osmRels={osmRels}
+          />
         </div>
         <Footer />
       </section>
