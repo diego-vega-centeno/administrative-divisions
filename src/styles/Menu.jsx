@@ -43,10 +43,21 @@ const headerCell = {
   padding: '.1rem .7rem',
   backgroundColor: '#212529',
   color: 'white',
-  '&:hover .header-cell-tools': {
-    opacity: 1,
-    visibility: "visible",
-  }
+}
+
+const compareTableSortLabel = {
+  '&:hover': {
+    color: 'grey',
+  },
+  '&:hover .MuiTableSortLabel-icon': {
+    color: '#0bff0b',
+  },
+  '&.Mui-active': {
+    color: 'white',
+  },
+  '&.Mui-active .MuiTableSortLabel-icon': {
+    color: '#0bff0b',
+  },
 }
 
 const subHeaderCell = {
@@ -141,10 +152,17 @@ const compareTableContainer = {
   marginY: '2rem'
 }
 
+const tableContainerHeader = {
+  backgroundColor: 'var(--color-secondary)',
+  marginTop: '1rem',
+  paddingLeft: '2rem',
+  color: 'white'
+}
+
 export {
   basicMenu, menuHeader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell,
-  saveMenuEditText, compareTableContainer
+  saveMenuEditText, compareTableContainer,compareTableSortLabel, tableContainerHeader
 }
