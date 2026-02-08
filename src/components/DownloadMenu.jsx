@@ -8,6 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { saveActionSection } from "../styles/Main";
 import { getRelationsDataWithCache, formatData } from '../utils/overpass';
 import { donwloadJSONData } from "../utils/overpass";
+import logger from '../utils/logger';
 
 export default function DownloadMenu({ open, onClose, onError, selectedNodes }) {
 
@@ -31,7 +32,10 @@ export default function DownloadMenu({ open, onClose, onError, selectedNodes }) 
 
     setIsProgressIconActive(true);
     try {
-      let osmRels = await getRelationsDataWithCache(selectedNodes, out);
+      let osmRels = await getRelationsDataWithCache(
+        selectedNodes.map(rel => rel.id),
+        out
+      );
       osmRels = formatData(osmRels, params, selectedNodes);
       setIsProgressIconActive(false);
       donwloadJSONData(osmRels, 'admin_divisions_selection.json');
