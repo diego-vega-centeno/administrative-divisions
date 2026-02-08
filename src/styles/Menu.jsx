@@ -133,10 +133,18 @@ const saveMenuEditText = {
   borderRadius: '5px',
 }
 
+const compareTableContainer = {
+  overflowY: 'auto',
+  flex: 1,
+  width: '90%',
+  marginX: 'auto',
+  marginY: '2rem'
+}
+
 export {
   basicMenu, menuHeader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell,
-  saveMenuEditText
+  saveMenuEditText, compareTableContainer
 }
