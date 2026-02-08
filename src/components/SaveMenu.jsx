@@ -21,7 +21,7 @@ import logger from "../utils/logger.js";
 import Modal from '@mui/material/Modal';
 import { dataIndex } from "../utils/addData.js";
 
-export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
+export default function SaveMenu({ open, onClose, onError, selectedRels }) {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
@@ -39,7 +39,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
     setError('');
     setIsProgressIconActive(true);
     try {
-      const saveResponse = await saveLayerToDB(title, selectedNodes);
+      const saveResponse = await saveLayerToDB(title, selectedRels);
     } catch (error) {
       logger.error(error);
       if (error?.code === 'duplicate_entry') {
@@ -113,12 +113,12 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {selectedNodes.map((node) => (
-                <TableRow key={node.id}>
-                  <TableCell align="center" sx={tableCell}>{node.original.admin_level}</TableCell>
-                  <TableCell align="center" sx={tableCell}>{node.id}</TableCell>
-                  <TableCell align="center" sx={tableCell}>{node.text}</TableCell>
-                  <TableCell align="center" sx={tableCell}>{getParentNames(node.parents).join('/')}</TableCell>
+              {selectedRels.map((rel) => (
+                <TableRow key={rel.id}>
+                  <TableCell align="center" sx={tableCell}>{rel.admin_level}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{rel.id}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{rel.text}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{getParentNames(rel.parents).join('/')}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
