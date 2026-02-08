@@ -1,20 +1,15 @@
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Main.module.css'
 import L from 'leaflet';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
-import logger from '../utils/logger.js';
-import { getRelationsDataWithCache } from '../utils/overpass';
 import { addToLeafletMap } from '../utils/leafletMap.js';
-import { profileSize } from '../utils/overpass';
-import { MapActionsContext } from './MapActionsContext.jsx';
+import logger from '../utils/logger.js';
 
-export default function Map({ onError }) {
-  const [isProgressIconActive, setIsProgressIconActive] = useState(false);
+export default function Map({ osmRels, onError, isProgressIconActive }) {
   const mapContainerRef = useRef(null); // will hold map container dom element
   const mapRef = useRef(null); // will hold map instance from leaflet
-  const { selected } = useContext(MapActionsContext)
 
   useEffect(() => {
     // exist if container doesn't exist
@@ -37,30 +32,22 @@ export default function Map({ onError }) {
     };
   }, []);
 
+
   useEffect(() => {
-    if (!selected.length) return;
-    handleADDPlot(selected);
-  }, [selected]);
-
-
-  // for add selection from tree
-  async function handleADDPlot(ids) {
+    if (!osmRels.length) return;
     try {
-      setIsProgressIconActive(true);
-      const osmRels = await getRelationsDataWithCache(ids);
-
-      // aproximate size in KB
-      if (process.env.NODE_ENV === 'development') profileSize(osmRels);
-
-      // add to map
-      const fakeOSMRes = { 'elements': osmRels };
-      await addToLeafletMap(fakeOSMRes, mapRef.current);
-      setIsProgressIconActive(false);
+      addToMap(osmRels);
     } catch (error) {
-      setIsProgressIconActive(false);
       onError(error.message);
       logger.error('An error ocurred: ', error);
     }
+  }, [osmRels])
+
+
+  const addToMap = async (osmRels) => {
+    // add to map
+    const fakeOSMRes = { 'elements': osmRels };
+    await addToLeafletMap(fakeOSMRes, mapRef.current);
   }
 
   return (
