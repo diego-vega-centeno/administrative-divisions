@@ -71,7 +71,7 @@ export default function DataTable({ osmRels }) {
     const av = a[orderBy];
     const bv = b[orderBy];
 
-    if (av === null || bv === null) return 0;
+    if (av === null && bv === null) return 0;
     if (av === null) return 1;
     if (bv === null) return -1;
 
