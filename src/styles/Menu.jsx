@@ -35,7 +35,8 @@ const textField = {
 }
 
 const tableCell = {
-  padding: '.1rem .5rem'
+  padding: '.1rem .5rem',
+  backgroundColor: 'white'
 }
 
 const headerCell = {
