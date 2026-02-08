@@ -19,7 +19,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { saveLayerToDB } from '../utils/database.js'
 import logger from "../utils/logger.js";
 import Modal from '@mui/material/Modal';
-import { dataIndex } from "../utils/addData.js";
+import { getParentNames } from "../utils/addData.js";
 
 export default function SaveMenu({ open, onClose, onError, selectedRels }) {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
@@ -68,16 +68,6 @@ export default function SaveMenu({ open, onClose, onError, selectedRels }) {
     }
   };
 
-  function getParentNames(parentsIds) {
-    let parentNames = [];
-    parentsIds.forEach(id => {
-      if (id !== '#') parentNames.push(dataIndex[id]['text'])
-    });
-    if (!parentNames.length) parentNames = ['World'];
-    return parentNames;
-  }
-
-
   return (
     <Modal open={open} onClose={onClose} sx={modalCenter}>
       <Box
@@ -118,7 +108,7 @@ export default function SaveMenu({ open, onClose, onError, selectedRels }) {
                   <TableCell align="center" sx={tableCell}>{rel.admin_level}</TableCell>
                   <TableCell align="center" sx={tableCell}>{rel.id}</TableCell>
                   <TableCell align="center" sx={tableCell}>{rel.text}</TableCell>
-                  <TableCell align="center" sx={tableCell}>{getParentNames(rel.parents).join('/')}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{getParentNames(rel.id)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
