@@ -43,6 +43,10 @@ const headerCell = {
   padding: '.1rem .7rem',
   backgroundColor: '#212529',
   color: 'white',
+  '&:hover .header-cell-tools': {
+    opacity: 1,
+    visibility: "visible",
+  }
 }
 
 const compareTableSortLabel = {
@@ -164,5 +168,5 @@ export {
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell,
-  saveMenuEditText, compareTableContainer,compareTableSortLabel, tableContainerHeader
+  saveMenuEditText, compareTableContainer, compareTableSortLabel, tableContainerHeader
 }
