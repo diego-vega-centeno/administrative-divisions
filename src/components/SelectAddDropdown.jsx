@@ -42,7 +42,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   }
 
   function handleSelect() {
-    setSelectedNodes(treeRef.current?.getSelected().map(node => node.id))
+    setSelectedNodes(treeRef.current?.getSelected())
   }
 
   function handleDownload() {
