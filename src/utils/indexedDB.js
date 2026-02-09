@@ -280,43 +280,6 @@ function cleanDBCacheObjectsCount(db) {
   });
 }
 
-function cleanDBCacheTotalSize(store) {
-
-  return new Promise((resolve, reject) => {
-
-    let totalSize = 0;
-    const request = store.getAll();
-
-    request.onsuccess = (e) => {
-      const rels = e.target.result;
-      const relsWithSize = rels.map(rel => {
-        const size = new Blob([JSON.stringify(rel)]).size / (1024 * 1024); // Convert to MB
-        totalSize += size;
-        return { ...rel, size };
-      });
-      logger.info(`IndexedDB: current total size: ${totalSize} (MB)`)
-      if (totalSize <= MAX_TOTAL_SIZE) return 0;
-
-      // Sort from youngest to oldest (keep newest)
-      relsWithSize.sort((a, b) => b.storedAt - a.storedAt);
-
-      let count = 0;
-      let currentSize = totalSize;
-
-      // Delete oldest objects until we're under the size limit
-      for (let i = relsWithSize.length - 1; i >= 0 && currentSize > MAX_TOTAL_SIZE; i--) {
-        store.delete(relsWithSize[i].id);
-        currentSize -= relsWithSize[i].size;
-        count++;
-      }
-
-      resolve(count);
-    }
-
-    request.onerror = () => reject(request.error);
-  })
-}
-
 export {
   putStoreRelations, getStoreRelation, getAllStoredRelations,
   clearAllStoredRelations, cleanDBCache, initDB
