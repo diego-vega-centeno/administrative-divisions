@@ -45,7 +45,7 @@ export default function Main() {
       setIsProgressIconActive(true)
       const queryOSMRels = await getRelationsDataWithCache(ids);
       // aproximate size in KB
-      if (process.env.NODE_ENV === 'development') profileSize(queryOSMRels);
+      // if (process.env.NODE_ENV === 'development') profileSize(queryOSMRels);
       setOsmRels(queryOSMRels)
       setIsProgressIconActive(false)
     } catch (error) {
