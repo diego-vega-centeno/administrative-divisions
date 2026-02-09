@@ -8,7 +8,7 @@ import AlertDialog from './AlertDialog.jsx';
 import { useSearchParams } from "react-router";
 import Map from './Map.jsx';
 import { MapActionsContext } from './MapActionsContext.jsx';
-import TagsTable from './TagsTable.jsx';
+import TagsSection from './TagsSection.jsx';
 import logger from '../utils/logger.js';
 import { getRelationsDataWithCache } from '../utils/overpass';
 import { profileSize } from '../utils/overpass';
@@ -120,7 +120,7 @@ export default function Main() {
             isProgressIconActive={isProgressIconActive}
           />
           {Boolean(osmRels.length != 0) && (
-            <TagsTable
+            <TagsSection
               osmRels={osmRels}
             />
           )}

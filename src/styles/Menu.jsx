@@ -158,7 +158,6 @@ const compareTableContainer = {
 
 const tableContainerHeader = {
   backgroundColor: 'var(--color-secondary)',
-  marginTop: '1rem',
   paddingLeft: '2rem',
   color: 'white'
 }
@@ -179,10 +178,28 @@ const chartsContainer = {
   gap: '2rem'
 }
 
+const listItem = {
+  backgroundColor: '#2f2f36',
+  color: ' white',
+  padding: '.5rem 1rem'
+}
+
+const tableContainerBody = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 3fr'
+}
+
+const tagsItemList = {
+  overflow: 'auto',
+  borderRight: '1px solid black'
+}
+
 export {
   basicMenu, menuHeader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell,
-  saveMenuEditText, compareTableContainer, compareTableSortLabel, tableContainerHeader, chartsContainer, chartContainer
+  saveMenuEditText, compareTableContainer, compareTableSortLabel,
+  tableContainerHeader, chartsContainer, chartContainer,
+  listItem, tableContainerBody, tagsItemList
 }
