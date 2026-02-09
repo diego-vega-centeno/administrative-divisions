@@ -15,47 +15,17 @@ import {
   headerCell, compareTableContainer, compareTableSortLabel,
   tableContainerHeader
 } from "../styles/Menu.jsx";
-import { dataIndex, getParentNames } from "../utils/addData.js";
 import { useEffect, useState } from 'react';
-import { calculatePropsFromGeo } from '../utils/calculateFromGeo.js';
-import osmtogeojson from 'osmtogeojson';
 
-export default function DataTable({ osmRels }) {
+
+export default function DataTable({ computedDataRels }) {
   const [rows, setRows] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
 
   useEffect(() => {
-    const newDataRels = [];
-    for (const rel of osmRels) {
-      // rel props
-      const id = rel.id.toString();
-      const relProps = {};
-      relProps['id'] = id;
-      relProps['admin_level'] = dataIndex[id].admin_level;
-      relProps['name'] = dataIndex[id].text;
-      relProps['parents'] = getParentNames(id);
-      relProps['population'] = rel.tags?.population ? parseInt(rel.tags.population) : null
-
-      // geo computed props
-      const geoJSON = osmtogeojson({ elements: [rel] });
-      const calcProps = calculatePropsFromGeo(geoJSON);
-
-
-      // derived props
-      const derivedProps = {
-        popDensity: rel.tags?.population ?
-          rel.tags?.population / calcProps.area :
-          null
-      }
-
-      const rawProps = { ...relProps, ...calcProps, ...derivedProps };
-
-      newDataRels.push(rawProps);
-    }
-
-    setRows([...newDataRels].sort((a, b) => compare(a, b, order, orderBy)))
-  }, [osmRels])
+    setRows([...computedDataRels].sort((a, b) => compare(a, b, order, orderBy)))
+  }, [computedDataRels])
 
 
   const headerCells = [

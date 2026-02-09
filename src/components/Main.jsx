@@ -13,6 +13,10 @@ import logger from '../utils/logger.js';
 import { getRelationsDataWithCache } from '../utils/overpass';
 import { profileSize } from '../utils/overpass';
 import DataTable from './DataTable.jsx';
+import ChartsSection from './ChartsSection.jsx';
+import { dataIndex, getParentNames } from "../utils/addData.js";
+import { calculatePropsFromGeo } from '../utils/calculateFromGeo.js';
+import osmtogeojson from 'osmtogeojson';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -22,6 +26,7 @@ export default function Main() {
   const { selected, setSelected } = useContext(MapActionsContext);
   const [osmRels, setOsmRels] = useState([]);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
+  const [computedDataRels, setComputedDataRels] = useState([])
 
   useEffect(() => {
     if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
@@ -61,6 +66,38 @@ export default function Main() {
     setSelected(ids)
   }
 
+  useEffect(() => {
+    const newDataRels = [];
+    for (const rel of osmRels) {
+      // rel props
+      const id = rel.id.toString();
+      const relProps = {};
+      relProps['id'] = id;
+      relProps['admin_level'] = dataIndex[id].admin_level;
+      relProps['name'] = dataIndex[id].text;
+      relProps['parents'] = getParentNames(id);
+      relProps['population'] = rel.tags?.population ? parseInt(rel.tags.population) : null
+
+      // geo computed props
+      const geoJSON = osmtogeojson({ elements: [rel] });
+      const calcProps = calculatePropsFromGeo(geoJSON);
+
+
+      // derived props
+      const derivedProps = {
+        popDensity: rel.tags?.population ?
+          rel.tags?.population / calcProps.area :
+          null
+      }
+
+      const rawProps = { ...relProps, ...calcProps, ...derivedProps };
+
+      newDataRels.push(rawProps);
+    }
+
+    setComputedDataRels(newDataRels)
+  }, [osmRels])
+
   return (
     <main className={styles.main}>
       <aside className={styles.aside}>
@@ -87,9 +124,14 @@ export default function Main() {
               osmRels={osmRels}
             />
           )}
-          {Boolean(osmRels.length != 0) && (
+          {Boolean(computedDataRels.length != 0) && (
             <DataTable
-              osmRels={osmRels}
+              computedDataRels={computedDataRels}
+            />
+          )}
+          {Boolean(computedDataRels.length != 0) && (
+            <ChartsSection
+              computedDataRels={computedDataRels}
             />
           )}
         </div>
