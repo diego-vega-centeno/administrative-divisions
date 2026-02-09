@@ -163,10 +163,26 @@ const tableContainerHeader = {
   color: 'white'
 }
 
+const chartContainer = {
+  width: '100%',
+}
+
+const chartsContainer = {
+  width: '100%',
+  paddingX: 'auto',
+  backgroundColor: '#2f2f36',
+  padding: '1rem',
+
+  display: 'grid',
+  justifyContent: 'center',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 35vw))',
+  gap: '2rem'
+}
+
 export {
   basicMenu, menuHeader, textField, table, tableCell, headerCell,
   subHeaderCell, tableContainer, modalCenter,
   headerCellContent, headerCellToolsContainer, headerCellToolsButton,
   headerCellConfirmContainer, favoritesMenuCheckbox, favoritesMenuCheckboxCell,
-  saveMenuEditText, compareTableContainer, compareTableSortLabel, tableContainerHeader
+  saveMenuEditText, compareTableContainer, compareTableSortLabel, tableContainerHeader, chartsContainer, chartContainer
 }
