@@ -57,9 +57,8 @@ export default function FavoritesMenu({ open, onClose, onError }) {
   }, [open]);
 
   const plotLayer = (groupKey) => {
-    const rels = relsPerLayer[groupKey].map(rel => ({ id: rel['osm_relation_id'] }));
     onClose();
-    setSelected(rels);
+    setSelected(relsPerLayer[groupKey].map(rel => rel['osm_relation_id']));
   }
 
   const deleteSelectedLayer = async (layerId) => {
