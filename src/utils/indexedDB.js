@@ -6,8 +6,8 @@ const DB_VERSION = 1;
 const STORE_NAME = 'relations';
 
 const MAX_AGE_DAYS = 7; // days
-const MAX_OBJECTS_COUNT = 50;
-const MAX_TOTAL_SIZE = 100; // MB
+const MAX_OBJECTS_COUNT = navigator.userAgentData.mobile ? 150 : 700;
+const MAX_TOTAL_SIZE = navigator.userAgentData.mobile ? 50 : 40; // MB
 const MS_PER_DAY = 24 * 60 * 60 * 1000
 
 //* initialize database
@@ -168,56 +168,22 @@ async function clearAllStoredRelations() {
 async function cleanDBCache() {
   // clearAllStoredRelations();
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  const store = tx.objectStore(STORE_NAME);
-  const countReq = store.count();
-  let ageDeleteCount = 0, objectsDeletedCount = 0, sizeDeleteCount = 0;
+  const estimate = await navigator.storage.estimate();
 
-  countReq.onsuccess = () => {
-    logger.info(`IndexedDB: object count: ${countReq.result}`);
-    // skip based on object counts
-    if (countReq.result <= MAX_OBJECTS_COUNT) {
-      logger.info(`IndexedDB: no cleanup needed`);
-      tx.abort();
-      return;
+  const usage = estimate.usage / 1_000_000; // MB
+  const quota = estimate.quota / 1_000_000; // MB
+
+  // compare with indexedDB caps
+  logger.info(`IndexedDB: storage quota: ${quota} (MB); cap: ${MAX_TOTAL_SIZE} (MB)`);
+  logger.info(`IndexedDB: storage usage: ${usage} (MB); `);
+
+  if (usage > MAX_TOTAL_SIZE) {
+    try {
+      await cleanDBCacheLRU(db, usage);
+    } catch (error) {
+      logger.error(error)
     }
-
-    // clean up needed
-    logger.info(`IndexedDB: doing cache clean up ...`);
-
-    // clean based on count
-    // let it try to delete already delete realtions 
-    // because is faster than filtering
-    cleanDBCacheObjectsCount(store)
-      .then(count => {
-        objectsDeletedCount = count;
-      })
-      .catch(err => logger.error(err));
-
-    // clean based on age, LRU object
-    cleanDBCacheMaxAge(store)
-      .then(count => {
-        ageDeleteCount = count;
-      })
-      .catch(err => logger.error(err));
-
-    // clean based on total size
-    // cleanDBCacheTotalSize(store)
-    //   .then(count => {
-    //     ageDeleteCount = count;
-    //   })
-    //   .catch(err => logger.error(err));
   }
-
-  tx.onerror = () => {
-    logger.error(tx.error);
-  };
-
-  tx.oncomplete = () => {
-    if (ageDeleteCount > 0) logger.info(`IndexedDB: cleanup done MAX_AGE_DAYS: ${ageDeleteCount} deleted`);
-    if (objectsDeletedCount > 0) logger.info(`IndexedDB: cleanup done MAX_OBJECTS_COUNT: ${objectsDeletedCount} deleted`);
-    if (sizeDeleteCount > 0) logger.info(`IndexedDB: cleanup done MAX_TOTAL_SIZE: ${sizeDeleteCount} deleted`);
-  };
 }
 
 function cleanDBCacheMaxAge(store) {
@@ -245,7 +211,47 @@ function cleanDBCacheMaxAge(store) {
   })
 }
 
-function cleanDBCacheObjectsCount(store) {
+async function cleanDBCacheLRU(db, usage) {
+  let currentUsage = usage;
+  let deleted = 0;
+
+  while (currentUsage > MAX_TOTAL_SIZE) {
+    const batchDeleted = await deleteBatch(db, 10);
+    if (batchDeleted === 0) break;
+    deleted += batchDeleted;
+
+    const estimate = await navigator.storage.estimate();
+    currentUsage = estimate.usage / 1_000_000;
+  }
+
+  if (deleted > 0) logger.info(`IndexedDB: cleanup done LRU: ${deleted} deleted`);
+}
+
+function deleteBatch(db, size) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    // make cursor at index iterating from oldest to newest
+    const index = store.index("storedAtIndex");
+    let deleted = 0;
+
+    index.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
+
+      if (!cursor || deleted >= size) return;
+
+      cursor.delete();
+      deleted++;
+
+      cursor.continue();
+    }
+
+    tx.oncomplete = () => resolve(deleted);
+    tx.onerror = () => reject(tx.error);
+  })
+}
+
+function cleanDBCacheObjectsCount(db) {
 
   return new Promise((resolve, reject) => {
     const index = store.index("storedAtIndex");
