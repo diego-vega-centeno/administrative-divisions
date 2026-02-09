@@ -6,8 +6,8 @@ const DB_VERSION = 1;
 const STORE_NAME = 'relations';
 
 const MAX_AGE_DAYS = 7; // days
-const MAX_OBJECTS_COUNT = navigator.userAgentData.mobile ? 150 : 700;
-const MAX_TOTAL_SIZE = navigator.userAgentData.mobile ? 50 : 40; // MB
+const MAX_OBJECTS_COUNT = navigator.userAgentData.mobile ? 100 : 200;
+const MAX_TOTAL_SIZE = navigator.userAgentData.mobile ? 50 : 100; // MB
 const MS_PER_DAY = 24 * 60 * 60 * 1000
 
 //* initialize database
@@ -214,8 +214,9 @@ function cleanDBCacheMaxAge(store) {
 async function cleanDBCacheLRU(db, usage) {
   let currentUsage = usage;
   let deleted = 0;
+  const threshold = (MAX_TOTAL_SIZE) * (80 / 100);
 
-  while (currentUsage > MAX_TOTAL_SIZE) {
+  while (currentUsage > threshold) {
     const batchDeleted = await deleteBatch(db, 10);
     if (batchDeleted === 0) break;
     deleted += batchDeleted;
