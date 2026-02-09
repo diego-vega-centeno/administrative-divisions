@@ -21,7 +21,8 @@ import logger from "../utils/logger.js";
 import Modal from '@mui/material/Modal';
 import { getParentNames } from "../utils/addData.js";
 
-export default function SaveMenu({ open, onClose, onError, selectedRels }) {
+export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
+  console.log(selectedNodes);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
@@ -39,7 +40,7 @@ export default function SaveMenu({ open, onClose, onError, selectedRels }) {
     setError('');
     setIsProgressIconActive(true);
     try {
-      const saveResponse = await saveLayerToDB(title, selectedRels);
+      const saveResponse = await saveLayerToDB(title, selectedNodes);
     } catch (error) {
       logger.error(error);
       if (error?.code === 'duplicate_entry') {
@@ -103,7 +104,7 @@ export default function SaveMenu({ open, onClose, onError, selectedRels }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {selectedRels.map((rel) => (
+              {selectedNodes.map((rel) => (
                 <TableRow key={rel.id}>
                   <TableCell align="center" sx={tableCell}>{rel.admin_level}</TableCell>
                   <TableCell align="center" sx={tableCell}>{rel.id}</TableCell>
