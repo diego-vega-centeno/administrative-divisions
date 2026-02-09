@@ -64,7 +64,6 @@ export default function OSMTagsDropDown({ elementData }) {
         filteredTags[key] = value;
       }
     }
-    // logger.debug('matchedTags: ', matchedTags);
 
     // Define SubTable and add to corresponding key
     for (const [key, tags] of Object.entries(matchedTags)) {
@@ -78,8 +77,6 @@ export default function OSMTagsDropDown({ elementData }) {
 
     return filteredTags
   }, [elementData]);
-
-  // logger.debug('filteredTags: ', filteredTags);
 
   return <Box>
     <ListItemButton sx={dropdown} disableRipple onClick={handleClick}>
