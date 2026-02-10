@@ -14,9 +14,6 @@ import { getRelationsDataWithCache } from '../utils/overpass';
 import { profileSize } from '../utils/overpass';
 import DataTable from './DataTable.jsx';
 import ChartsSection from './ChartsSection.jsx';
-import { dataIndex, getParentNames } from "../utils/addData.js";
-import { calculatePropsFromGeo } from '../utils/calculateFromGeo.js';
-import osmtogeojson from 'osmtogeojson';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -68,34 +65,24 @@ export default function Main() {
 
   //* effect for computed props
   useEffect(() => {
-    const newDataRels = [];
-    for (const rel of osmRels) {
-      // rel props
-      const id = rel.id.toString();
-      const relProps = {};
-      relProps['id'] = id;
-      relProps['admin_level'] = dataIndex[id].admin_level;
-      relProps['name'] = dataIndex[id].text;
-      relProps['parents'] = getParentNames(id);
-      relProps['population'] = rel.tags?.population ? parseInt(rel.tags.population) : null
 
-      // geo computed props
-      const geoJSON = osmtogeojson({ elements: [rel] });
-      const calcProps = calculatePropsFromGeo(geoJSON);
+    if (!osmRels.length) return;
+    const worker = new Worker(
+      new URL('../utils/worker.js', import.meta.url),
+      { type: 'module' }
+    );
+    // send data
+    worker.postMessage(osmRels);
+    // receive
+    worker.onmessage = (e) => {
+      setComputedDataRels(e.data);
+      // clean up
+      worker.terminate();
+    };
 
-      // derived props
-      const derivedProps = {
-        popDensity: rel.tags?.population ?
-          rel.tags?.population / calcProps.area :
-          null
-      }
+    // unmount
+    return () => worker.terminate();
 
-      const rawProps = { ...relProps, ...calcProps, ...derivedProps };
-
-      newDataRels.push(rawProps);
-    }
-
-    setComputedDataRels(newDataRels)
   }, [osmRels]);
 
   return (
