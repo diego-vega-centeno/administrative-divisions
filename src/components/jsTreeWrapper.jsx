@@ -4,7 +4,14 @@ window.jQuery = $;
 window.$ = $;
 import "jstree";
 import 'jstree/dist/themes/default/style.min.css';
-import { childrenIndex } from "../utils/addData.js";
+import logger from "../utils/logger";
+import add_flat_countries from '../add_flat_countries.json'
+
+const fetchCountryChildren = async (countrId) => {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/country/${countrId}/children`);
+  if (!response.ok) throw new Error(`Failed fetch of country: ${countrId}`);
+  return response.json();
+}
 
 const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
 
@@ -15,18 +22,20 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
       'core': {
         // jsTree calls this function whenever it needs data
         // passes the node on the 'node' parameter
-
-        // help jstree by using childrenIndex wich is O(1) lookup
-        // tc: O(m); m is number of childs
-        'data': function (node, callback) {
-          const children = childrenIndex[node.id] || []; // O(1)
-          // O(m)
-          const childrenWithHas = children.map(child => ({
-            ...child,
-            children: Boolean(childrenIndex[child.id]) // O(1)
-          }))
-          callback(childrenWithHas);
-          $(treeRef.current).trigger('lazy_load_done.jstree', [node]);
+        'data': async function (node, callback) {
+          try {
+            if (node.id == '#') {
+              return callback(add_flat_countries)
+            } else if (node.parent == '#') {
+              const children = await fetchCountryChildren(node.id);
+              callback(children)
+            } else {
+              callback([]);
+            }
+          } catch (error) {
+            logger.error(`Error loading node: ${node}; error: `, error);
+            callback([])
+          }
         },
         'themes': {
           'icons': false
