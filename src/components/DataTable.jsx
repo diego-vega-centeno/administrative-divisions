@@ -8,8 +8,10 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from '@mui/material/ListItemText';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { visuallyHidden } from '@mui/utils';
+import { progressIcon } from '../styles/Main.jsx';
 import {
   table, tableCell,
   headerCell, compareTableContainer, compareTableSortLabel,
@@ -18,14 +20,17 @@ import {
 import { useEffect, useState, memo } from 'react';
 
 
-const DataTable = memo(({ computedDataRels }) => {
+const DataTable = memo(({ computedDataRels, isComputingIconActive }) => {
+
+  if (!computedDataRels.length && !isComputingIconActive) return null;
+
   const [rows, setRows] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
 
   useEffect(() => {
     setRows([...computedDataRels].sort((a, b) => compare(a, b, order, orderBy)))
-  }, [computedDataRels])
+  }, [computedDataRels, order, orderBy])
 
 
   const headerCells = [
@@ -56,11 +61,6 @@ const DataTable = memo(({ computedDataRels }) => {
     setOrderBy(name);
   };
 
-  useEffect(() => {
-    setRows(prev => [...prev].sort((a, b) => compare(a, b, order, orderBy)));
-  }, [order, orderBy]);
-
-
   function formatValue(val) {
     if (typeof val === 'number') return val.toFixed(2);
     if (val === null) return '--';
@@ -68,55 +68,67 @@ const DataTable = memo(({ computedDataRels }) => {
   }
 
   return (
-    <Box>
-      <ListItem sx={tableContainerHeader}>
-        <ListItemText primary={"Compare table"} />
-      </ListItem>
-      <TableContainer sx={compareTableContainer}>
-        <Table sx={table}>
-          <TableHead >
-            <TableRow >
-              {headerCells.map(header => (
-                <TableCell
-                  sx={headerCell}
-                  key={header.id}
-                  align='center'
-                  sortDirection={orderBy === header.id ? order : false}
-                >
-                  <TableSortLabel
-                    sx={compareTableSortLabel}
-                    active={orderBy === header.id}
-                    direction={orderBy === header.id ? order : 'asc'}
-                    onClick={() => handleRequestSort(header.id)}
+    isComputingIconActive ? (
+      <Box >
+        <ListItem sx={tableContainerHeader}>
+          <ListItemText primary={"Compare table"} />
+        </ListItem>
+        <Box sx={progressIcon}>
+          <CircularProgress thickness={9} size={70} />
+        </Box>
+      </Box>
+    ) : (
+      <Box>
+        <ListItem sx={tableContainerHeader}>
+          <ListItemText primary={"Compare table"} />
+        </ListItem>
+        <TableContainer sx={compareTableContainer}>
+          <Table sx={table}>
+            <TableHead >
+              <TableRow >
+                {headerCells.map(header => (
+                  <TableCell
+                    sx={headerCell}
+                    key={header.id}
+                    align='center'
+                    sortDirection={orderBy === header.id ? order : false}
                   >
-                    {header.label}
-                    {orderBy === header.id ? (
-                      // for screen readers
-                      <Box component="span" sx={visuallyHidden}>
-                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                      </Box>
-                    ) : null}
-                  </TableSortLabel>
-                </TableCell>
-              ))
-              }
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((rel) => (
-              <TableRow key={rel.id}>
-                <TableCell align="center" sx={tableCell}>{formatValue(rel.admin_level)}</TableCell>
-                <TableCell align="center" sx={tableCell}>{rel.name}</TableCell>
-                <TableCell align="center" sx={tableCell}>{formatValue(rel.area)}</TableCell>
-                <TableCell align="center" sx={tableCell}>{formatValue(rel.perimeter)}</TableCell>
-                <TableCell align="center" sx={tableCell}>{formatValue(rel.population)}</TableCell>
-                <TableCell align="center" sx={tableCell}>{formatValue(rel.popDensity)}</TableCell>
+                    <TableSortLabel
+                      sx={compareTableSortLabel}
+                      active={orderBy === header.id}
+                      direction={orderBy === header.id ? order : 'asc'}
+                      onClick={() => handleRequestSort(header.id)}
+                    >
+                      {header.label}
+                      {orderBy === header.id ? (
+                        // for screen readers
+                        <Box component="span" sx={visuallyHidden}>
+                          {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                        </Box>
+                      ) : null}
+                    </TableSortLabel>
+                  </TableCell>
+                ))
+                }
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+            </TableHead>
+            <TableBody>
+              {rows.map((rel) => (
+                <TableRow key={rel.id}>
+                  <TableCell align="center" sx={tableCell}>{formatValue(rel.admin_level)}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{rel.name}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{formatValue(rel.area)}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{formatValue(rel.perimeter)}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{formatValue(rel.population)}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{formatValue(rel.popDensity)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    )
+
   )
 })
 

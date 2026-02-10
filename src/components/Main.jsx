@@ -24,6 +24,7 @@ export default function Main() {
   const [osmRels, setOsmRels] = useState([]);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [computedDataRels, setComputedDataRels] = useState([]);
+  const [isComputingIconActive, setIsComputingIconActive] = useState(false);
 
   useEffect(() => {
     if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
@@ -65,8 +66,9 @@ export default function Main() {
 
   //* effect for computed props
   useEffect(() => {
-
     if (!osmRels.length) return;
+
+    setIsComputingIconActive(true);
     const worker = new Worker(
       new URL('../utils/worker.js', import.meta.url),
       { type: 'module' }
@@ -76,6 +78,7 @@ export default function Main() {
     // receive
     worker.onmessage = (e) => {
       setComputedDataRels(e.data);
+      setIsComputingIconActive(false);
       // clean up
       worker.terminate();
     };
@@ -112,16 +115,14 @@ export default function Main() {
               osmRels={osmRels}
             />
           )}
-          {Boolean(computedDataRels.length != 0) && (
-            <DataTable
-              computedDataRels={computedDataRels}
-            />
-          )}
-          {Boolean(computedDataRels.length != 0) && (
-            <ChartsSection
-              computedDataRels={computedDataRels}
-            />
-          )}
+          <DataTable
+            computedDataRels={computedDataRels}
+            isComputingIconActive={isComputingIconActive}
+          />
+          <ChartsSection
+            computedDataRels={computedDataRels}
+            isComputingIconActive={isComputingIconActive}
+          />
         </div>
         <Footer />
       </section>
