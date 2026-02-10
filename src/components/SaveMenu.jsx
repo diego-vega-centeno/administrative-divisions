@@ -19,10 +19,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { saveLayerToDB } from '../utils/database.js'
 import logger from "../utils/logger.js";
 import Modal from '@mui/material/Modal';
-import { getParentNames } from "../utils/addData.js";
+// import { getParentNames } from "../utils/addData.js";
 
 export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
-  console.log(selectedNodes);
+
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
@@ -109,7 +109,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
                   <TableCell align="center" sx={tableCell}>{rel.admin_level}</TableCell>
                   <TableCell align="center" sx={tableCell}>{rel.id}</TableCell>
                   <TableCell align="center" sx={tableCell}>{rel.text}</TableCell>
-                  <TableCell align="center" sx={tableCell}>{getParentNames(rel.id)}</TableCell>
+                  {/* <TableCell align="center" sx={tableCell}>{getParentNames(rel.id)}</TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

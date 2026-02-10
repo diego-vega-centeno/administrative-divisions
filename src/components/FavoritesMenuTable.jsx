@@ -19,7 +19,7 @@ import {
   faPenToSquare
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare, faCheckSquare } from '@fortawesome/free-regular-svg-icons'
-import { dataIndex, getParentNames } from "../utils/addData.js";
+// import { dataIndex, getParentNames } from "../utils/addData.js";
 import { addToolsButton } from '../styles/SelectAddDropdown.jsx';
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
@@ -194,12 +194,12 @@ export default function FavoritesMenuTable({
                   </Button>
                 )}
               </TableCell>
-              <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell>
+              {/* <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell> */}
               <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
               <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
-              <TableCell align="center" sx={tableCell}>
+              {/* <TableCell align="center" sx={tableCell}>
                 {getParentNames(rel.osm_relation_id)}
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           )
         })}
