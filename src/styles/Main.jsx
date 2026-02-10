@@ -9,6 +9,15 @@ const progressMapIcon = {
   zIndex: '1000'
 }
 
+const progressIcon = {
+  display: 'flex',
+  justifyContent: 'center',
+  padding: '0.7rem 0',
+  '& .MuiCircularProgress-root': {
+    color: '#3F7251',
+  }
+}
+
 const saveActionSection = {
   display: 'flex',
   alignItems: 'center',
@@ -22,4 +31,4 @@ const saveActionSection = {
   }
 }
 
-export { progressMapIcon, saveActionSection }
+export { progressMapIcon, saveActionSection, progressIcon }
