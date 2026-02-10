@@ -190,8 +190,19 @@ const tableContainerBody = {
 }
 
 const tagsItemList = {
-  overflow: 'auto',
-  borderRight: '1px solid black'
+  overflowY: 'auto',
+  borderRight: '1px solid black',
+  maxHeight: '70vh',
+  '&::-webkit-scrollbar': {
+    width: '10px',
+  },
+  '&::-webkit-scrollbar-track': {
+    background: 'var(--color-secondary)',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'var(--color-primary)',
+    borderRadius: '4px',
+  },
 }
 
 export {

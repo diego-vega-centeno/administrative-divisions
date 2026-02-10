@@ -24,8 +24,8 @@ export default function TagsSection({ osmRels }) {
         <ListItemText primary={"Selected divisions tags"} />
       </ListItem>
       <Box sx={tableContainerBody}>
-        <Box sx={tagsItemList}>
-          <Box sx={{borderRight: '1px solid black', maxHeight: '70vh'}}>
+        <Box>
+          <Box sx={tagsItemList}>
             {osmRels.map(rel => (
               <ListItemButton
                 key={rel.id}
