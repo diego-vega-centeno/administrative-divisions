@@ -1,5 +1,5 @@
-import { dataIndex } from "./addData";
-import { getParentNames } from "./addData";
+// import { dataIndex } from "./addData";
+// import { getParentNames } from "./addData";
 import osmtogeojson from "osmtogeojson";
 import { calculatePropsFromGeo } from "./calculateFromGeo";
 
@@ -28,9 +28,12 @@ function addComputedProps(osmRels) {
     const id = rel.id.toString();
     const relProps = {
       id,
-      admin_level: dataIndex[id].admin_level,
-      name: dataIndex[id].text,
-      parents: getParentNames(id),
+      // admin_level: dataIndex[id].admin_level,
+      admin_level: 'dataIndex[id].admin_level',
+      // name: dataIndex[id].text,
+      name: 'dataIndex[id].text',
+      // parents: getParentNames(id),
+      parents: 'getParentNames(id)',
       population: rel.tags?.population ? parseInt(rel.tags.population) : null
     };
 
