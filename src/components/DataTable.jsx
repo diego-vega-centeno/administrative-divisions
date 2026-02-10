@@ -22,7 +22,7 @@ import { useEffect, useState, memo } from 'react';
 
 const DataTable = memo(({ computedDataRels, isComputingIconActive }) => {
 
-  if (!computedDataRels.length && !isComputingIconActive) return null;
+
 
   const [rows, setRows] = useState([]);
   const [order, setOrder] = useState('asc');
@@ -32,7 +32,8 @@ const DataTable = memo(({ computedDataRels, isComputingIconActive }) => {
     setRows([...computedDataRels].sort((a, b) => compare(a, b, order, orderBy)))
   }, [computedDataRels, order, orderBy])
 
-
+  if (!computedDataRels.length && !isComputingIconActive) return null;
+  
   const headerCells = [
     { id: 'admin_level', label: 'admin level', numeric: false, },
     { id: 'name', label: 'name', numeric: false, },
