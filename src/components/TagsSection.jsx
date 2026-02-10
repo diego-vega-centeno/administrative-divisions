@@ -7,10 +7,10 @@ import {
 import Box from '@mui/material/Box';
 import { dataIndex } from '../utils/addData.js';
 import { listItem } from '../styles/Menu.jsx';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import TagsTable from './TagsTable.jsx';
 
-export default function TagsSection({ osmRels }) {
+const TagsSection = memo(({ osmRels }) => {
 
   const [selectedRel, setSelectedRel] = useState();
 
@@ -45,4 +45,6 @@ export default function TagsSection({ osmRels }) {
       </Box>
     </Box>
   )
-}
+});
+
+export default TagsSection;

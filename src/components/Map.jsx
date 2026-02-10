@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import styles from '../styles/Main.module.css'
 import L from 'leaflet';
 import Box from '@mui/material/Box';
@@ -7,7 +7,7 @@ import { progressMapIcon } from '../styles/Main.jsx';
 import { addToLeafletMap } from '../utils/leafletMap.js';
 import logger from '../utils/logger.js';
 
-export default function Map({ osmRels, onError, isProgressIconActive }) {
+const Map = memo(({ osmRels, onError, isProgressIconActive }) => {
   const mapContainerRef = useRef(null); // will hold map container dom element
   const mapRef = useRef(null); // will hold map instance from leaflet
 
@@ -63,4 +63,6 @@ export default function Map({ osmRels, onError, isProgressIconActive }) {
       />
     </div>
   )
-}
+});
+
+export default Map;
