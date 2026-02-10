@@ -66,6 +66,7 @@ export default function Main() {
     setSelected(ids)
   }
 
+  //* effect for computed props
   useEffect(() => {
     const newDataRels = [];
     for (const rel of osmRels) {
@@ -82,7 +83,6 @@ export default function Main() {
       const geoJSON = osmtogeojson({ elements: [rel] });
       const calcProps = calculatePropsFromGeo(geoJSON);
 
-
       // derived props
       const derivedProps = {
         popDensity: rel.tags?.population ?
@@ -96,7 +96,7 @@ export default function Main() {
     }
 
     setComputedDataRels(newDataRels)
-  }, [osmRels])
+  }, [osmRels]);
 
   return (
     <main className={styles.main}>

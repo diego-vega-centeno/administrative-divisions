@@ -15,10 +15,10 @@ import {
   headerCell, compareTableContainer, compareTableSortLabel,
   tableContainerHeader
 } from "../styles/Menu.jsx";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 
 
-export default function DataTable({ computedDataRels }) {
+const DataTable = memo(({ computedDataRels }) => {
   const [rows, setRows] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
@@ -118,4 +118,6 @@ export default function DataTable({ computedDataRels }) {
       </TableContainer>
     </Box>
   )
-}
+})
+
+export default DataTable;
