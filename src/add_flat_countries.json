@@ -3,420 +3,490 @@
     "id": "303427",
     "parent": "#",
     "text": "Afghanistan",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "53292",
     "parent": "#",
     "text": "Albania",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192756",
     "parent": "#",
     "text": "Algeria",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "195267",
     "parent": "#",
     "text": "Angola",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "536900",
     "parent": "#",
     "text": "Antigua and Barbuda",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "286393",
     "parent": "#",
     "text": "Argentina",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "364066",
     "parent": "#",
     "text": "Armenia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "80500",
     "parent": "#",
     "text": "Australia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "16239",
     "parent": "#",
     "text": "Austria",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "378734",
     "parent": "#",
     "text": "Bahrain",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "184640",
     "parent": "#",
     "text": "Bangladesh",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "59065",
     "parent": "#",
     "text": "Belarus",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "52411",
     "parent": "#",
     "text": "Belgium",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "287827",
     "parent": "#",
     "text": "Belize",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192784",
     "parent": "#",
     "text": "Benin",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "184629",
     "parent": "#",
     "text": "Bhutan",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "252645",
     "parent": "#",
     "text": "Bolivia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "2528142",
     "parent": "#",
     "text": "Bosnia and Herzegovina",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "1889339",
     "parent": "#",
     "text": "Botswana",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "59470",
     "parent": "#",
     "text": "Brazil",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "285454",
     "parent": "#",
     "text": "British Virgin Islands",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "186382",
     "parent": "#",
     "text": "Bulgaria",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "49898",
     "parent": "#",
     "text": "Cambodia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "1428125",
     "parent": "#",
     "text": "Canada",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "167454",
     "parent": "#",
     "text": "Chile",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "120027",
     "parent": "#",
     "text": "Colombia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "51684",
     "parent": "#",
     "text": "Czechia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "50046",
     "parent": "#",
     "text": "Denmark",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "108089",
     "parent": "#",
     "text": "Ecuador",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "88210",
     "parent": "#",
     "text": "Eswatini",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "54224",
     "parent": "#",
     "text": "Finland",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "2202162",
     "parent": "#",
     "text": "France",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "28699",
     "parent": "#",
     "text": "Georgia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "51477",
     "parent": "#",
     "text": "Germany",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192307",
     "parent": "#",
     "text": "Greece",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192778",
     "parent": "#",
     "text": "Guinea",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192776",
     "parent": "#",
     "text": "Guinea-Bissau",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "21335",
     "parent": "#",
     "text": "Hungary",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "184818",
     "parent": "#",
     "text": "Jordan",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "178009",
     "parent": "#",
     "text": "Kyrgyzstan",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "49903",
     "parent": "#",
     "text": "Laos",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "184843",
     "parent": "#",
     "text": "Lebanon",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192758",
     "parent": "#",
     "text": "Libya",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "72596",
     "parent": "#",
     "text": "Lithuania",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192763",
     "parent": "#",
     "text": "Mauritania",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "114686",
     "parent": "#",
     "text": "Mexico",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "58974",
     "parent": "#",
     "text": "Moldova",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "161033",
     "parent": "#",
     "text": "Mongolia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "50371",
     "parent": "#",
     "text": "Myanmar",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "184633",
     "parent": "#",
     "text": "Nepal",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192734",
     "parent": "#",
     "text": "North Korea",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "288247",
     "parent": "#",
     "text": "Peru",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "49715",
     "parent": "#",
     "text": "Poland",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "90689",
     "parent": "#",
     "text": "Romania",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "60189",
     "parent": "#",
     "text": "Russia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "171496",
     "parent": "#",
     "text": "Rwanda",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192775",
     "parent": "#",
     "text": "Senegal",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192777",
     "parent": "#",
     "text": "Sierra Leone",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "14296",
     "parent": "#",
     "text": "Slovakia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "87565",
     "parent": "#",
     "text": "South Africa",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "52822",
     "parent": "#",
     "text": "Sweden",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "51701",
     "parent": "#",
     "text": "Switzerland",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "184840",
     "parent": "#",
     "text": "Syria",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192774",
     "parent": "#",
     "text": "The Gambia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "192757",
     "parent": "#",
     "text": "Tunisia",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "174737",
     "parent": "#",
     "text": "Turkey",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "60199",
     "parent": "#",
     "text": "Ukraine",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "62149",
     "parent": "#",
     "text": "United Kingdom",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "148838",
     "parent": "#",
     "text": "United States",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   },
   {
     "id": "49915",
     "parent": "#",
     "text": "Vietnam",
-    "admin_level": "2"
+    "admin_level": "2",
+    "children": true
   }
 ]
