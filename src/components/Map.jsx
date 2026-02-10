@@ -7,7 +7,7 @@ import { progressMapIcon } from '../styles/Main.jsx';
 import { addToLeafletMap } from '../utils/leafletMap.js';
 import logger from '../utils/logger.js';
 
-const Map = memo(({ osmRels, onError, isProgressIconActive }) => {
+const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconActive }) => {
   const mapContainerRef = useRef(null); // will hold map container dom element
   const mapRef = useRef(null); // will hold map instance from leaflet
 
@@ -48,6 +48,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive }) => {
     // add to map
     const fakeOSMRes = { 'elements': osmRels };
     await addToLeafletMap(fakeOSMRes, mapRef.current);
+    setIsProgressIconActive(false)
   }
 
   return (

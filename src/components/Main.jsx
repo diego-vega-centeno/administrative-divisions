@@ -23,7 +23,7 @@ export default function Main() {
   const { selected, setSelected } = useContext(MapActionsContext);
   const [osmRels, setOsmRels] = useState([]);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
-  const [computedDataRels, setComputedDataRels] = useState([])
+  const [computedDataRels, setComputedDataRels] = useState([]);
 
   useEffect(() => {
     if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
@@ -44,7 +44,7 @@ export default function Main() {
       // aproximate size in KB
       // if (process.env.NODE_ENV === 'development') profileSize(queryOSMRels);
       setOsmRels(queryOSMRels)
-      setIsProgressIconActive(false)
+      // setIsProgressIconActive(false)
     } catch (error) {
       handleError(error.message);
       logger.error('An error ocurred: ', error);
@@ -105,6 +105,7 @@ export default function Main() {
             osmRels={osmRels}
             onError={handleError}
             isProgressIconActive={isProgressIconActive}
+            setIsProgressIconActive={setIsProgressIconActive}
           />
           {Boolean(osmRels.length != 0) && (
             <TagsSection
