@@ -5,7 +5,7 @@ import {
   tableContainerHeader, tableContainerBody, tagsItemList
 } from '../styles/Menu.jsx';
 import Box from '@mui/material/Box';
-import { dataIndex } from '../utils/addData.js';
+// import { dataIndex } from '../utils/addData.js';
 import { listItem } from '../styles/Menu.jsx';
 import { useState, useEffect, memo } from 'react';
 import TagsTable from './TagsTable.jsx';
@@ -33,7 +33,8 @@ const TagsSection = memo(({ osmRels }) => {
                 sx={listItem}
                 onClick={() => setSelectedRel(rel)}
               >
-                {dataIndex[rel.id].text}
+                dataIndex[rel.id].textdataIndex[rel.id].text
+                {/* {dataIndex[rel.id].text} */}
               </ListItemButton>
             )
             )}
