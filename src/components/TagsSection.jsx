@@ -16,7 +16,11 @@ const TagsSection = memo(({ osmRels }) => {
 
   useEffect(() => {
     if (osmRels.length > 0) setSelectedRel(osmRels[0]);
-  }, [osmRels])
+  }, [osmRels]);
+
+  function getRelName(rel) {
+    return rel.tags['name:en'] ?? rel.tags['alt_name:en'] ?? rel.tags['name'];
+  }
 
   return (
     <Box>
@@ -33,8 +37,7 @@ const TagsSection = memo(({ osmRels }) => {
                 sx={listItem}
                 onClick={() => setSelectedRel(rel)}
               >
-                dataIndex[rel.id].textdataIndex[rel.id].text
-                {/* {dataIndex[rel.id].text} */}
+                {getRelName(rel)}
               </ListItemButton>
             )
             )}

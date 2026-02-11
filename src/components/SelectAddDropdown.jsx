@@ -42,10 +42,10 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
     setFilterInput('');
   }
 
-  function handleSelect() {
+  function handleSelect(selected) {
     // nodes select uses all data from jstree and original
     // so just use and pass that
-    setSelectedNodes(treeRef.current?.getSelected())
+    setSelectedNodes(selected)
   }
 
   function handleDownload() {
@@ -126,6 +126,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         onClose={() => setIsSaveMenuOpen(false)}
         onError={onError}
         selectedNodes={selectedNodes}
+        getNodePath={treeRef.current?.getNodePath}
       />}
       {isDownloadMenuOpen && <DownloadMenu
         open={isDownloadMenuOpen}
