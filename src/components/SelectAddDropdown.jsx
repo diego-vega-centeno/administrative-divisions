@@ -13,11 +13,12 @@ import { addToolsButton, addTools, treeContainer, infoAddBox, addPanel } from '.
 import DownloadMenu from './DownloadMenu.jsx';
 import SaveMenu from './SaveMenu.jsx';
 import { AuthContext } from './AuthContext.jsx';
+import logger from '../utils/logger.js';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
   const treeRef = useRef(null);
-  const [filterInput, setFilterInput] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState([]);
@@ -32,9 +33,9 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
     onPlotRequest(selectedNodes.map(rel => rel.id));
   }
 
-  function handleFilter(filterInput) {
-    treeRef.current?.filter(filterInput)
-  }
+  // function handleFilter(filterInput) {
+  //   treeRef.current?.filter(filterInput)
+  // }
 
   function handleReset() {
     treeRef.current?.deselectAll();
@@ -68,6 +69,18 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
     setIsSaveMenuOpen(true);
   }
 
+  async function handleSearch(searchInput) {
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_BACKEND_URL + `/search?q=${searchInput}`
+      );
+      const data = await response.json();
+      logger.info(`Search result length: ${data.data.length}`);
+    } catch (error) {
+      logger.error(`Failed to search relations: ${error.message}`)
+    }
+  }
+
   return (
     <Box>
       <ListItemButton disableRipple sx={dropdown}>
@@ -79,13 +92,13 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
             type="search"
             sx={searchField}
             placeholder="search"
-            value={filterInput}
-            onChange={(e) => setFilterInput(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleFilter(filterInput);
+              if (e.key === 'Enter') handleSearch(searchInput);
             }}
           />
-          <Box sx={searchFieldIconBox} onClick={() => handleFilter(filterInput)}>
+          <Box sx={searchFieldIconBox} onClick={() => handleSearch(searchInput)}>
             <FontAwesomeIcon icon={faSearch} />
           </Box>
         </Box>
