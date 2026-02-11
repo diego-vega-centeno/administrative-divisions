@@ -88,3 +88,17 @@
 .btn-toggle-container {
   text-align: right;
 }
+
+.leaflet-btn {
+  width: 1.7rem;
+  height: 1.7rem;
+  cursor: pointer;
+  background-color: white;
+  box-shadow: 0 0 10px black;
+  line-height: 1.7rem;
+  font-size: 1.2rem;
+}
+
+.leaflet-btn:hover {
+  background-color: #d8d8d8;
+}

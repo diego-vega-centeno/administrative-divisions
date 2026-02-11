@@ -1,17 +1,24 @@
 import osmtogeojson from 'osmtogeojson';
 import L from 'leaflet';
 import styles from '../styles/Main.module.css'
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faMapPin } from '@fortawesome/free-solid-svg-icons';
 
 // initial map state
 const leafletState = {
   geojsonLayer: null,
   highlightedLayer: null,
-  mapControl: null
+  mapControl: null,
+  map: null,
+  centerBtn: null,
 };
 
 /* main leaflet map creation */
 
 function addToLeafletMap(osmBaseData, map) {
+
+  leafletState.map = map;
+
   // remove previous layer
   if (leafletState.geojsonLayer) {
     map.removeLayer(leafletState.geojsonLayer);
@@ -58,6 +65,7 @@ function addToLeafletMap(osmBaseData, map) {
   if (!leafletState.mapControl._map) {
     leafletState.mapControl.addTo(map);
   }
+
   // clearn content of control
   leafletState.mapControl.div.innerHTML = "";
 
@@ -71,6 +79,12 @@ function addToLeafletMap(osmBaseData, map) {
   }
   map.off('click', handleMapClick);
   map.on('click', handleMapClick);
+
+
+  // add buttons
+  if (!leafletState.centerBtn._map) {
+    leafletState.centerBtn.addTo(leafletState.map);
+  }
 }
 
 /* Custom tooltip function */
@@ -130,7 +144,7 @@ function highlightFeature(event) {
 
 /* map control panel */
 
-leafletState.mapControl = L.control();
+leafletState.mapControl = new L.Control();
 // create and return dom element container
 leafletState.mapControl.onAdd = function (map) {
   this.div = L.DomUtil.create('div');
@@ -220,6 +234,29 @@ function buttonClickHandler() {
     btn.innerText = '➖'  // expanded
 
   }
+
 }
+
+//* custom button
+L.Control.Button = L.Control.extend({
+  options: {
+    position: 'topleft'
+  },
+  onAdd: function (map) {
+    const button = L.DomUtil.create('button', 'leaflet-btn');
+    console.log();
+    const svgFaMapPin = icon(faMapPin).html[0];
+    button.innerHTML = `<div class="${styles['leaflet-btn']}">${svgFaMapPin}</div>`;
+
+    button.onclick = function () {
+      leafletState.map.fitBounds(leafletState.geojsonLayer.getBounds());
+    }
+
+    L.DomEvent.disableClickPropagation(button);
+    return button;
+  }
+});
+
+leafletState.centerBtn = new L.Control.Button();
 
 export { addToLeafletMap }
