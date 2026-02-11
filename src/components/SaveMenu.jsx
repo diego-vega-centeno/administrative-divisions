@@ -21,7 +21,7 @@ import logger from "../utils/logger.js";
 import Modal from '@mui/material/Modal';
 // import { getParentNames } from "../utils/addData.js";
 
-export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
+export default function SaveMenu({ open, onClose, onError, selectedNodes, getNodePath }) {
 
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [title, setTitle] = useState('');
@@ -40,7 +40,15 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
     setError('');
     setIsProgressIconActive(true);
     try {
-      const saveResponse = await saveLayerToDB(title, selectedNodes);
+      const formattedRels = selectedNodes.map(ele => (
+        {
+          relId: ele.id,
+          relName: ele.text,
+          adminLevel: ele.original.admin_level,
+          parentsNames: getNodePath(ele.id)
+        }
+      ))
+      const saveResponse = await saveLayerToDB(title, formattedRels);
     } catch (error) {
       logger.error(error);
       if (error?.code === 'duplicate_entry') {
@@ -100,16 +108,16 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes }) {
                 <TableCell align="center" sx={headerCell}>admin level</TableCell>
                 <TableCell align="center" sx={headerCell}>id</TableCell>
                 <TableCell align="center" sx={headerCell}>name</TableCell>
-                <TableCell align="center" sx={headerCell}>parents</TableCell>
+                <TableCell align="center" sx={headerCell}>parents names</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {selectedNodes.map((rel) => (
                 <TableRow key={rel.id}>
-                  <TableCell align="center" sx={tableCell}>{rel.admin_level}</TableCell>
+                  <TableCell align="center" sx={tableCell}>{rel.original.admin_level}</TableCell>
                   <TableCell align="center" sx={tableCell}>{rel.id}</TableCell>
                   <TableCell align="center" sx={tableCell}>{rel.text}</TableCell>
-                  {/* <TableCell align="center" sx={tableCell}>{getParentNames(rel.id)}</TableCell> */}
+                  <TableCell align="center" sx={tableCell}>{getNodePath(rel.id)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
