@@ -8,6 +8,11 @@ export default function SearchTreeResultList({ relations, onSelect }) {
 
   if (!relations || relations.length == 0) return null;
 
+  const getPathString = (path) => {
+    if (!path || path.length === 0) return '';
+    return path.map(p => p.text).join(' / ');
+  };
+
   return (
     <Box sx={listBox}>
       {relations.map(rel => (
@@ -15,9 +20,15 @@ export default function SearchTreeResultList({ relations, onSelect }) {
           sx={listItem} key={rel.id}
           onClick={() => onSelect(rel)}
         >
-          <ListItemText>
-            <Typography component={'span'}>{rel.text}</Typography>
-          </ListItemText>
+          <ListItemText
+            primary={rel.text}
+            secondary={getPathString(rel.path)}
+            secondaryTypographyProps={{
+              fontSize: '0.9rem',
+              color: 'black'
+            }}
+
+          />
         </ListItem>
       ))}
     </Box>
