@@ -65,8 +65,7 @@ export default function BarChart({ computedDataRels, config }) {
 
   useEffect(() => {
     const labels = computedDataRels.map(rel => {
-      // return dataIndex[rel.id].text
-      return 'dataIndex[rel.id].text'
+      return rel.name
     });
     const newData = {
       labels,
