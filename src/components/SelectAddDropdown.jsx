@@ -14,11 +14,13 @@ import DownloadMenu from './DownloadMenu.jsx';
 import SaveMenu from './SaveMenu.jsx';
 import { AuthContext } from './AuthContext.jsx';
 import logger from '../utils/logger.js';
+import SearchTreeResultList from './SearchTreeResultList.jsx';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
   const treeRef = useRef(null);
   const [searchInput, setSearchInput] = useState('');
+  const [searchResult, setSearchResult] = useState([]);
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState([]);
@@ -76,6 +78,8 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       );
       const data = await response.json();
       logger.info(`Search result length: ${data.data.length}`);
+
+      setSearchResult(data.data);
     } catch (error) {
       logger.error(`Failed to search relations: ${error.message}`)
     }
@@ -102,6 +106,10 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
             <FontAwesomeIcon icon={faSearch} />
           </Box>
         </Box>
+        <SearchTreeResultList
+          relations={searchResult}
+          onSelect={(rel) => logger.info(rel)}
+        />
         <Box sx={addTools}>
           <Button sx={addToolsButton}
             size='small'
