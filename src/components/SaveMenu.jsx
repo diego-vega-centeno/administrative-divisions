@@ -40,7 +40,15 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes, getNod
     setError('');
     setIsProgressIconActive(true);
     try {
-      const saveResponse = await saveLayerToDB(title, selectedNodes);
+      const formattedRels = selectedNodes.map(ele => (
+        {
+          relId: ele.id,
+          relName: ele.text,
+          adminLevel: ele.original.admin_level,
+          parentsNames: getNodePath(ele.id)
+        }
+      ))
+      const saveResponse = await saveLayerToDB(title, formattedRels);
     } catch (error) {
       logger.error(error);
       if (error?.code === 'duplicate_entry') {
