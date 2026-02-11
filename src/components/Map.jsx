@@ -44,10 +44,9 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
   }, [osmRels])
 
 
-  const addToMap = async (osmRels) => {
+  const addToMap = (osmRels) => {
     // add to map
-    const fakeOSMRes = { 'elements': osmRels };
-    await addToLeafletMap(fakeOSMRes, mapRef.current);
+    addToLeafletMap({ 'elements': osmRels }, mapRef.current);
     setIsProgressIconActive(false)
   }
 
