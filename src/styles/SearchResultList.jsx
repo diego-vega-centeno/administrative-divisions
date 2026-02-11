@@ -9,7 +9,8 @@ const listItem = {
 }
 
 const listBox = {
-  padding: '0.5rem 0'
+  maxHeight: '20rem',
+  overflowY: 'auto'
 }
 
 export {listItem, listBox}
