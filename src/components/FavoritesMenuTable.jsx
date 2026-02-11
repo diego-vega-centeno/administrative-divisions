@@ -173,7 +173,7 @@ export default function FavoritesMenuTable({
           <TableCell align="center" sx={subHeaderCell}>admin level</TableCell>
           <TableCell align="center" sx={subHeaderCell}>id</TableCell>
           <TableCell align="center" sx={subHeaderCell}>name</TableCell>
-          <TableCell align="center" sx={subHeaderCell}>parents</TableCell>
+          <TableCell align="center" sx={subHeaderCell}>parents names</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

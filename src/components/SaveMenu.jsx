@@ -108,7 +108,7 @@ export default function SaveMenu({ open, onClose, onError, selectedNodes, getNod
                 <TableCell align="center" sx={headerCell}>admin level</TableCell>
                 <TableCell align="center" sx={headerCell}>id</TableCell>
                 <TableCell align="center" sx={headerCell}>name</TableCell>
-                <TableCell align="center" sx={headerCell}>parents</TableCell>
+                <TableCell align="center" sx={headerCell}>parents names</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
