@@ -11,7 +11,7 @@ const leafletState = {
 
 /* main leaflet map creation */
 
-async function addToLeafletMap(osmBaseData, map) {
+function addToLeafletMap(osmBaseData, map) {
   // remove previous layer
   if (leafletState.geojsonLayer) {
     map.removeLayer(leafletState.geojsonLayer);
