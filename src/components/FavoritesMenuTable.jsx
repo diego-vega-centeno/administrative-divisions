@@ -194,12 +194,10 @@ export default function FavoritesMenuTable({
                   </Button>
                 )}
               </TableCell>
-              {/* <TableCell align="center" sx={tableCell}>{dataIndex[rel.osm_relation_id]['admin_level']}</TableCell> */}
+              <TableCell align="center" sx={tableCell}>{rel.admin_level}</TableCell>
               <TableCell align="center" sx={tableCell}>{rel.osm_relation_id}</TableCell>
               <TableCell align="center" sx={tableCell}>{rel.osm_relation_name}</TableCell>
-              {/* <TableCell align="center" sx={tableCell}>
-                {getParentNames(rel.osm_relation_id)}
-              </TableCell> */}
+              <TableCell align="center" sx={tableCell}>{rel.parents_names}</TableCell>
             </TableRow>
           )
         })}
