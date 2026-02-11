@@ -78,7 +78,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
           <TextField
             type="search"
             sx={searchField}
-            placeholder="filter..."
+            placeholder="search"
             value={filterInput}
             onChange={(e) => setFilterInput(e.target.value)}
             onKeyDown={(e) => {
