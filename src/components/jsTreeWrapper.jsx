@@ -59,13 +59,18 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
               // obj is the button object
               "action": function (obj) {
                 const tree = $(treeRef.current).jstree(true);
+
                 // manually open node instead of attaching events
                 tree.open_node(node, function () {
                   const updatedNode = tree.get_node(node.id);
-                  updatedNode.children.forEach(child => {
-                    tree.select_node(child);
-                  });
+                  // select all children
+                  tree.select_node(updatedNode.children, true)
+                  // deselect parent
                   tree.deselect_node(node.id);
+
+                  // we dont need a map because all children are selected
+                  // wont work if one is not selected
+                  onSelect(updatedNode.children.map(id => tree.get_node(id)))
                 });
               }
             },
