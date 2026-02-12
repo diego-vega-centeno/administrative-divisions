@@ -2,7 +2,6 @@ import ListItem from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import { listItem, listBox } from '../styles/SearchResultList';
-import Typography from "@mui/material/Typography";
 
 export default function SearchTreeResultList({ relations, onSelect }) {
 
