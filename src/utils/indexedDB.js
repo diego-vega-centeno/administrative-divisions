@@ -5,10 +5,26 @@ const DB_NAME = 'osm-cache';
 const DB_VERSION = 1;
 const STORE_NAME = 'relations';
 
+const isMobile = isDeviceMobile();
+
 const MAX_AGE_DAYS = 7; // days
-const MAX_OBJECTS_COUNT = navigator.userAgentData.mobile ? 100 : 200;
-const MAX_TOTAL_SIZE = navigator.userAgentData.mobile ? 50 : 100; // MB
+const MAX_OBJECTS_COUNT = isMobile ? 100 : 200;
+const MAX_TOTAL_SIZE = isMobile ? 50 : 100; // MB
 const MS_PER_DAY = 24 * 60 * 60 * 1000
+
+function isDeviceMobile() {
+  let isMobile = false;
+
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    isMobile = true;
+  }
+
+  if (!isMobile) {
+    isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+  }
+
+  return isMobile;
+}
 
 //* initialize database
 
