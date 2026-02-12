@@ -1,14 +1,6 @@
 import { useMemo, useState } from 'react';
-import { dropdownIcon } from '../styles/SearchDropdown.jsx';
-import { dropdown } from '../styles/OSMTagsDropDown.jsx';
 import styles from '../styles/OSMTagsDropDown.module.css'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import Box from '@mui/material/Box';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import logger from '../utils/logger.js';
 
 export default function TagsTable({ osmRel }) {
   if (!osmRel) return null;
