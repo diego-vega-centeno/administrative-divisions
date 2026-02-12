@@ -174,7 +174,7 @@ const chartsContainer = {
 
   display: 'grid',
   justifyContent: 'center',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 35vw))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 35vw))',
   gap: '2rem'
 }
 
