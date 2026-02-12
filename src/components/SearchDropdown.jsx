@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faX } from '@fortawesome/free-solid-svg-icons';
 import { dropdown, dropdownIcon } from '../styles/SearchDropdown';
 import { useState } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -8,11 +8,13 @@ import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { searchFieldBox, searchField, searchFieldIconBox, progressIcon } from '../styles/SearchDropdown';
+import {cancelButton} from '../styles/SelectAddDropdown.jsx';
 import TextField from '@mui/material/TextField';
 import { getNominatimSearch } from '../utils/nominatim.js';
 import SearchResultList from './SearchResultList.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import logger from "../utils/logger.js";
+import IconButton from '@mui/material/IconButton';
 
 export default function SearchDropdown({ text = '', onSelect, onError }) {
 
@@ -49,11 +51,26 @@ export default function SearchDropdown({ text = '', onSelect, onError }) {
       <Collapse in={isOpen}>
         <Box sx={searchFieldBox}>
           <TextField
-            type="search"
             sx={searchField} placeholder="search" variant="outlined"
             value={input} onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') { handleSearch(); }
+            }}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <IconButton
+                    size='small'
+                    sx={cancelButton}
+                    onClick={() => {
+                      setEntities([]);
+                      setInput('')
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faX} />
+                  </IconButton>
+                )
+              }
             }}
           />
           <Box sx={searchFieldIconBox} onClick={handleSearch}>
