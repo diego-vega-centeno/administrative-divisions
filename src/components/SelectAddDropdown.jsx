@@ -15,6 +15,8 @@ import SaveMenu from './SaveMenu.jsx';
 import { AuthContext } from './AuthContext.jsx';
 import logger from '../utils/logger.js';
 import SearchTreeResultList from './SearchTreeResultList.jsx';
+import CircularProgress from '@mui/material/CircularProgress';
+import { progressIcon } from '../styles/SearchDropdown';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
@@ -25,6 +27,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState([]);
   const { userData, setUserData, loading } = useContext(AuthContext);
+  const [isProgressIconActive, setIsProgressIconActive] = useState(false);
 
   function handlePlot() {
     if (!selectedNodes.length) {
@@ -72,6 +75,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   }
 
   async function handleSearch(searchInput) {
+    setIsProgressIconActive(true);
     try {
       const response = await fetch(
         import.meta.env.VITE_BACKEND_URL + `/search?q=${searchInput}`
@@ -80,6 +84,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       logger.info(`Search result length: ${data.data.length}`);
 
       setSearchResult(data.data);
+      setIsProgressIconActive(false);
     } catch (error) {
       logger.error(`Failed to search relations: ${error.message}`)
     }
@@ -106,6 +111,11 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
             <FontAwesomeIcon icon={faSearch} />
           </Box>
         </Box>
+        {isProgressIconActive && (
+          <Box sx={progressIcon}>
+            <CircularProgress thickness={8} size={30} />
+          </Box>
+        )}
         <SearchTreeResultList
           relations={searchResult}
           onSelect={(rel) => logger.info(rel)}
