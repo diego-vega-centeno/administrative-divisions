@@ -33,7 +33,11 @@ const searchFieldBox = {
   padding: '0.4rem 0',
   height: '3rem',
   backgroundColor: 'var(--color-primary)',
-  zIndex: '100'
+  zIndex: '100',
+  '& input.MuiInputBase-input::-webkit-search-cancel-button': {
+    fontSize: '1.1rem',
+    cursor:'pointer'
+  }
 }
 
 const searchField = {

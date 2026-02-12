@@ -102,7 +102,12 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
             sx={searchField}
             placeholder="search"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val == '') setSearchResult([]);
+
+              setSearchInput(e.target.value)
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSearch(searchInput);
             }}
