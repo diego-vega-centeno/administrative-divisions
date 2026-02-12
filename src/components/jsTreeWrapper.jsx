@@ -54,24 +54,29 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
         "select_node": false,
         "items": function (node) {
           return {
-            "childs": {
-              "label": "select immediate childs",
-              // obj is the button object
-              "action": function (obj) {
-                const tree = $(treeRef.current).jstree(true);
+            "select": {
+              "label": "Select",
+              "submenu": {
+                "childs": {
+                  "label": "Select immediate childs",
+                  // obj is the button object
+                  "action": function (obj) {
+                    const tree = $(treeRef.current).jstree(true);
 
-                // manually open node instead of attaching events
-                tree.open_node(node, function () {
-                  const updatedNode = tree.get_node(node.id);
-                  // select all children
-                  tree.select_node(updatedNode.children, true)
-                  // deselect parent
-                  tree.deselect_node(node.id);
+                    // manually open node instead of attaching events
+                    tree.open_node(node, function () {
+                      const updatedNode = tree.get_node(node.id);
+                      // select all children
+                      tree.select_node(updatedNode.children, true)
+                      // deselect parent
+                      tree.deselect_node(node.id);
 
-                  // we dont need a map because all children are selected
-                  // wont work if one is not selected
-                  onSelect(updatedNode.children.map(id => tree.get_node(id)))
-                });
+                      // we dont need a map because all children are selected
+                      // wont work if one is not selected
+                      onSelect(updatedNode.children.map(id => tree.get_node(id)))
+                    });
+                  }
+                }
               }
             },
             // "allChilds": {
@@ -93,7 +98,24 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
             //     }
             //     openNodeAndSelectChildren(node.id);
             //   }
-            // }
+            // },
+            "deselect": {
+              "label": "Deselect",
+              "submenu": {
+                "deselect-all": {
+                  "label": "Deselect all",
+                  "action": function (obj) {
+                    $(treeRef.current).jstree(true).deselect_all();
+                  }
+                }
+              }
+            },
+            "Close-all": {
+              "label": "Close all",
+              "action": function (obj) {
+                $(treeRef.current).jstree(true).close_all();
+              }
+            }
           }
         }
       }
