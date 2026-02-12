@@ -36,7 +36,7 @@ const searchFieldBox = {
   zIndex: '100',
   '& input.MuiInputBase-input::-webkit-search-cancel-button': {
     fontSize: '1.1rem',
-    cursor:'pointer'
+    cursor: 'pointer'
   }
 }
 
@@ -45,17 +45,18 @@ const searchField = {
   flex: '1',
   '& .MuiInputBase-input': {
     color: 'white',
-    padding: '.25rem .5rem',
+    padding: '0 .8rem',
     fontSize: '.9rem',
-    height: '100%'
+    height: '100%',
   },
   '& .MuiInputBase-root': {
-    height: '100%'
+    height: '100%',
+    borderRadius: '0'
   },
   '& input:-webkit-autofill': {
     WebkitBoxShadow: '0 0 0 1000px var(--color-secondary) inset',
     WebkitTextFillColor: 'white'
-  },
+  }
 }
 
 const searchFieldIconBox = {

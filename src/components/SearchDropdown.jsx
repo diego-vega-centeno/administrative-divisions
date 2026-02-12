@@ -8,7 +8,7 @@ import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { searchFieldBox, searchField, searchFieldIconBox, progressIcon } from '../styles/SearchDropdown';
-import {cancelButton} from '../styles/SelectAddDropdown.jsx';
+import { cancelButton } from '../styles/SelectAddDropdown.jsx';
 import TextField from '@mui/material/TextField';
 import { getNominatimSearch } from '../utils/nominatim.js';
 import SearchResultList from './SearchResultList.jsx';
@@ -51,8 +51,10 @@ export default function SearchDropdown({ text = '', onSelect, onError }) {
       <Collapse in={isOpen}>
         <Box sx={searchFieldBox}>
           <TextField
-            sx={searchField} placeholder="search" variant="outlined"
-            value={input} onChange={(e) => setInput(e.target.value)}
+            sx={searchField}
+            placeholder="search"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') { handleSearch(); }
             }}
