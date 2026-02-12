@@ -116,7 +116,10 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
       $(treeRef.current).jstree(true).search(filter);
     },
     getNodePath: (nodeId) => {
-      return $(treeRef.current).jstree(true).get_path(nodeId, ' / ');
+      let path = $(treeRef.current).jstree(true).get_path(nodeId, ' / ');
+      path = path.replace(/\/[^\/]+$/,'')
+      path = path.split('/').reverse().join(' / ');
+      return path;
     },
     tree: () => {
       return $(treeRef.current).jstree(true);
