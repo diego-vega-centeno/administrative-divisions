@@ -61,6 +61,7 @@ body {
   color: white !important;
   text-shadow: none !important;
   font-size: 0.9rem;
+  min-width: 10rem !important;
 }
 
 .vakata-context li>a:hover{
@@ -68,7 +69,17 @@ body {
 }
 
 .vakata-context{
+  background-color: var(--color-secondary) !important;
   padding: 0 !important;
+}
+
+.vakata-context ul{
+  background-color: var(--color-secondary) !important;
+  padding: 0 !important;
+}
+
+.vakata-context li > a.vakata-context-parent {
+  background-size: 1rem;
 }
 
 .jstree-context{
