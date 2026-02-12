@@ -7,9 +7,12 @@ import Box from '@mui/material/Box';
 import JsTreeWrapper from './jsTreeWrapper.jsx';
 import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
 import TextField from '@mui/material/TextField';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faX } from '@fortawesome/free-solid-svg-icons';
 import Button from '@mui/material/Button';
-import { addToolsButton, addTools, treeContainer, infoAddBox, addPanel } from '../styles/SelectAddDropdown.jsx';
+import {
+  addToolsButton, addTools, treeContainer, infoAddBox,
+  addPanel, cancelButton
+} from '../styles/SelectAddDropdown.jsx';
 import DownloadMenu from './DownloadMenu.jsx';
 import SaveMenu from './SaveMenu.jsx';
 import { AuthContext } from './AuthContext.jsx';
@@ -17,6 +20,7 @@ import logger from '../utils/logger.js';
 import SearchTreeResultList from './SearchTreeResultList.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressIcon } from '../styles/SearchDropdown';
+import IconButton from '@mui/material/IconButton';
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
@@ -98,7 +102,6 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       <Box sx={addPanel}>
         <Box sx={searchFieldBox}>
           <TextField
-            type="search"
             sx={searchField}
             placeholder="search"
             value={searchInput}
@@ -110,6 +113,22 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSearch(searchInput);
+            }}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <IconButton
+                    size='small'
+                    sx={cancelButton}
+                    onClick={() => {
+                      setSearchResult([]);
+                      setSearchInput('')
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faX} />
+                  </IconButton>
+                )
+              }
             }}
           />
           <Box sx={searchFieldIconBox} onClick={() => handleSearch(searchInput)}>

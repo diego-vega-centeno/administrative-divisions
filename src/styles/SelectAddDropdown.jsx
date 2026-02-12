@@ -37,4 +37,13 @@ const infoAddBox = {
   borderBottom: '1px solid black',
 }
 
-export { addToolsButton, addTools, treeContainer, infoAddBox, addPanel }
+const cancelButton = {
+  padding: 0,
+  fontSize: '0.8rem',
+  color: 'white',
+  '&:hover': {
+    color: 'grey'
+  }
+}
+
+export { addToolsButton, addTools, treeContainer, infoAddBox, addPanel, cancelButton }
