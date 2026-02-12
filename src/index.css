@@ -71,6 +71,7 @@ body {
 .vakata-context{
   background-color: var(--color-secondary) !important;
   padding: 0 !important;
+  z-index: 500;
 }
 
 .vakata-context ul{
