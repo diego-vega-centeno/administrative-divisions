@@ -30,6 +30,21 @@ async function getRelationsOSMData(ids, out = "geom") {
 function formatData(osmElems, params, selectedNodes) {
 
   if (params.format === 'geojson') {
+    // for geojson include jstree data but inside the tags prop
+    const jstreeDataIndex = {};
+    selectedNodes.forEach(ele => {
+      jstreeDataIndex[ele.id] = ele;
+    });
+
+    osmElems.forEach(ele => {
+      const parentID = jstreeDataIndex[ele.id].parent;
+      ele.tags.parent = parentID === '#' ? 0 : parseInt(parentID);
+      ele.tags.parents = jstreeDataIndex[ele.id].parents.map(id => {
+        return id === '#' ? 0 : parseInt(id);
+      });
+      ele.tags.children = jstreeDataIndex[ele.id].children.map(id => parseInt(id));
+    });
+
     return osmtogeojson({ "elements": osmElems });
   }
 
@@ -40,12 +55,12 @@ function formatData(osmElems, params, selectedNodes) {
   });
 
   osmElems.forEach(ele => {
-    const parentID = jstreeDataIndex[ele.id]['parent'];
-    ele['parent'] = parentID === '#' ? 0 : parseInt(parentID);
-    ele['parents'] = jstreeDataIndex[ele.id]['parents'].map(id => {
+    const parentID = jstreeDataIndex[ele.id].parent;
+    ele.parent = parentID === '#' ? 0 : parseInt(parentID);
+    ele.parents = jstreeDataIndex[ele.id].parents.map(id => {
       return id === '#' ? 0 : parseInt(id);
     });
-    ele['children'] = jstreeDataIndex[ele.id]['children'].map(id => parseInt(id));
+    ele.children = jstreeDataIndex[ele.id].children.map(id => parseInt(id));
   });
 
   // delete tags if checked
