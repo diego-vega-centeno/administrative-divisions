@@ -127,6 +127,8 @@ async function getStoreRelation(id) {
       if (request.result) {
         logger.info(`IndexedDB: Relation obtained: id = ${request.result.id}`);
       }
+      // storedAt for internal indexedDB management
+      delete request.result.storedAt;
       resolve(request.result);
     };
 
