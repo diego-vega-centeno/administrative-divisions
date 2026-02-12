@@ -47,9 +47,8 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   // }
 
   function handleReset() {
-    treeRef.current?.deselectAll();
-    treeRef.current?.filter('');
-    setFilterInput('');
+    treeRef.current?.tree().deselect_all();
+    treeRef.current?.tree().close_all();
   }
 
   function handleSelect(selected) {
