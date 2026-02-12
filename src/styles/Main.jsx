@@ -4,6 +4,7 @@ const progressMapIcon = {
   padding: '0.7rem 0',
   '& .MuiCircularProgress-root': {
     color: '#3F7251',
+    strokeLinecap: 'round'
   },
   position: 'absolute',
   zIndex: '1000'
@@ -15,6 +16,7 @@ const progressIcon = {
   padding: '0.7rem 0',
   '& .MuiCircularProgress-root': {
     color: '#3F7251',
+    strokeLinecap: 'round'
   }
 }
 
