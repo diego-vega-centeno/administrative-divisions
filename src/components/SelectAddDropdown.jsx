@@ -141,7 +141,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         )}
         <SearchTreeResultList
           relations={searchResult}
-          onSelect={(rel) => logger.info(rel)}
+          onSelect={(rel) => onPlotRequest([rel.id])}
         />
         <Box sx={addTools}>
           <Button sx={addToolsButton}
