@@ -10,7 +10,7 @@ export default function SearchTreeResultList({ relations, onSelect }) {
 
   const getPathString = (path) => {
     if (!path || path.length === 0) return '';
-    return path.map(p => p.text).join(' / ');
+    return path.join(' / ');
   };
 
   return (
