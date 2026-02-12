@@ -23,11 +23,12 @@ export default function SearchTreeResultList({ relations, onSelect }) {
           <ListItemText
             primary={rel.text}
             secondary={getPathString(rel.path)}
-            secondaryTypographyProps={{
-              fontSize: '0.9rem',
-              color: 'black'
+            slotProps={{
+              secondary: {
+                fontSize: '0.9rem',
+                color: 'black'
+              }
             }}
-
           />
         </ListItem>
       ))}
