@@ -109,9 +109,6 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
   }, []);
 
   useImperativeHandle(ref, () => ({
-    deselectAll: () => {
-      $(treeRef.current).jstree(true).deselect_all();
-    },
     getSelected: () => {
       return $(treeRef.current).jstree(true).get_selected(true);
     },
@@ -120,6 +117,9 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
     },
     getNodePath: (nodeId) => {
       return $(treeRef.current).jstree(true).get_path(nodeId, ' / ');
+    },
+    tree: () => {
+      return $(treeRef.current).jstree(true);
     }
   }));
 
