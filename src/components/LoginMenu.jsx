@@ -13,8 +13,8 @@ import logger from "../utils/logger.js";
 export default function LoginMenu({ open, onClose }) {
 
   const handleClick = () => {
-    const authUrl = import.meta.env.VITE_AUTH_URL;
-    if (!authUrl) logger.error('Missing VITE_AUTH_URL');
+    const authUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
+    if (!authUrl) logger.error('Missing VITE_GOOGLE_AUTH_URL');
     location.href = authUrl;
   }
 
