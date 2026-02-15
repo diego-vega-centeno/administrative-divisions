@@ -89,6 +89,33 @@ export default function Main() {
 
   }, [osmRels]);
 
+
+  //* fetch wikidata props
+  useEffect(() => {
+    if (!osmRels.length) return;
+
+    const osmIdsToWikidataIds = {};
+    osmRels.forEach(rel => {
+      osmIdsToWikidataIds[rel.id.toString()] = rel.tags.wikidata;
+    });
+
+    const wikidataIds = Object.values(osmIdsToWikidataIds);
+
+    setIsComputingIconActive(true);
+    const worker = new Worker(
+      new URL('../utils/fetchWikidataPropsWorker.js', import.meta.url),
+      { type: 'module' }
+    );
+    worker.postMessage(wikidataIds);
+    worker.onmessage = (e) => {
+      console.log(e.data);
+      setWikiDataIndex(e.data);
+      worker.terminate();
+    };
+
+    return () => worker.terminate();
+  }, [osmRels])
+
   return (
     <main className={styles.main}>
       <aside className={styles.aside}>
