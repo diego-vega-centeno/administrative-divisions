@@ -25,6 +25,7 @@ export default function Main() {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [computedDataRels, setComputedDataRels] = useState([]);
   const [isComputingIconActive, setIsComputingIconActive] = useState(false);
+  const [wikiDataIndex, setWikiDataIndex] = useState({})
 
   useEffect(() => {
     if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
@@ -70,7 +71,7 @@ export default function Main() {
 
     setIsComputingIconActive(true);
     const worker = new Worker(
-      new URL('../utils/worker.js', import.meta.url),
+      new URL('../utils/computePropsWorker.js', import.meta.url),
       { type: 'module' }
     );
     // send data
