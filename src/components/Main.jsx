@@ -95,12 +95,7 @@ export default function Main() {
   useEffect(() => {
     if (!osmRels.length) return;
 
-    const osmIdsToWikidataIds = {};
-    osmRels.forEach(rel => {
-      osmIdsToWikidataIds[rel.id.toString()] = rel.tags.wikidata;
-    });
-
-    const wikidataIds = Object.values(osmIdsToWikidataIds);
+    const wikidataIds = osmRels.map(rel => rel.tags.wikidata);
 
     setIsComputingIconActive(true);
     const worker = new Worker(
@@ -109,7 +104,11 @@ export default function Main() {
     );
     worker.postMessage(wikidataIds);
     worker.onmessage = (e) => {
-      setWikidataIndex(e.data);
+      const index = {};
+      osmRels.forEach(rel => {
+        index[rel.tags['name:en'] ?? rel.tags['alt_name:en'] ?? rel.tags['name']] = e.data[rel.tags.wikidata];
+      });
+      setWikidataIndex(index);
       worker.terminate();
     };
 
