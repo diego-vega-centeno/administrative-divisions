@@ -58,24 +58,24 @@ async function fetchWikidataIds(ids, dataIndex) {
     if (!grouped[id]) {
       grouped[id] = {
         timezone: row.timezoneLabel.value,
-        continent: row.continentLabel.value,
+        continent: row.continentLabel?.value,
         capital: row.capitalLabel.value,
-        officialName: [],
-        ethnicGroup: [],
-        officialLang: []
+        officialName: new Set(),
+        ethnicGroup: new Set(),
+        officialLang: new Set()
       }
     }
 
     if (row.officialName) {
-      grouped[id].officialName.push(row.officialName.value)
+      grouped[id].officialName.add(row.officialName.value)
     }
 
     if (row.ethnicGroupLabel) {
-      grouped[id].ethnicGroup.push(row.ethnicGroupLabel.value)
+      grouped[id].ethnicGroup.add(row.ethnicGroupLabel.value)
     }
 
     if (row.officialLangLabel) {
-      grouped[id].officialLang.push(row.officialLangLabel.value)
+      grouped[id].officialLang.add(row.officialLangLabel.value)
     }
   });
 
