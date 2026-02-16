@@ -25,7 +25,7 @@ const TagsSection = memo(({ osmRels }) => {
   return (
     <Box>
       <ListItem sx={tableContainerHeader}>
-        <ListItemText primary={"Selected divisions tags"} />
+        <ListItemText primary={"OpenStreetMap tags"} />
       </ListItem>
       <Box sx={tableContainerBody}>
         <Box>
