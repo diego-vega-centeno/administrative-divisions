@@ -4,25 +4,16 @@ import styles from '../styles/Main.module.css'
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faMapPin } from '@fortawesome/free-solid-svg-icons';
 
-// initial map state
-const leafletState = {
-  geojsonLayer: null,
-  highlightedLayer: null,
-  mapControl: null,
-  map: null,
-  centerBtn: null,
-};
-
 /* main leaflet map creation */
 
-function addToLeafletMap(osmBaseData, map) {
+function addToLeafletMap(osmBaseData, leafletState) {
 
-  leafletState.map = map;
-
-  // remove previous layer
-  if (leafletState.geojsonLayer) {
-    map.removeLayer(leafletState.geojsonLayer);
-  }
+  // remove previous layers except tile layers
+  leafletState.map.eachLayer(function (layer) {
+    if (!(layer instanceof L.TileLayer)) {
+      leafletState.map.removeLayer(layer);
+    }
+  });
 
   // create layer from geojson data
   leafletState.geojsonLayer = L.geoJSON(osmtogeojson(osmBaseData), {
@@ -30,22 +21,15 @@ function addToLeafletMap(osmBaseData, map) {
       return !(feature.id.includes('node'));
     },
     // custom tooltip
-    onEachFeature: onEachFeature,
-  });
-
-  // remove previous layers except tile layers
-  map.eachLayer(function (layer) {
-    if (!(layer instanceof L.TileLayer)) {
-      map.removeLayer(layer);
-    }
+    onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
   });
 
   // fit bounds to new layer
-  map.fitBounds(leafletState.geojsonLayer.getBounds());
+  leafletState.map.fitBounds(leafletState.geojsonLayer.getBounds());
 
   // check if tile layer exists, if not create one
   let tileLayer;
-  map.eachLayer(function (layer) {
+  leafletState.map.eachLayer(function (layer) {
     if (layer instanceof L.TileLayer) {
       tileLayer = layer;
     }
@@ -56,29 +40,21 @@ function addToLeafletMap(osmBaseData, map) {
       maxZoom: 15,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
-    tileLayer.addTo(map);
+    tileLayer.addTo(leafletState.map);
     leafletState.tileLayer = tileLayer;
   }
-  leafletState.geojsonLayer.addTo(map);
+  leafletState.geojsonLayer.addTo(leafletState.map);
 
-  // check and add control panel
+  // check if tags control panel was added, if not add it
   if (!leafletState.mapControl._map) {
-    leafletState.mapControl.addTo(map);
+    leafletState.mapControl.addTo(leafletState.map);
   }
 
-  // clearn content of control
+  // clear content of control
   leafletState.mapControl.div.innerHTML = "";
 
-  // unhighlight on click outside a feature
-  function handleMapClick(e) {
-    if (leafletState.highlightedLayer) {
-      leafletState.geojsonLayer.resetStyle(leafletState.highlightedLayer);
-      leafletState.highlightedLayer = null;
-      leafletState.mapControl.div.innerHTML = "";
-    }
-  }
-  map.off('click', handleMapClick);
-  map.on('click', handleMapClick);
+  leafletState.map.off('click', leafletState.handleMapClick);
+  leafletState.map.on('click', leafletState.handleMapClick);
 
 
   // add buttons
@@ -89,7 +65,7 @@ function addToLeafletMap(osmBaseData, map) {
 
 /* Custom tooltip function */
 
-function onEachFeature(feature, layer) {
+function onEachFeature(feature, layer, leafletState) {
 
   const id = feature.id || feature.properties?.id || '';
   const name = feature.properties?.['name:en'] ||
@@ -111,12 +87,12 @@ function onEachFeature(feature, layer) {
     'mouseover': function (e) {
       this.openTooltip();
     },
-    'click': highlightFeature
+    'click': (event) => highlightFeature(event, leafletState)
   });
 
 }
 
-function highlightFeature(event) {
+function highlightFeature(event, leafletState) {
 
   // stop event propagation to prevent map click
   L.DomEvent.stopPropagation(event);
@@ -137,28 +113,69 @@ function highlightFeature(event) {
   // update info panel
   const tags = layer.feature.properties;
   // custom function added to control object
-  leafletState.mapControl.updatePanel(tags, layer.feature.id);
+  leafletState.mapControl.updateTagsPanel(leafletState, tags, layer.feature.id);
 
 }
 
 
-/* map control panel */
+//* tags panel creation
 
-leafletState.mapControl = new L.Control();
-// create and return dom element container
-leafletState.mapControl.onAdd = function (map) {
-  this.div = L.DomUtil.create('div');
-  this.div.innerHTML = "";
-  // prevent map other click events
-  L.DomEvent.disableClickPropagation(this.div); // Handles mousedown, touchstart, dblclick, etc.
-  L.DomEvent.disableScrollPropagation(this.div); // Handles mousewheel
+function makeTagsPanel(leafletState) {
 
-  return this.div;
+  //* create instance and dom container
+  leafletState.mapControl = new L.Control();
+  // create and return dom element container
+  leafletState.mapControl.onAdd = function (map) {
+    this.div = L.DomUtil.create('div');
+    this.div.innerHTML = "";
+    // prevent map other click events
+    L.DomEvent.disableClickPropagation(this.div); // Handles mousedown, touchstart, dblclick, etc.
+    L.DomEvent.disableScrollPropagation(this.div); // Handles mousewheel
+
+    return this.div;
+  }
+
+  //* handle the update of the control panel with new tags and id
+  leafletState.mapControl.updateTagsPanel = updateTagsPanel;
+}
+
+//* center button creation
+
+// class creation
+L.Control.Button = L.Control.extend({
+  options: {
+    position: 'topleft',
+    leafletState: null
+  },
+  onAdd: function (map) {
+    const button = L.DomUtil.create('button', 'leaflet-btn');
+    const svgFaMapPin = icon(faMapPin).html[0];
+    button.innerHTML = `<div class="${styles['leaflet-btn']}">${svgFaMapPin}</div>`;
+
+    button.onclick = () => {
+      const state = this.options.leafletState;
+      if (state.geojsonLayer) {
+        state.map.fitBounds(state.geojsonLayer.getBounds());
+      }
+    }
+
+    L.DomEvent.disableClickPropagation(button);
+    return button;
+  }
+})
+
+// create button instance
+function creatCenterButton(leafletState) {
+  // create center button instance and add to leafletState
+  leafletState.centerBtn = new L.Control.Button({ leafletState });
 }
 
 
-// handle the update of the control panel with new tags and id
-leafletState.mapControl.updatePanel = function (tags, id) {
+
+//* utility functions
+
+//* update tags panel
+function updateTagsPanel(leafletState, tags, id) {
 
   let rows = "";
   const tagsToUse = ["admin_level", "name:en", "name", "population", "population:date", "wikipedia", "wikidata"];
@@ -209,7 +226,8 @@ leafletState.mapControl.updatePanel = function (tags, id) {
     `;
 
   //* button to hide table
-  const btn = document.getElementById('btn-toggle');
+  const btn = leafletState.mapControl.div.querySelector('#btn-toggle');
+  const table = leafletState.mapControl.div.querySelector('#leaflet-control-table');
   // previous listener is gone because button is destroyed by using innerHTML
 
   // disable other mouse events
@@ -217,13 +235,11 @@ leafletState.mapControl.updatePanel = function (tags, id) {
   L.DomEvent.disableScrollPropagation(btn);
 
   // add new event listener
-  L.DomEvent.on(btn, 'click', buttonClickHandler);
-
+  L.DomEvent.on(btn, 'click', () => buttonClickHandler(table, btn));
 }
 
-function buttonClickHandler() {
-  const table = document.getElementById('leaflet-control-table');
-  const btn = document.getElementById('btn-toggle');
+//* toggle tags panel
+function buttonClickHandler(table, btn) {
 
   if (table.style.display !== 'none') {
     table.style.display = 'none'
@@ -232,31 +248,8 @@ function buttonClickHandler() {
   } else {
     table.style.display = 'table';
     btn.innerText = '➖'  // expanded
-
   }
-
 }
 
-//* custom button
-L.Control.Button = L.Control.extend({
-  options: {
-    position: 'topleft'
-  },
-  onAdd: function (map) {
-    const button = L.DomUtil.create('button', 'leaflet-btn');
-    console.log();
-    const svgFaMapPin = icon(faMapPin).html[0];
-    button.innerHTML = `<div class="${styles['leaflet-btn']}">${svgFaMapPin}</div>`;
 
-    button.onclick = function () {
-      leafletState.map.fitBounds(leafletState.geojsonLayer.getBounds());
-    }
-
-    L.DomEvent.disableClickPropagation(button);
-    return button;
-  }
-});
-
-leafletState.centerBtn = new L.Control.Button();
-
-export { addToLeafletMap }
+export { addToLeafletMap, makeTagsPanel, creatCenterButton }
