@@ -12,6 +12,7 @@ import BarChart from './charts/BarChart.jsx';
 export default function ChartsSection({ computedDataRels, isComputingIconActive }) {
 
   if (!computedDataRels.length && !isComputingIconActive) return null;
+  const labels = computedDataRels.map(rel => rel.name);
 
   return (
     isComputingIconActive ? (
@@ -31,9 +32,9 @@ export default function ChartsSection({ computedDataRels, isComputingIconActive 
         <Box sx={chartsContainer}>
           <Box sx={chartContainer}>
             <BarChart
-              computedDataRels={computedDataRels}
+              chartData={computedDataRels.map(rel => parseInt(rel['population']))}
+              labels={labels}
               config={{
-                prop: 'population',
                 title: 'population',
                 color: 'rgba(30, 136, 229, 0.8)'
               }}
@@ -41,9 +42,9 @@ export default function ChartsSection({ computedDataRels, isComputingIconActive 
           </Box>
           <Box sx={chartContainer}>
             <BarChart
-              computedDataRels={computedDataRels}
+              chartData={computedDataRels.map(rel => parseInt(rel['area']))}
+              labels={labels}
               config={{
-                prop: 'area',
                 title: 'area',
                 color: 'rgba(233, 237, 22, 0.8)'
               }}
@@ -51,9 +52,9 @@ export default function ChartsSection({ computedDataRels, isComputingIconActive 
           </Box>
           <Box sx={chartContainer}>
             <BarChart
-              computedDataRels={computedDataRels}
+              chartData={computedDataRels.map(rel => parseInt(rel['popDensity']))}
+              labels={labels}
               config={{
-                prop: 'popDensity',
                 title: 'population density',
                 color: 'rgba(233, 237, 22, 0.8)'
               }}
