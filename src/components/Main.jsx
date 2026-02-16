@@ -14,6 +14,7 @@ import { getRelationsDataWithCache } from '../utils/overpass';
 import { profileSize } from '../utils/overpass';
 import DataTable from './DataTable.jsx';
 import ChartsSection from './ChartsSection.jsx';
+import WikidataSection from './WikidataSection.jsx';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -25,7 +26,7 @@ export default function Main() {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [computedDataRels, setComputedDataRels] = useState([]);
   const [isComputingIconActive, setIsComputingIconActive] = useState(false);
-  const [wikiDataIndex, setWikiDataIndex] = useState({})
+  const [wikidataIndex, setWikidataIndex] = useState({})
 
   useEffect(() => {
     if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
@@ -108,8 +109,7 @@ export default function Main() {
     );
     worker.postMessage(wikidataIds);
     worker.onmessage = (e) => {
-      console.log(e.data);
-      setWikiDataIndex(e.data);
+      setWikidataIndex(e.data);
       worker.terminate();
     };
 
@@ -149,6 +149,10 @@ export default function Main() {
           />
           <ChartsSection
             computedDataRels={computedDataRels}
+            isComputingIconActive={isComputingIconActive}
+          />
+          <WikidataSection
+            wikidataIndex={wikidataIndex}
             isComputingIconActive={isComputingIconActive}
           />
         </div>
