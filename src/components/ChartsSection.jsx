@@ -8,8 +8,9 @@ import { chartsContainer, chartContainer } from '../styles/Menu.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressIcon } from '../styles/Main.jsx';
 import BarChart from './charts/BarChart.jsx';
+import { memo } from 'react';
 
-export default function ChartsSection({ computedDataRels, isComputingIconActive }) {
+const ChartsSection = memo(({ computedDataRels, isComputingIconActive }) => {
 
   if (!computedDataRels.length && !isComputingIconActive) return null;
   const labels = computedDataRels.map(rel => rel.name);
@@ -67,4 +68,6 @@ export default function ChartsSection({ computedDataRels, isComputingIconActive 
       </Box>
     )
   )
-}
+})
+
+export default ChartsSection;
