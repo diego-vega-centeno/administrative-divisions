@@ -21,6 +21,8 @@ const WikidataSection = memo(({ wikidataIndex, isComputingIconActive }) => {
     };
   }, [wikidataIndex]);
 
+  if (!Object.keys(wikidataIndex).length && !isComputingIconActive) return null;
+
   return (
     isComputingIconActive ? (
       <Box >
