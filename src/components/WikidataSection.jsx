@@ -10,6 +10,7 @@ import { useState, useEffect, memo } from 'react';
 import Table from './Table.jsx';
 import { progressIcon } from '../styles/Main.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
+import BarChart from './charts/BarChart.jsx';
 
 const WikidataSection = memo(({ wikidataIndex, isFetchingIconActive }) => {
 
@@ -56,6 +57,20 @@ const WikidataSection = memo(({ wikidataIndex, isFetchingIconActive }) => {
           </Box>
           <Box>
             <Table selectedIdMap={selectedIdMap} />
+            <Box sx={{width: '80%', padding:'3rem 2rem'}}>
+              <BarChart
+                chartData={selectedIdMap['populationTS'] ?
+                  selectedIdMap['populationTS'].map(point => ({ x: point.date, y: point.pop }))
+                  :
+                  []
+                }
+                labels={Object.keys(wikidataIndex)}
+                config={{
+                  title: 'population',
+                  color: 'rgba(30, 136, 229, 0.8)'
+                }}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
