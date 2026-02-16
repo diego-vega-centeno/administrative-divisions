@@ -19,7 +19,7 @@ const ChartsSection = memo(({ computedDataRels, isComputingIconActive }) => {
     isComputingIconActive ? (
       <Box >
         <ListItem sx={tableContainerHeader}>
-          <ListItemText primary={"Compare table"} />
+          <ListItemText primary={"Compare charts"} />
         </ListItem>
         <Box sx={progressIcon}>
           <CircularProgress thickness={9} size={70} />
@@ -28,7 +28,7 @@ const ChartsSection = memo(({ computedDataRels, isComputingIconActive }) => {
     ) : (
       <Box>
         <ListItem sx={tableContainerHeader}>
-          <ListItemText primary={"Charts"} />
+          <ListItemText primary={"Compare charts"} />
         </ListItem>
         <Box sx={chartsContainer}>
           <Box sx={chartContainer}>
