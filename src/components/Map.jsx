@@ -4,13 +4,31 @@ import L from 'leaflet';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
-import { addToLeafletMap } from '../utils/leafletMap.js';
+import { addToLeafletMap, makeTagsPanel, creatCenterButton } from '../utils/leafletMap.js';
 import logger from '../utils/logger.js';
 
 const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconActive }) => {
   const mapContainerRef = useRef(null); // will hold map container dom element
   const mapRef = useRef(null); // will hold map instance from leaflet
 
+  const leafletStateRef = useRef({
+    tileLayer: null,
+    geojsonLayer: null,
+    highlightedLayer: null,
+    mapControl: null,
+    map: null,
+    centerBtn: null,
+    handleMapClick: (e) => {
+      if (leafletStateRef.current.highlightedLayer) {
+        // unhighlight on click outside a feature
+        leafletStateRef.current.geojsonLayer.resetStyle(leafletStateRef.current.highlightedLayer);
+        leafletStateRef.current.highlightedLayer = null;
+        leafletStateRef.current.mapControl.div.innerHTML = "";
+      }
+    }
+  });
+
+  // this effect should be before others so leafletState.current.map gets populated
   useEffect(() => {
     // exist if container doesn't exist
     // exitst if map object already exist
@@ -24,6 +42,13 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
 
     // check change in dimension just in case, lol
     mapRef.current.invalidateSize();
+
+    // set leafletState map
+    leafletStateRef.current.map = mapRef.current;
+    // set tag control panel
+    makeTagsPanel(leafletStateRef.current);
+    // set center button
+    creatCenterButton(leafletStateRef.current)
 
     // destroy map on unmount
     return () => {
@@ -46,7 +71,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
 
   const addToMap = (osmRels) => {
     // add to map
-    addToLeafletMap({ 'elements': osmRels }, mapRef.current);
+    addToLeafletMap({ 'elements': osmRels }, leafletStateRef.current);
     setIsProgressIconActive(false)
   }
 
