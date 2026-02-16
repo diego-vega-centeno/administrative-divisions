@@ -27,7 +27,7 @@ async function fetchWikidataIds(ids, dataIndex) {
 
     SELECT ?item ?timezoneLabel ?officialName ?ethnicGroupLabel 
     ?officialLangLabel ?continentLabel ?capitalLabel ?languageLabel ?area
-    ?ISO3166_2 WHERE {
+    ?ISO3166_2 ?FIPS WHERE {
         VALUES ?item {${ids.map(id => 'wd:' + id).join(' ')}}
         OPTIONAL {?item wdt:P421 ?timezone .}
         OPTIONAL {?item wdt:P1448 ?officialName .}
@@ -38,6 +38,7 @@ async function fetchWikidataIds(ids, dataIndex) {
         OPTIONAL {?item wdt:P2936 ?language .}
         OPTIONAL {?item wdt:P2046 ?area .}
         OPTIONAL {?item wdt:P300 ?ISO3166_2 .}
+        OPTIONAL {?item wdt:P901 ?FIPS .}
         SERVICE wikibase:label {
             bd:serviceParam wikibase:language "en" .
         }
@@ -61,11 +62,12 @@ async function fetchWikidataIds(ids, dataIndex) {
     // initialize with single value props
     if (!grouped[id]) {
       grouped[id] = {
-        timezone: row.timezoneLabel.value,
+        timezone: row.timezoneLabel?.value,
         continent: row.continentLabel?.value,
-        capital: row.capitalLabel.value,
-        area: row.area.value,
-        ISO3166_2: row.ISO3166_2.value,
+        capital: row.capitalLabel?.value,
+        area: row.area?.value,
+        ISO3166_2: row.ISO3166_2?.value,
+        FIPS: row.FIPS?.value,
         officialName: new Set(),
         ethnicGroup: new Set(),
         officialLang: new Set(),
