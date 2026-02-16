@@ -1,14 +1,23 @@
 
+// const endpoint = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql'
+const endpoint = 'https://query.wikidata.org/sparql'
+
 self.onmessage = async (e) => {
   const ids = e.data;
+  const index = {}
 
-  const rows = await fetchWikidataIds(e.data);
+  const propsIndex = await fetchWikidataIds(e.data);
+  const tsIndex = await fetchWikidataTS(e.data);
 
-  self.postMessage(rows);
+  for (const id of ids) {
+    index[id] = { ...propsIndex[id], ...tsIndex[id] }
+  }
+
+  self.postMessage(index);
 };
 
 
-async function fetchWikidataIds(ids) {
+async function fetchWikidataIds(ids, dataIndex) {
   const query = `
     PREFIX wd: <http://www.wikidata.org/entity/>
     PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -16,16 +25,15 @@ async function fetchWikidataIds(ids) {
     PREFIX wikibase: <http://wikiba.se/ontology#>
 
 
-    SELECT ?item ?timezoneLabel ?pop ?date WHERE {
+    SELECT ?item ?timezoneLabel ?officialName ?ethnicGroupLabel 
+    ?officialLangLabel ?continentLabel ?capitalLabel WHERE {
         VALUES ?item {${ids.map(id => 'wd:' + id).join(' ')}}
-
         OPTIONAL {?item wdt:P421 ?timezone .}
-        OPTIONAL { 
-          ?item p:P1082 ?statementNode .
-          ?statementNode ps:P1082 ?pop .
-          ?statementNode pq:P585 ?date .
-        } 
-
+        OPTIONAL {?item wdt:P1448 ?officialName .}
+        OPTIONAL {?item wdt:P172 ?ethnicGroup .}
+        OPTIONAL {?item wdt:P37 ?officialLang .}
+        OPTIONAL {?item wdt:P30 ?continent .}
+        OPTIONAL {?item wdt:P36 ?capital .}
         SERVICE wikibase:label {
             bd:serviceParam wikibase:language "en" .
         }
@@ -33,8 +41,68 @@ async function fetchWikidataIds(ids) {
     ORDER BY ?item
   `
 
-  // const endpoint = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql'
-  const endpoint = 'https://query.wikidata.org/sparql'
+  const response = await fetch(`${endpoint}?query=${encodeURIComponent(query)}&format=json`, {
+    headers: {
+      'Accept': 'application/sparql-results+json',
+    }
+  });
+
+  const rows = (await response.json()).results.bindings;
+  const grouped = {};
+
+  rows.forEach(row => {
+
+    const id = row.item.value.replace('http://www.wikidata.org/entity/', '');
+
+    // initialize with single value props
+    if (!grouped[id]) {
+      grouped[id] = {
+        timezone: row.timezoneLabel.value,
+        continent: row.continentLabel.value,
+        capital: row.capitalLabel.value,
+        officialName: [],
+        ethnicGroup: [],
+        officialLang: []
+      }
+    }
+
+    if (row.officialName) {
+      grouped[id].officialName.push(row.officialName.value)
+    }
+
+    if (row.ethnicGroupLabel) {
+      grouped[id].ethnicGroup.push(row.ethnicGroupLabel.value)
+    }
+
+    if (row.officialLangLabel) {
+      grouped[id].officialLang.push(row.officialLangLabel.value)
+    }
+  });
+
+  return grouped;
+}
+
+async function fetchWikidataTS(ids) {
+  const query = `
+    PREFIX wd: <http://www.wikidata.org/entity/>
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    PREFIX bd: <http://www.bigdata.com/rdf#>
+    PREFIX wikibase: <http://wikiba.se/ontology#>
+
+
+    SELECT ?item ?pop ?date WHERE {
+        VALUES ?item {${ids.map(id => 'wd:' + id).join(' ')}}
+
+        ?item p:P1082 ?statementNode .
+        ?statementNode ps:P1082 ?pop .
+        ?statementNode pq:P585 ?date .
+
+        SERVICE wikibase:label {
+            bd:serviceParam wikibase:language "en" .
+        }
+    }
+    ORDER BY ?item
+  `
   const response = await fetch(`${endpoint}?query=${encodeURIComponent(query)}&format=json`, {
     headers: {
       'Accept': 'application/sparql-results+json',
@@ -52,15 +120,12 @@ async function fetchWikidataIds(ids) {
     // initialize with single value props
     if (!grouped[id]) {
       grouped[id] = {
-        timezone: row.timezoneLabel.value,
         populationTS: []
       }
     }
 
-    // make population time series
     if (row.pop) {
       grouped[id].populationTS.push({
-        // date: (new Date(row.date.value)).toLocaleDateString('en-GB'),
         date: new Date(row.date.value),
         pop: parseInt(row.pop.value)
       })
