@@ -10,7 +10,7 @@ export default function Table({ selectedIdMap }) {
               if (key === 'populationTS') return null;
               let displayValue = value;
 
-              if (['ethnicGroup', 'officialLang', 'officialName'].includes(key)) {
+              if (['ethnicGroup', 'officialLang', 'officialName', 'language'].includes(key)) {
                 if (!value.size) {
                   displayValue = '--'
                 } else {
