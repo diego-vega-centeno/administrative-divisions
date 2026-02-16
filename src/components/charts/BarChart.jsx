@@ -20,8 +20,8 @@ ChartJS.register(
   Legend
 );
 
-export default function BarChart({ computedDataRels, config }) {
-  const [data, setData] = useState({ labels: [], datasets: [] });
+export default function BarChart({ chartData, labels, config }) {
+  const [data, setData] = useState({ datasets: [] });
 
   const options = {
     responsive: true,
@@ -64,15 +64,11 @@ export default function BarChart({ computedDataRels, config }) {
 
 
   useEffect(() => {
-    const labels = computedDataRels.map(rel => {
-      return rel.name
-    });
     const newData = {
-      labels,
       datasets: [
         {
           label: config.title,
-          data: computedDataRels.map(rel => parseInt(rel[config.prop])),
+          data: chartData,
           backgroundColor: config.color,
           borderColor: 'rgb(33 37 41)',
           borderWidth: 2,
@@ -80,8 +76,10 @@ export default function BarChart({ computedDataRels, config }) {
       ],
     };
 
+    if (config.type === 'compare') newData.labels = labels;
+
     setData(newData);
-  }, [computedDataRels])
+  }, [chartData])
 
 
   return (

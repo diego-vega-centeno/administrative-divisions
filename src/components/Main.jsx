@@ -14,6 +14,7 @@ import { getRelationsDataWithCache } from '../utils/overpass';
 import { profileSize } from '../utils/overpass';
 import DataTable from './DataTable.jsx';
 import ChartsSection from './ChartsSection.jsx';
+import WikidataSection from './WikidataSection.jsx';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -25,7 +26,8 @@ export default function Main() {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [computedDataRels, setComputedDataRels] = useState([]);
   const [isComputingIconActive, setIsComputingIconActive] = useState(false);
-  const [wikiDataIndex, setWikiDataIndex] = useState({})
+  const [isFetchingIconActive, setIsFetchingIconActive] = useState(false);
+  const [wikidataIndex, setWikidataIndex] = useState({})
 
   useEffect(() => {
     if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
@@ -89,6 +91,32 @@ export default function Main() {
 
   }, [osmRels]);
 
+
+  //* fetch wikidata props
+  useEffect(() => {
+    if (!osmRels.length) return;
+
+    const wikidataIds = osmRels.map(rel => rel.tags.wikidata);
+
+    setIsFetchingIconActive(true);
+    const worker = new Worker(
+      new URL('../utils/fetchWikidataPropsWorker.js', import.meta.url),
+      { type: 'module' }
+    );
+    worker.postMessage(wikidataIds);
+    worker.onmessage = (e) => {
+      const index = {};
+      osmRels.forEach(rel => {
+        index[rel.tags['name:en'] ?? rel.tags['alt_name:en'] ?? rel.tags['name']] = e.data[rel.tags.wikidata];
+      });
+      setWikidataIndex(index);
+      setIsFetchingIconActive(false)
+      worker.terminate();
+    };
+
+    return () => worker.terminate();
+  }, [osmRels])
+
   return (
     <main className={styles.main}>
       <aside className={styles.aside}>
@@ -123,6 +151,10 @@ export default function Main() {
           <ChartsSection
             computedDataRels={computedDataRels}
             isComputingIconActive={isComputingIconActive}
+          />
+          <WikidataSection
+            wikidataIndex={wikidataIndex}
+            isFetchingIconActive={isFetchingIconActive}
           />
         </div>
         <Footer />
