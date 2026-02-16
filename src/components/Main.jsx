@@ -26,6 +26,7 @@ export default function Main() {
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [computedDataRels, setComputedDataRels] = useState([]);
   const [isComputingIconActive, setIsComputingIconActive] = useState(false);
+  const [isFetchingIconActive, setIsFetchingIconActive] = useState(false);
   const [wikidataIndex, setWikidataIndex] = useState({})
 
   useEffect(() => {
@@ -97,7 +98,7 @@ export default function Main() {
 
     const wikidataIds = osmRels.map(rel => rel.tags.wikidata);
 
-    setIsComputingIconActive(true);
+    setIsFetchingIconActive(true);
     const worker = new Worker(
       new URL('../utils/fetchWikidataPropsWorker.js', import.meta.url),
       { type: 'module' }
@@ -109,6 +110,7 @@ export default function Main() {
         index[rel.tags['name:en'] ?? rel.tags['alt_name:en'] ?? rel.tags['name']] = e.data[rel.tags.wikidata];
       });
       setWikidataIndex(index);
+      setIsFetchingIconActive(false)
       worker.terminate();
     };
 
@@ -152,7 +154,7 @@ export default function Main() {
           />
           <WikidataSection
             wikidataIndex={wikidataIndex}
-            isComputingIconActive={isComputingIconActive}
+            isFetchingIconActive={isFetchingIconActive}
           />
         </div>
         <Footer />

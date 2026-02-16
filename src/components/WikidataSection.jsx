@@ -11,7 +11,7 @@ import Table from './Table.jsx';
 import { progressIcon } from '../styles/Main.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const WikidataSection = memo(({ wikidataIndex, isComputingIconActive }) => {
+const WikidataSection = memo(({ wikidataIndex, isFetchingIconActive }) => {
 
   const [selectedIdMap, setSelectedIdMap] = useState({});
 
@@ -21,13 +21,13 @@ const WikidataSection = memo(({ wikidataIndex, isComputingIconActive }) => {
     };
   }, [wikidataIndex]);
 
-  if (!Object.keys(wikidataIndex).length && !isComputingIconActive) return null;
+  if (!Object.keys(wikidataIndex).length && !isFetchingIconActive) return null;
 
   return (
-    isComputingIconActive ? (
+    isFetchingIconActive ? (
       <Box >
         <ListItem sx={tableContainerHeader}>
-          <ListItemText primary={"Compare table"} />
+          <ListItemText primary={"Wikidata information"} />
         </ListItem>
         <Box sx={progressIcon}>
           <CircularProgress thickness={9} size={70} />
