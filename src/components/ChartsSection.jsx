@@ -35,6 +35,7 @@ export default function ChartsSection({ computedDataRels, isComputingIconActive 
               chartData={computedDataRels.map(rel => parseInt(rel['population']))}
               labels={labels}
               config={{
+                type: 'compare',
                 title: 'population',
                 color: 'rgba(30, 136, 229, 0.8)'
               }}
@@ -45,6 +46,7 @@ export default function ChartsSection({ computedDataRels, isComputingIconActive 
               chartData={computedDataRels.map(rel => parseInt(rel['area']))}
               labels={labels}
               config={{
+                type: 'compare',
                 title: 'area',
                 color: 'rgba(233, 237, 22, 0.8)'
               }}
@@ -55,6 +57,7 @@ export default function ChartsSection({ computedDataRels, isComputingIconActive 
               chartData={computedDataRels.map(rel => parseInt(rel['popDensity']))}
               labels={labels}
               config={{
+                type: 'compare',
                 title: 'population density',
                 color: 'rgba(233, 237, 22, 0.8)'
               }}

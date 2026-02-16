@@ -21,8 +21,7 @@ ChartJS.register(
 );
 
 export default function BarChart({ chartData, labels, config }) {
-
-  const [data, setData] = useState({ labels: [], datasets: [] });
+  const [data, setData] = useState({ datasets: [] });
 
   const options = {
     responsive: true,
@@ -66,7 +65,6 @@ export default function BarChart({ chartData, labels, config }) {
 
   useEffect(() => {
     const newData = {
-      labels,
       datasets: [
         {
           label: config.title,
@@ -77,6 +75,8 @@ export default function BarChart({ chartData, labels, config }) {
         }
       ],
     };
+
+    if (config.type === 'compare') newData.labels = labels;
 
     setData(newData);
   }, [chartData])
