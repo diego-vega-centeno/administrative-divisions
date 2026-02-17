@@ -31,21 +31,13 @@ function addToLeafletMap(osmBaseData, leafletState) {
   // fit bounds to new layer
   leafletState.map.fitBounds(leafletState.geojsonLayer.getBounds());
 
-  // check if tile layer exists, if not create one
-  let tileLayer;
-  leafletState.map.eachLayer(function (layer) {
-    if (layer instanceof L.TileLayer) {
-      tileLayer = layer;
-    }
-  });
 
-  if (!tileLayer) {
-    tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  if (!leafletState.tileLayer) {
+    // save tile layer of leaflet state
+    leafletState.tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 15,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    });
-    tileLayer.addTo(leafletState.map);
-    leafletState.tileLayer = tileLayer;
+    }).addTo(leafletState.map);
   }
   leafletState.geojsonLayer.addTo(leafletState.map);
 
