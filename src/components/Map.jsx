@@ -12,7 +12,8 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
 
   const leafletStateRef = useRef({
     tileLayer: null,
-    geojsonLayer: null,
+    baseLayer: null,
+    choroplethLayer: null,
     highlightedLayer: null,
     mapControl: null,
     map: null,
@@ -20,7 +21,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
     handleMapClick: (e) => {
       if (leafletStateRef.current.highlightedLayer) {
         // unhighlight on click outside a feature
-        leafletStateRef.current.geojsonLayer.resetStyle(leafletStateRef.current.highlightedLayer);
+        leafletStateRef.current.baseLayer.resetStyle(leafletStateRef.current.highlightedLayer);
         leafletStateRef.current.highlightedLayer = null;
         leafletStateRef.current.mapControl.div.innerHTML = "";
       }

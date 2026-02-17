@@ -10,28 +10,14 @@ import { onEachFeature } from './leafletUtilities';
 
 function addToLeafletMap(osmBaseData, leafletState) {
 
-  // remove previous layers except tile layers
+  //* remove previous layers except tile layers
   leafletState.map.eachLayer(function (layer) {
     if (!(layer instanceof L.TileLayer)) {
       leafletState.map.removeLayer(layer);
     }
   });
 
-  // create layer from geojson data
-  // leafletState.geojsonLayer = L.geoJSON(osmtogeojson(osmBaseData), {
-  //   filter: function (feature, layer) {
-  //     return !(feature.id.includes('node'));
-  //   },
-  //   // custom tooltip
-  //   onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
-  // });
-
-  leafletState.geojsonLayer = createChoroplethLayer(L, leafletState, osmBaseData)
-
-  // fit bounds to new layer
-  leafletState.map.fitBounds(leafletState.geojsonLayer.getBounds());
-
-
+  //* base tile layer
   if (!leafletState.tileLayer) {
     // save tile layer of leaflet state
     leafletState.tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -39,21 +25,34 @@ function addToLeafletMap(osmBaseData, leafletState) {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(leafletState.map);
   }
-  leafletState.geojsonLayer.addTo(leafletState.map);
 
-  // check if tags control panel was added, if not add it
+  //* base layer
+  leafletState.baseLayer = L.geoJSON(osmtogeojson(osmBaseData), {
+    filter: (feature) => !feature.id.includes('node'),
+    // custom tooltip
+    onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
+  });
+
+  //* Choropleth layer
+  // leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, osmBaseData)
+
+  //* add layers
+  leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
+  leafletState.baseLayer.addTo(leafletState.map);
+
+  //* check if tags control panel was added, if not add it
   if (!leafletState.mapControl._map) {
     leafletState.mapControl.addTo(leafletState.map);
   }
 
-  // clear content of control
+  //* clear content of control
   leafletState.mapControl.div.innerHTML = "";
 
   leafletState.map.off('click', leafletState.handleMapClick);
   leafletState.map.on('click', leafletState.handleMapClick);
 
 
-  // add buttons
+  //* add buttons
   if (!leafletState.centerBtn._map) {
     leafletState.centerBtn.addTo(leafletState.map);
   }
@@ -97,8 +96,8 @@ L.Control.Button = L.Control.extend({
 
     button.onclick = () => {
       const state = this.options.leafletState;
-      if (state.geojsonLayer) {
-        state.map.fitBounds(state.geojsonLayer.getBounds());
+      if (state.baseLayer) {
+        state.map.fitBounds(state.baseLayer.getBounds());
       }
     }
 
