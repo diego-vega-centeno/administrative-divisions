@@ -3,14 +3,9 @@ import osmtogeojson from 'osmtogeojson';
 import { onEachFeature } from './leafletUtilities';
 import styles from '../styles/Main.module.css'
 
-function createChoroplethLayer(L, leafletState, osmBaseData) {
-  const pops = osmBaseData.elements.reduce((acc, rel) => {
-    const val = parseInt(rel.tags.population);
-    if (!isNaN(val)) acc.push(val);
-    return acc;
-  }, []);
+function createChoroplethLayer(L, leafletState, geojson, ranges) {
 
-  const ranges = getChoroplethRanges(pops, 7);
+
   const colors = generateHueColors(ranges.length);
 
   //* legend control
@@ -35,8 +30,8 @@ function createChoroplethLayer(L, leafletState, osmBaseData) {
 
 
   return (
-    L.geoJSON(osmtogeojson(osmBaseData), {
-      filter: (feature) => !feature.id.includes('node'),
+    L.geoJSON(geojson, {
+      filter: (feature) => feature.geometry.type !== 'Point',
       // custom tooltip
       // onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
       style: (feature) => style(feature, ranges, colors)
@@ -120,4 +115,4 @@ function style(feature, ranges, colors) {
 }
 
 
-export { createChoroplethLayer }
+export { createChoroplethLayer, getChoroplethRanges }
