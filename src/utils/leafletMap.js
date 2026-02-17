@@ -38,8 +38,7 @@ function addToLeafletMap(osmBaseData, leafletState) {
     onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
   });
 
-  //* Choropleth layer
-  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, osmBaseData)
+
 
   //* add layers
   leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
@@ -61,6 +60,14 @@ function addToLeafletMap(osmBaseData, leafletState) {
   if (!leafletState.centerBtn._map) {
     leafletState.centerBtn.addTo(leafletState.map);
   }
+
+
+  addChoroplethLayer(osmBaseData, L, leafletState, oldBase, oldChoro);
+}
+
+function addChoroplethLayer(osmBaseData, L, leafletState, oldBase, oldChoro) {
+  //* Choropleth layer
+  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, osmBaseData);
 
   //* add control layers
   if (!leafletState.layerControl) {
