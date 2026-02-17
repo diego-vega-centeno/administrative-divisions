@@ -14,24 +14,24 @@ function createChoroplethLayer(L, leafletState, osmBaseData) {
   const colors = generateHueColors(ranges.length);
 
   //* legend control
-  if (!leafletState.legendControl) {
-    leafletState.legendControl = L.control({ position: 'bottomright' });
+  if (leafletState.legendControl) leafletState.legendControl.remove();
 
-    leafletState.legendControl.onAdd = function (map) {
+  leafletState.legendControl = L.control({ position: 'bottomright' });
 
-      const div = L.DomUtil.create('div', `${styles['info']} ${styles['legend']}`);
-      const grades = ranges.map(range => range[0]).reverse();
-      for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
-          '<i style="background:' + getColor(grades[i] + 1, ranges, colors) + '"></i> ' +
-          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-      }
+  leafletState.legendControl.onAdd = function (map) {
 
-      return div;
-    };
+    const div = L.DomUtil.create('div', `${styles['info']} ${styles['legend']}`);
+    const grades = ranges.map(range => range[0]).reverse();
+    for (var i = 0; i < grades.length; i++) {
+      div.innerHTML +=
+        '<i style="background:' + getColor(grades[i] + 1, ranges, colors) + '"></i> ' +
+        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
 
-    leafletState.legendControl.addTo(leafletState.map);
-  }
+    return div;
+  };
+
+  leafletState.legendControl.addTo(leafletState.map);
 
 
   return (
