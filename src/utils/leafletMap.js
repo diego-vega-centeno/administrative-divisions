@@ -73,7 +73,8 @@ function addChoroplethLayer(osmBaseData, L, leafletState, oldBase, oldChoro) {
       {
         'Base': leafletState.baseLayer,
         'Choropleth': leafletState.choroplethLayer,
-      }
+      },
+      {position: 'topleft'}
     ).addTo(leafletState.map);
   } else {
     // remove old overlays
