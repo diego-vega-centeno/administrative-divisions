@@ -4,7 +4,8 @@ import L from 'leaflet';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
-import { addToLeafletMap, makeTagsPanel, creatCenterButton } from '../utils/leafletMap.js';
+import { addToLeafletMap } from '../utils/leafletMap.js';
+import { makeTagsPanel, createCenterButton } from '../utils/leafletUtilities.js';
 import logger from '../utils/logger.js';
 
 const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconActive }) => {
@@ -15,6 +16,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
     baseLayer: null,
     choroplethLayer: null,
     layerControl: null,
+    legendControl: null,
     highlightedLayer: null,
     mapControl: null,
     map: null,
@@ -47,7 +49,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
     // set tag control panel
     makeTagsPanel(leafletStateRef.current);
     // set center button
-    creatCenterButton(leafletStateRef.current)
+    createCenterButton(leafletStateRef.current)
 
     // destroy map on unmount
     return () => {
