@@ -53,13 +53,20 @@ function generateHueColors(num) {
 
 
 function getChoroplethRanges(values, num) {
+  let divisionsNum = num;
+  if (values.length < num) {
+    divisionsNum = values.length;
+  }
   const min = Math.min(...values);
   const max = Math.max(...values);
-  const step = (max - min) / num;
+  const step = (max - min) / divisionsNum;
 
   const ranges = [];
-  for (let i = 0; i < num; i++) {
-    ranges[i] = [min + i * step, min + (i + 1) * step]
+  let start = Math.floor(min);
+  for (let i = 0; i < divisionsNum; i++) {
+    let end = (i === divisionsNum - 1) ? Math.ceil(max) : Math.floor(min + (i + 1) * step);
+    ranges.push([start, end]);
+    start = end + 1;
   }
 
   return ranges;
