@@ -33,7 +33,7 @@ function highlightFeature(event, leafletState) {
 
   // remove highlighted layer if it exist
   if (leafletState.highlightedLayer) {
-    leafletState.geojsonLayer.resetStyle(leafletState.highlightedLayer);
+    leafletState.baseLayer.resetStyle(leafletState.highlightedLayer);
   }
 
   const layer = event.target;
