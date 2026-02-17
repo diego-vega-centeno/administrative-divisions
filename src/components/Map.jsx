@@ -9,7 +9,6 @@ import logger from '../utils/logger.js';
 
 const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconActive }) => {
   const mapContainerRef = useRef(null); // will hold map container dom element
-  const mapRef = useRef(null); // will hold map instance from leaflet
 
   const leafletStateRef = useRef({
     tileLayer: null,
@@ -32,19 +31,17 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
   useEffect(() => {
     // exist if container doesn't exist
     // exitst if map object already exist
-    if (!mapContainerRef.current || mapRef.current) return;
+    if (!mapContainerRef.current || leafletStateRef.current.map) return;
 
-    mapRef.current = L.map(mapContainerRef.current).setView([0, 0], 1);
+    leafletStateRef.current.map = L.map(mapContainerRef.current).setView([0, 0], 1);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(mapRef.current);
+    }).addTo(leafletStateRef.current.map);
 
     // check change in dimension just in case, lol
-    mapRef.current.invalidateSize();
+    leafletStateRef.current.map.invalidateSize();
 
-    // set leafletState map
-    leafletStateRef.current.map = mapRef.current;
     // set tag control panel
     makeTagsPanel(leafletStateRef.current);
     // set center button
@@ -52,8 +49,8 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
 
     // destroy map on unmount
     return () => {
-      mapRef.current.remove();
-      mapRef.current = null;
+      leafletStateRef.current.map.remove();
+      leafletStateRef.current.map = null;
     };
   }, []);
 
