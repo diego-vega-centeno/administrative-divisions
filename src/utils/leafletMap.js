@@ -10,6 +10,11 @@ import { onEachFeature } from './leafletUtilities';
 
 function addToLeafletMap(osmBaseData, leafletState) {
 
+  //* store old layers references for the layer control
+  // this will be cleared by garbage collection
+  const oldBase = leafletState.baseLayer;
+  const oldChoro = leafletState.choroplethLayer;
+
   //* remove previous layers except tile layers
   leafletState.map.eachLayer(function (layer) {
     if (!(layer instanceof L.TileLayer)) {
@@ -34,7 +39,7 @@ function addToLeafletMap(osmBaseData, leafletState) {
   });
 
   //* Choropleth layer
-  // leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, osmBaseData)
+  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, osmBaseData)
 
   //* add layers
   leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
@@ -55,6 +60,25 @@ function addToLeafletMap(osmBaseData, leafletState) {
   //* add buttons
   if (!leafletState.centerBtn._map) {
     leafletState.centerBtn.addTo(leafletState.map);
+  }
+
+  //* add control layers
+  if (!leafletState.layerControl) {
+    leafletState.layerControl = L.control.layers(
+      { 'OpenStreetMap': leafletState.tileLayer },
+      {
+        'Base': leafletState.baseLayer,
+        'Choropleth': leafletState.choroplethLayer,
+      }
+    ).addTo(leafletState.map);
+  } else {
+    // remove old overlays
+    if (oldBase) leafletState.layerControl.removeLayer(oldBase);
+    if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
+
+    // add new ones
+    leafletState.layerControl.addOverlay(leafletState.baseLayer, 'Base');
+    leafletState.layerControl.addOverlay(leafletState.choroplethLayer, 'Choropleth');
   }
 
 }

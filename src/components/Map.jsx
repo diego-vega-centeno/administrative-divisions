@@ -14,6 +14,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
     tileLayer: null,
     baseLayer: null,
     choroplethLayer: null,
+    layerControl: null,
     highlightedLayer: null,
     mapControl: null,
     map: null,
