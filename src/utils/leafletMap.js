@@ -1,6 +1,6 @@
 import osmtogeojson from 'osmtogeojson';
 import L from 'leaflet';
-import { createChoroplethLayer } from './leafletChoroplethLayer';
+import { createChoroplethLayer, getChoroplethRanges } from './leafletChoroplethLayer';
 import { onEachFeature } from './leafletUtilities';
 
 /* main leaflet map creation */
@@ -30,9 +30,12 @@ function addToLeafletMap(osmBaseData, leafletState) {
     }).addTo(leafletState.map);
   }
 
+  //* conver to geojson
+  const geojson = osmtogeojson(osmBaseData);
+
   //* base layer
-  leafletState.baseLayer = L.geoJSON(osmtogeojson(osmBaseData), {
-    filter: (feature) => !feature.id.includes('node'),
+  leafletState.baseLayer = L.geoJSON(geojson, {
+    filter: (feature) => feature.geometry.type !== 'Point',
     // custom tooltip
     onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
   });
@@ -61,12 +64,21 @@ function addToLeafletMap(osmBaseData, leafletState) {
   }
 
 
-  addChoroplethLayer(osmBaseData, L, leafletState, oldBase, oldChoro);
+  addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro);
 }
 
-function addChoroplethLayer(osmBaseData, L, leafletState, oldBase, oldChoro) {
+function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro) {
+
+  const pops = osmBaseData.elements.reduce((acc, rel) => {
+    const val = parseInt(rel.tags.population);
+    if (!isNaN(val)) acc.push(val);
+    return acc;
+  }, []);
+
+  const ranges = getChoroplethRanges(pops, 7);
+
   //* Choropleth layer
-  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, osmBaseData);
+  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, geojson, ranges);
 
   //* add control layers
   if (!leafletState.layerControl) {
