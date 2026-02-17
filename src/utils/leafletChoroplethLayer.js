@@ -1,6 +1,7 @@
 
 import osmtogeojson from 'osmtogeojson';
 import { onEachFeature } from './leafletUtilities';
+import styles from '../styles/Main.module.css'
 
 function createChoroplethLayer(L, leafletState, osmBaseData) {
   const pops = osmBaseData.elements.reduce((acc, rel) => {
@@ -11,6 +12,27 @@ function createChoroplethLayer(L, leafletState, osmBaseData) {
 
   const ranges = getChoroplethRanges(pops, 7);
   const colors = generateHueColors(ranges.length);
+
+  //* legend control
+  if (!leafletState.legendControl) {
+    leafletState.legendControl = L.control({ position: 'bottomright' });
+
+    leafletState.legendControl.onAdd = function (map) {
+
+      const div = L.DomUtil.create('div', `${styles['info']} ${styles['legend']}`);
+      const grades = ranges.map(range => range[0]).reverse();
+      for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+          '<i style="background:' + getColor(grades[i] + 1, ranges, colors) + '"></i> ' +
+          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+      }
+
+      return div;
+    };
+
+    leafletState.legendControl.addTo(leafletState.map);
+  }
+
 
   return (
     L.geoJSON(osmtogeojson(osmBaseData), {
