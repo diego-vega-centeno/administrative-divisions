@@ -18,11 +18,8 @@ function addToLeafletMap(osmBaseData, leafletState) {
   leafletState.highlightedLayer = null;
 
   //* remove previous layers except tile layers
-  leafletState.map.eachLayer(function (layer) {
-    if (!(layer instanceof L.TileLayer)) {
-      leafletState.map.removeLayer(layer);
-    }
-  });
+  if (leafletState.baseLayer) leafletState.map.removeLayer(leafletState.baseLayer);
+  if (leafletState.choroplethLayer) leafletState.map.removeLayer(leafletState.choroplethLayer);
 
   //* base tile layer
   if (!leafletState.tileLayer) {
