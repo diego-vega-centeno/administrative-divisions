@@ -11,6 +11,8 @@ function addToLeafletMap(osmBaseData, leafletState) {
   // this will be cleared by garbage collection
   const oldBase = leafletState.baseLayer;
   const oldChoro = leafletState.choroplethLayer;
+  // clear highlighted
+  leafletState.highlightedLayer = null;
 
   //* remove previous layers except tile layers
   leafletState.map.eachLayer(function (layer) {
@@ -74,7 +76,7 @@ function addChoroplethLayer(osmBaseData, L, leafletState, oldBase, oldChoro) {
         'Base': leafletState.baseLayer,
         'Choropleth': leafletState.choroplethLayer,
       },
-      {position: 'topleft'}
+      { position: 'topleft' }
     ).addTo(leafletState.map);
   } else {
     // remove old overlays
