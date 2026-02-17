@@ -1,6 +1,9 @@
 import osmtogeojson from 'osmtogeojson';
 import L from 'leaflet';
-import { createChoroplethLayer, getChoroplethRanges } from './leafletChoroplethLayer';
+import {
+  createChoroplethLayer,
+  getChoroplethRanges, getColor, generateHueColors
+} from './leafletChoroplethLayer';
 import { onEachFeature } from './leafletUtilities';
 
 /* main leaflet map creation */
@@ -69,16 +72,23 @@ function addToLeafletMap(osmBaseData, leafletState) {
 
 function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro) {
 
+  //* compute ranges and colors
   const pops = osmBaseData.elements.reduce((acc, rel) => {
     const val = parseInt(rel.tags.population);
     if (!isNaN(val)) acc.push(val);
     return acc;
   }, []);
-
   const ranges = getChoroplethRanges(pops, 7);
+  const colors = generateHueColors(ranges.length);
+
+  const colorMap = new Map();
+  geojson.features.forEach(f => {
+    const val = f.properties.population;
+    colorMap.set(f.id, getColor(val, ranges, colors));
+  });
 
   //* Choropleth layer
-  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, geojson, ranges);
+  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, geojson, colorMap, colors, ranges);
 
   //* add control layers
   if (!leafletState.layerControl) {
