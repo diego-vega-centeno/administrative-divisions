@@ -16,7 +16,7 @@ function createChoroplethLayer(L, leafletState, osmBaseData) {
     L.geoJSON(osmtogeojson(osmBaseData), {
       filter: (feature) => !feature.id.includes('node'),
       // custom tooltip
-      onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
+      // onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
       style: (feature) => style(feature, ranges, colors)
     })
   )
