@@ -88,7 +88,7 @@ function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldC
       { 'OpenStreetMap': leafletState.tileLayer },
       {
         'Base': leafletState.baseLayer,
-        'Choropleth': leafletState.choroplethLayer,
+        'Population': leafletState.choroplethLayer,
       },
       { position: 'topleft' }
     ).addTo(leafletState.map);
