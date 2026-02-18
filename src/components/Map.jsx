@@ -4,7 +4,8 @@ import L from 'leaflet';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressMapIcon } from '../styles/Main.jsx';
-import { addToLeafletMap, makeTagsPanel, creatCenterButton } from '../utils/leafletMap.js';
+import { addToLeafletMap } from '../utils/leafletMap.js';
+import { makeTagsPanel, createCenterButton } from '../utils/leafletUtilities.js';
 import logger from '../utils/logger.js';
 
 const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconActive }) => {
@@ -12,17 +13,20 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
 
   const leafletStateRef = useRef({
     tileLayer: null,
-    geojsonLayer: null,
+    baseLayer: null,
+    choroplethLayer: null,
+    layerControl: null,
+    legendControl: null,
     highlightedLayer: null,
     mapControl: null,
+    mapControlIsCollapsed: false,
     map: null,
     centerBtn: null,
     handleMapClick: (e) => {
       if (leafletStateRef.current.highlightedLayer) {
         // unhighlight on click outside a feature
-        leafletStateRef.current.geojsonLayer.resetStyle(leafletStateRef.current.highlightedLayer);
+        leafletStateRef.current.baseLayer.resetStyle(leafletStateRef.current.highlightedLayer);
         leafletStateRef.current.highlightedLayer = null;
-        leafletStateRef.current.mapControl.div.innerHTML = "";
       }
     }
   });
@@ -45,7 +49,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
     // set tag control panel
     makeTagsPanel(leafletStateRef.current);
     // set center button
-    creatCenterButton(leafletStateRef.current)
+    createCenterButton(leafletStateRef.current)
 
     // destroy map on unmount
     return () => {
