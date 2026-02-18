@@ -148,9 +148,9 @@ function updateTagsPanel(leafletState, tags, id) {
   leafletState.mapControl.div.innerHTML =
     `<div>
       <div class="${styles['btn-toggle-container']}">
-        <button id='btn-toggle' class="${styles['btn-toggle']}">➖</button>
+        <button id='btn-toggle' class="${styles['btn-toggle']}">${leafletState.mapControlIsCollapsed ? '➕' : '➖'}</button>
       </div>
-      <table id='leaflet-control-table' class="${styles['leaflet-control-table']}">
+      <table id='leaflet-control-table' class="${styles['leaflet-control-table']} ${leafletState.mapControlIsCollapsed ? styles['hidden'] : ''}">
         <tbody>
             ${rows}
         </tbody>
@@ -168,19 +168,21 @@ function updateTagsPanel(leafletState, tags, id) {
   L.DomEvent.disableScrollPropagation(btn);
 
   // add new event listener
-  L.DomEvent.on(btn, 'click', () => buttonClickHandler(table, btn));
+  L.DomEvent.on(btn, 'click', () => buttonClickHandler(leafletState, table, btn));
 }
 
 //* toggle tags panel
-function buttonClickHandler(table, btn) {
+function buttonClickHandler(leafletState, table, btn) {
+  console.log('H');
 
-  if (table.style.display !== 'none') {
-    table.style.display = 'none'
-    btn.innerText = '➕'  // collapsed
-
+  if (leafletState.mapControlIsCollapsed) {
+    table.classList.remove(styles['hidden']);
+    btn.innerText = '➖';
+    leafletState.mapControlIsCollapsed = false;
   } else {
-    table.style.display = 'table';
-    btn.innerText = '➖'  // expanded
+    table.classList.add(styles['hidden']);
+    btn.innerText = '➕';
+    leafletState.mapControlIsCollapsed = true;
   }
 }
 
