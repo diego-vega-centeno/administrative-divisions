@@ -19,6 +19,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
     legendControl: null,
     highlightedLayer: null,
     mapControl: null,
+    mapControlIsCollapsed: false,
     map: null,
     centerBtn: null,
     handleMapClick: (e) => {
