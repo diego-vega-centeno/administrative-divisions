@@ -14,12 +14,13 @@ function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, range
 
     const div = L.DomUtil.create('div', `${styles['info']} ${styles['legend']}`);
     const grades = ranges.map(range => range[0]).reverse();
+    div.innerHTML = '<div style="text-align: center; font-weight:bold">Population</div>';
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML +=
+
         '<i style="background:' + getColor(grades[i] + 1, ranges, colors) + '"></i> ' +
         grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
     }
-
     return div;
   };
 
