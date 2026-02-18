@@ -40,8 +40,6 @@ function addToLeafletMap(osmBaseData, leafletState) {
     onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
   });
 
-
-
   //* add layers
   leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
   leafletState.baseLayer.addTo(leafletState.map);
@@ -50,9 +48,6 @@ function addToLeafletMap(osmBaseData, leafletState) {
   if (!leafletState.mapControl._map) {
     leafletState.mapControl.addTo(leafletState.map);
   }
-
-  //* clear content of control
-  leafletState.mapControl.div.innerHTML = "";
 
   leafletState.map.off('click', leafletState.handleMapClick);
   leafletState.map.on('click', leafletState.handleMapClick);
