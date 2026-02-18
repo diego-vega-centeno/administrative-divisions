@@ -61,13 +61,30 @@ function makeTagsPanel(leafletState) {
   leafletState.mapControl = new L.Control();
   // create and return dom element container
   leafletState.mapControl.onAdd = function (map) {
-    this.div = L.DomUtil.create('div');
-    this.div.innerHTML = "";
-    // prevent map other click events
-    L.DomEvent.disableClickPropagation(this.div); // Handles mousedown, touchstart, dblclick, etc.
-    L.DomEvent.disableScrollPropagation(this.div); // Handles mousewheel
+    const div = L.DomUtil.create('div', 'leaflet-control');
 
-    return this.div;
+    const btnContainer = L.DomUtil.create('div', styles['btn-toggle-container'], div);
+    const btn = L.DomUtil.create('button', styles['btn-toggle'], btnContainer);
+    btn.innerText = '➖';
+    const table = L.DomUtil.create('table', styles['leaflet-control-table'], div);
+    const tbody = L.DomUtil.create('tbody', '', table);
+
+    // prevent map other click events
+    L.DomEvent.disableClickPropagation(div); // Handles mousedown, touchstart, dblclick, etc.
+    L.DomEvent.disableScrollPropagation(div); // Handles mousewheel
+
+    // disable other mouse events
+    L.DomEvent.disableClickPropagation(btn);
+    L.DomEvent.disableScrollPropagation(btn);
+
+    // add toggle btn listener
+    L.DomEvent.on(btn, 'click', () => buttonClickHandler(leafletState, table, btn));
+
+    leafletState.mapControl.btn = btn;
+    leafletState.mapControl.table = table;
+    leafletState.mapControl.tbody = tbody;
+
+    return div;
   }
 
   //* handle the update of the control panel with new tags and id
@@ -110,6 +127,8 @@ function createCenterButton(leafletState) {
 //* update tags panel
 function updateTagsPanel(leafletState, tags, id) {
 
+  const control = leafletState.mapControl;
+
   let rows = "";
   const tagsToUse = ["admin_level", "name:en", "name", "population", "population:date", "wikipedia", "wikidata"];
 
@@ -144,37 +163,13 @@ function updateTagsPanel(leafletState, tags, id) {
     rows += row;
   }
 
-  // add control panel with updated info
-  leafletState.mapControl.div.innerHTML =
-    `<div>
-      <div class="${styles['btn-toggle-container']}">
-        <button id='btn-toggle' class="${styles['btn-toggle']}">${leafletState.mapControlIsCollapsed ? '➕' : '➖'}</button>
-      </div>
-      <table id='leaflet-control-table' class="${styles['leaflet-control-table']} ${leafletState.mapControlIsCollapsed ? styles['hidden'] : ''}">
-        <tbody>
-            ${rows}
-        </tbody>
-      </table>
-    </div>
-    `;
-
-  //* button to hide table
-  const btn = leafletState.mapControl.div.querySelector('#btn-toggle');
-  const table = leafletState.mapControl.div.querySelector('#leaflet-control-table');
-  // previous listener is gone because button is destroyed by using innerHTML
-
-  // disable other mouse events
-  L.DomEvent.disableClickPropagation(btn);
-  L.DomEvent.disableScrollPropagation(btn);
-
-  // add new event listener
-  L.DomEvent.on(btn, 'click', () => buttonClickHandler(leafletState, table, btn));
+  control.btn.innerText = leafletState.mapControlIsCollapsed ? '➕' : '➖';
+  control.table.classList.toggle(styles['hidden'], leafletState.mapControlIsCollapsed);
+  control.tbody.innerHTML = rows;
 }
 
 //* toggle tags panel
 function buttonClickHandler(leafletState, table, btn) {
-  console.log('H');
-
   if (leafletState.mapControlIsCollapsed) {
     table.classList.remove(styles['hidden']);
     btn.innerText = '➖';
