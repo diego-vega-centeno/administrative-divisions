@@ -65,7 +65,7 @@ function makeTagsPanel(leafletState) {
 
     const btnContainer = L.DomUtil.create('div', styles['btn-toggle-container'], div);
     const btn = L.DomUtil.create('button', styles['btn-toggle'], btnContainer);
-    btn.innerText = '➖';
+    btn.innerText = 'hide tags';
     const table = L.DomUtil.create('table', styles['leaflet-control-table'], div);
     const tbody = L.DomUtil.create('tbody', '', table);
 
@@ -163,7 +163,7 @@ function updateTagsPanel(leafletState, tags, id) {
     rows += row;
   }
 
-  control.btn.innerText = leafletState.mapControlIsCollapsed ? '➕' : '➖';
+  control.btn.innerText = leafletState.mapControlIsCollapsed ? 'show tags' : 'hide tags';
   control.table.classList.toggle(styles['hidden'], leafletState.mapControlIsCollapsed);
   control.tbody.innerHTML = rows;
 }
@@ -172,11 +172,11 @@ function updateTagsPanel(leafletState, tags, id) {
 function buttonClickHandler(leafletState, table, btn) {
   if (leafletState.mapControlIsCollapsed) {
     table.classList.remove(styles['hidden']);
-    btn.innerText = '➖';
+    btn.innerText = 'hide tags';
     leafletState.mapControlIsCollapsed = false;
   } else {
     table.classList.add(styles['hidden']);
-    btn.innerText = '➕';
+    btn.innerText = 'show tags';
     leafletState.mapControlIsCollapsed = true;
   }
 }

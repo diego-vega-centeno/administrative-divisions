@@ -27,7 +27,6 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
         // unhighlight on click outside a feature
         leafletStateRef.current.baseLayer.resetStyle(leafletStateRef.current.highlightedLayer);
         leafletStateRef.current.highlightedLayer = null;
-        leafletStateRef.current.mapControl.div.innerHTML = "";
       }
     }
   });
