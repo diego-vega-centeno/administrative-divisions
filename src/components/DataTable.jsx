@@ -29,11 +29,12 @@ const DataTable = memo(({ computedDataRels, isComputingIconActive }) => {
   const [orderBy, setOrderBy] = useState('name');
 
   useEffect(() => {
+    if (!computedDataRels.length) return;
     setRows([...computedDataRels].sort((a, b) => compare(a, b, order, orderBy)))
   }, [computedDataRels, order, orderBy])
 
   if (!computedDataRels.length && !isComputingIconActive) return null;
-  
+
   const headerCells = [
     { id: 'admin_level', label: 'admin level', numeric: false, },
     { id: 'name', label: 'name', numeric: false, },
