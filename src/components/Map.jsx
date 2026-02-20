@@ -55,6 +55,8 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
     return () => {
       leafletStateRef.current.map.remove();
       leafletStateRef.current.map = null;
+      // react re-render weirdness make the layer control persist, so clean it
+      leafletStateRef.current.layerControl = null;
     };
   }, []);
 
