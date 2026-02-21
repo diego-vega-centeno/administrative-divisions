@@ -33,33 +33,36 @@ function addToLeafletMap(osmBaseData, leafletState) {
   //* conver to geojson
   const geojson = osmtogeojson(osmBaseData);
 
-  //* base layer
-  leafletState.baseLayer = L.geoJSON(geojson, {
-    filter: (feature) => feature.geometry.type !== 'Point',
-    // custom tooltip
-    onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
-  });
+  if (leafletState.type === 'base') {
+    //* base layer
+    leafletState.baseLayer = L.geoJSON(geojson, {
+      filter: (feature) => feature.geometry.type !== 'Point',
+      // custom tooltip
+      onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
+    });
 
-  //* add layers
-  leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
-  leafletState.baseLayer.addTo(leafletState.map);
+    //* add layers
+    leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
+    leafletState.baseLayer.addTo(leafletState.map);
 
-  //* check if tags control panel was added, if not add it
-  if (!leafletState.mapControl._map) {
-    leafletState.mapControl.addTo(leafletState.map);
+    //* check if tags control panel was added, if not add it
+    if (!leafletState.mapControl._map) {
+      leafletState.mapControl.addTo(leafletState.map);
+    }
+
+    leafletState.map.off('click', leafletState.handleMapClick);
+    leafletState.map.on('click', leafletState.handleMapClick);
   }
-
-  leafletState.map.off('click', leafletState.handleMapClick);
-  leafletState.map.on('click', leafletState.handleMapClick);
-
 
   //* add buttons
   if (!leafletState.centerBtn._map) {
     leafletState.centerBtn.addTo(leafletState.map);
   }
 
+  if (leafletState.type === 'choropleth') {
+    addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro);
+  }
 
-  addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro);
 }
 
 function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro) {
@@ -81,20 +84,20 @@ function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldC
 
   //* Choropleth layer
   leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, geojson, colorMap, colors, ranges);
+  leafletState.map.fitBounds(leafletState.choroplethLayer.getBounds());
+  leafletState.choroplethLayer.addTo(leafletState.map);
 
   //* add control layers
   if (!leafletState.layerControl) {
     leafletState.layerControl = L.control.layers(
       null,
       {
-        'Base': leafletState.baseLayer,
         'Population': leafletState.choroplethLayer,
       },
       { position: 'topleft' }
     ).addTo(leafletState.map);
   } else {
     // remove old overlays
-    if (oldBase) leafletState.layerControl.removeLayer(oldBase);
     if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
 
     // add new ones
