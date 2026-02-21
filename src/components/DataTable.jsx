@@ -22,8 +22,6 @@ import { useEffect, useState, memo } from 'react';
 
 const DataTable = memo(({ computedDataRels, isComputingIconActive }) => {
 
-
-
   const [rows, setRows] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
