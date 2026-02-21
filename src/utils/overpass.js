@@ -72,7 +72,8 @@ function formatData(osmElems, params, selectedNodes) {
 
   // convert to geojson and add data to relations
   if (params.geom && params.geojsonInOSM) {
-    const features = osmtogeojson({ "elements": osmElems }).features.filter(feature => {
+    const clonedElems = JSON.parse(JSON.stringify(osmElems));
+    const features = osmtogeojson({ "elements": clonedElems }).features.filter(feature => {
       return feature.id.includes('relation');
     });
     const geojsonMap = new Map(features.map(feature => {
