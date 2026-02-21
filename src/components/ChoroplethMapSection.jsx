@@ -16,11 +16,24 @@ const ChoroplethMapSection = memo(({
   isComputingIconActive
 }) => {
   const [isProgressIconActive, setIsProgressIconActive] = useState(true);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    if (!isComputingIconActive && computedDataRels.length) {
+      // create a macro task to schedule after render
+      // use 1s to give time to composer thread take the painting job
+      setTimeout(() => {
+        const start = Date.now();
+        while (Date.now() - start < 2000) { };
+        setShouldRender(true);
+      }, 1000);
+    }
+  }, [computedDataRels, isComputingIconActive]);
 
   if (!computedDataRels.length && !isComputingIconActive) return null;
 
   return (
-    isComputingIconActive ? (
+    (!shouldRender || isComputingIconActive) ? (
       <Box >
         <ListItem sx={tableContainerHeader}>
           <ListItemText primary={"Choropleth map"} />
