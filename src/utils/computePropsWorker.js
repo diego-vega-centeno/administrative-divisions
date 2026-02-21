@@ -19,6 +19,8 @@ function addComputedProps(osmRels) {
 
   const featureMap = new Map();
   geoJSON.features.forEach(f => {
+    const id = f.id.toString();
+    if (!id.includes('relation/')) return;
     featureMap.set(f.id.toString().replace('relation/', ''), f);
   });
 
@@ -35,7 +37,11 @@ function addComputedProps(osmRels) {
 
     // geo computed props
     const feature = featureMap.get(rel.id.toString());
-    const calcProps = calculatePropsFromGeo(feature);
+    let calcProps = { area: null, perimeter: null }
+    // some relations are malformed so they wont have a geojson
+    if (feature) {
+      calcProps = calculatePropsFromGeo(feature);
+    }
 
     // derived props
     const derivedProps = {
