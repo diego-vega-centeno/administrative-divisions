@@ -106,8 +106,14 @@ L.Control.Button = L.Control.extend({
 
     button.onclick = () => {
       const state = this.options.leafletState;
-      if (state.baseLayer) {
+      if (state.type === 'base' && state.baseLayer) {
         state.map.fitBounds(state.baseLayer.getBounds());
+        return;
+      }
+
+      if (state.type === 'choropleth' && state.choroplethLayer) {
+        state.map.fitBounds(state.choroplethLayer.getBounds());
+        return;
       }
     }
 
