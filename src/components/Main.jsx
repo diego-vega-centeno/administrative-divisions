@@ -15,6 +15,7 @@ import { profileSize } from '../utils/overpass';
 import DataTable from './DataTable.jsx';
 import ChartsSection from './ChartsSection.jsx';
 import WikidataSection from './WikidataSection.jsx';
+import ChoroplethMapSection from './ChoroplethMapSection.jsx';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -138,6 +139,7 @@ export default function Main() {
             onError={handleError}
             isProgressIconActive={isProgressIconActive}
             setIsProgressIconActive={setIsProgressIconActive}
+            type={'base'}
           />
           {Boolean(osmRels.length != 0) && (
             <TagsSection
@@ -147,6 +149,12 @@ export default function Main() {
           <DataTable
             computedDataRels={computedDataRels}
             isComputingIconActive={isComputingIconActive}
+          />
+          <ChoroplethMapSection
+            osmRels={osmRels}
+            computedDataRels={computedDataRels}
+            isComputingIconActive={isComputingIconActive}
+            onError={handleError}
           />
           <ChartsSection
             computedDataRels={computedDataRels}
