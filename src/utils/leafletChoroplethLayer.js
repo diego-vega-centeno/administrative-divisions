@@ -1,6 +1,4 @@
 
-import osmtogeojson from 'osmtogeojson';
-import { onEachFeature } from './leafletUtilities';
 import styles from '../styles/Main.module.css'
 
 function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, ranges) {
@@ -51,21 +49,6 @@ function generateHueColors(num) {
   }
   return colors;
 }
-
-// function generateColors(num) {
-//   const start = 200;
-//   const end = 50;
-//   const colors = [];
-//   for (let i = 0; i < num; i++) {
-//     const t = i / (num - 1);
-//     const r = Math.round(start + t * (end - start));
-//     const g = Math.round(start + t * (end - start));
-//     const b = Math.round(255);
-//     colors.push(`rgb(${r},${g},${b})`);
-//   }
-//   return colors;
-// }
-
 
 function getChoroplethRanges(values, num) {
   let divisionsNum = num;
