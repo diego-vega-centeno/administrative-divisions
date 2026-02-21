@@ -85,7 +85,7 @@ function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldC
   //* add control layers
   if (!leafletState.layerControl) {
     leafletState.layerControl = L.control.layers(
-      { 'OpenStreetMap': leafletState.tileLayer },
+      null,
       {
         'Base': leafletState.baseLayer,
         'Population': leafletState.choroplethLayer,
@@ -99,7 +99,7 @@ function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldC
 
     // add new ones
     leafletState.layerControl.addOverlay(leafletState.baseLayer, 'Base');
-    leafletState.layerControl.addOverlay(leafletState.choroplethLayer, 'Choropleth');
+    leafletState.layerControl.addOverlay(leafletState.choroplethLayer, 'Population');
   }
 
 }
