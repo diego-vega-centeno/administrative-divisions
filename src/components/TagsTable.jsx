@@ -66,7 +66,6 @@ export default function TagsTable({ osmRel }) {
   return (
     <div>
       <div className={styles["table-container"]}>
-        <h3 className={styles["header"]}>OSM tags</h3>
         <table className={styles["table"]}>
           <tbody>
             {Object.entries(filteredTags).map(([key, value]) => (
