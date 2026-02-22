@@ -146,11 +146,13 @@ function donwloadJSONData(content, filename) {
 async function getRelationsDataWithCache(ids) {
   // obtain relation from cache if present
   const cachedRels = [];
-  for (const id of ids) {
-    // object key is id(int), node is id(string)
-    const rel = await getStoreRelation(parseInt(id));
-    if (rel) cachedRels.push(rel);
-  }
+  // for (const id of ids) {
+  //   // object key is id(int), node is id(string)
+  //   const rel = await getStoreRelation(parseInt(id));
+  //   if (rel) cachedRels.push(rel);
+  // }
+  const rels = await getStoreRelation(ids.map(id => parseInt(id)));
+
   const cachedIds = cachedRels.map(rel => rel.id.toString());
   const nonCachedIds = ids.filter(id => !cachedIds.includes(id));
 
