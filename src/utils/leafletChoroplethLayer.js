@@ -86,7 +86,7 @@ function getColor(val, ranges, colors) {
 
 function style(feature, colorMap) {
   return {
-    fillColor: colorMap.get(feature.id),
+    fillColor: colorMap.get(feature.id) ?? '#ccc',
     weight: 2,
     opacity: 1,
     color: 'white',
