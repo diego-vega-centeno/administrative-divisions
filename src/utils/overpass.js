@@ -145,16 +145,12 @@ function donwloadJSONData(content, filename) {
 
 async function getRelationsDataWithCache(ids) {
   // obtain relation from cache if present
-  const cachedRels = [];
-  // for (const id of ids) {
-  //   // object key is id(int), node is id(string)
-  //   const rel = await getStoreRelation(parseInt(id));
-  //   if (rel) cachedRels.push(rel);
-  // }
-  const rels = await getStoreRelation(ids.map(id => parseInt(id)));
+  const cachedRels = await getStoreRelation(ids.map(id => parseInt(id)));
 
-  const cachedIds = cachedRels.map(rel => rel.id.toString());
-  const nonCachedIds = ids.filter(id => !cachedIds.includes(id));
+  const cachedIdSet = new Set(cachedRels.map(rel => rel.id.toString()));
+  logger.info(`IndexedDB: ${cachedIdSet.size} ids found: ${[...cachedIdSet]}`);
+
+  const nonCachedIds = ids.filter(id => !cachedIdSet.has(id));
 
   // get osm data
   let queryRels = [];
@@ -163,24 +159,12 @@ async function getRelationsDataWithCache(ids) {
   }
 
   // join cached data
-  logger.info(`IndexedDB: Relations: In cache ${cachedRels.length}, non-cached: ${queryRels.length}`);
+  logger.info(`IndexedDB: In cache ${cachedRels.length}, non-cached: ${queryRels.length}`);
   const osmRels = [...queryRels, ...cachedRels];
-
-  // store >= 400KB relations
-  // const largeRels = queryRels.filter(rel => {
-  //   const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
-  //   return sizeInBytes >= 400 * 1024;
-  // });
-
-  // const smallRels = queryRels.filter(rel => {
-  //   const sizeInBytes = new Blob([JSON.stringify(rel)]).size;
-  //   return sizeInBytes < 400 * 1024;
-  // });
-  // logger.info(`Relations: Added to cache: ${largeRels.length}, skipped: ${smallRels.length}`);
 
   // store query rels
   putStoreRelations(queryRels);
-  logger.info(`IndexedDB: Relations: Added to cache: ${queryRels.length}`);
+  logger.info(`IndexedDB: ${queryRels.length} added to cache`);
 
   return osmRels
 }

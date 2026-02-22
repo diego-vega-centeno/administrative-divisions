@@ -120,24 +120,19 @@ async function getStoreRelation(ids) {
   const tx = db.transaction(STORE_NAME, 'readonly');
   const store = tx.objectStore(STORE_NAME);
 
-  return Promise.all(
+  const results = await Promise.all(
     ids.map(id => new Promise((resolve, reject) => {
-      const request = store.get(id)
-      request.onsuccess = () => {
-        if (request.result) delete request.result.storedAt;
-        resolve(request.result);
-      };
-      request.onerror = () => {
-        reject(request.error);
-      }
+      const request = store.get(id);
+      request.onsuccess = () => resolve(request.result ?? null);
+      request.onerror = () => reject(request.error);
     }))
-  ).then((values) => {
-    console.log(values);
-    // logger.info(`IndexedDB: Relation obtained: id = ${request.result.id}`);
+  );
 
-  })
+  return results.filter(Boolean).map(item => {
+    delete item.storedAt;
+    return item;
+  });
 }
-
 
 async function getAllStoredRelations() {
   const db = await initDB();
