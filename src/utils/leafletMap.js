@@ -101,17 +101,17 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
 
   //* add control layers
   leafletState.layerControl = L.control.layers(
-    null,
     {
       'Population': leafletState.baseLayer,
       'Population density': leafletState.popDensityLayer,
     },
+    null,
     { position: 'topleft' }
   ).addTo(leafletState.map);
   if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
 
   //* Add layer switching event listener
-  leafletState.map.on('overlayadd', function (e) {
+  leafletState.map.on('baselayerchange', function (e) {
     // Update legend when layer is switched
     if (e.layer === leafletState.baseLayer) {
       updateLegend(L, leafletState, ...popParams, 'Population');
