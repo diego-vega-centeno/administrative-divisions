@@ -115,31 +115,24 @@ async function putStoreRelations(relations) {
   });
 }
 
-async function getStoreRelation(id) {
+async function getStoreRelation(ids) {
   const db = await initDB();
   const tx = db.transaction(STORE_NAME, 'readonly');
   const store = tx.objectStore(STORE_NAME);
 
-  return new Promise((resolve, reject) => {
-    const request = store.get(id);
+  const results = await Promise.all(
+    ids.map(id => new Promise((resolve, reject) => {
+      const request = store.get(id);
+      request.onsuccess = () => resolve(request.result ?? null);
+      request.onerror = () => reject(request.error);
+    }))
+  );
 
-    request.onsuccess = () => {
-      if (request.result) {
-        logger.info(`IndexedDB: Relation obtained: id = ${request.result.id}`);
-      }
-      // storedAt for internal indexedDB management
-      if(request.result) delete request.result.storedAt;
-      
-      resolve(request.result);
-    };
-
-    request.onerror = () => {
-      logger.error(`IndexedDB: Error while getting relation: ${request.error}`);
-      reject(request.error);
-    }
+  return results.filter(Boolean).map(item => {
+    delete item.storedAt;
+    return item;
   });
 }
-
 
 async function getAllStoredRelations() {
   const db = await initDB();
