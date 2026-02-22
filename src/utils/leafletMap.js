@@ -104,7 +104,6 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
   leafletState.areaLayer = createChoroplethLayer(L, leafletState, geojson, ...areaParams, 'Area');
 
   leafletState.baseLayer.addTo(leafletState.map);
-  leafletState.popDensityLayer.addTo(leafletState.map);
 
   //* add control layers
   leafletState.layerControl = L.control.layers(
@@ -128,7 +127,7 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
       case leafletState.popDensityLayer._leaflet_id:
         updateLegend(L, leafletState, ...popDensityParams, 'Population density');
         break;
-      case leafletState.baseLayer._leaflet_id:
+      case leafletState.areaLayer._leaflet_id:
         updateLegend(L, leafletState, ...areaParams, 'Area');
         break;
 
