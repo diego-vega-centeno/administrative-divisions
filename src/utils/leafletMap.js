@@ -89,12 +89,16 @@ function getValues(computedDataRels, prop) {
 function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro) {
 
   //* Choropleth layer
-  // population layer
+  // population is the base layer
   const popParams = getChoroplethParams(computedDataRels, 'population');
   leafletState.baseLayer = createChoroplethLayer(L, leafletState, geojson, ...popParams, 'Population');
   leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
+
   const popDensityParams = getChoroplethParams(computedDataRels, 'popDensity');
   leafletState.popDensityLayer = createChoroplethLayer(L, leafletState, geojson, ...popDensityParams, 'Population density');
+
+  const areaParams = getChoroplethParams(computedDataRels, 'area');
+  leafletState.areaLayer = createChoroplethLayer(L, leafletState, geojson, ...areaParams, 'Area');
 
   leafletState.baseLayer.addTo(leafletState.map);
   leafletState.popDensityLayer.addTo(leafletState.map);
@@ -104,6 +108,7 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
     {
       'Population': leafletState.baseLayer,
       'Population density': leafletState.popDensityLayer,
+      'Area': leafletState.areaLayer
     },
     null,
     { position: 'topleft' }
@@ -113,10 +118,19 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
   //* Add layer switching event listener
   leafletState.map.on('baselayerchange', function (e) {
     // Update legend when layer is switched
-    if (e.layer === leafletState.baseLayer) {
-      updateLegend(L, leafletState, ...popParams, 'Population');
-    } else if (e.layer === leafletState.popDensityLayer) {
-      updateLegend(L, leafletState, ...popDensityParams, 'Population density');
+    switch (e.layer._leaflet_id) {
+      case leafletState.baseLayer._leaflet_id:
+        updateLegend(L, leafletState, ...popParams, 'Population');
+        break;
+      case leafletState.popDensityLayer._leaflet_id:
+        updateLegend(L, leafletState, ...popParams, 'Population density');
+        break;
+      case leafletState.baseLayer._leaflet_id:
+        updateLegend(L, leafletState, ...areaParams, 'Area');
+        break;
+
+      default:
+        break;
     }
   });
 }
