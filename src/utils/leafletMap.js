@@ -51,6 +51,8 @@ function addToLeafletMap(osmRels, computedDataRels, leafletState) {
     if (!leafletState.mapControl._map) {
       leafletState.mapControl.addTo(leafletState.map);
     }
+    // clear body content of tags control
+    leafletState.mapControl.updateTagsPanel(leafletState, {}, null)
 
     leafletState.map.off('click', leafletState.handleMapClick);
     leafletState.map.on('click', leafletState.handleMapClick);
