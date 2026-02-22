@@ -24,15 +24,33 @@ function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, range
 
   leafletState.legendControl.addTo(leafletState.map);
 
+  const geoJsonLayer = L.geoJSON(geojson, {
+    filter: (feature) => feature.geometry.type !== 'Point',
+    // custom tooltip
+    // onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
+    style: (feature) => style(feature, colorMap),
+    onEachFeature: (feature, layer) => {
+      layer.on({
+        mouseover: highlightFeature,
+        mouseout: (e) => geoJsonLayer.resetStyle(e.target),
+      })
+    }
+  });
 
-  return (
-    L.geoJSON(geojson, {
-      filter: (feature) => feature.geometry.type !== 'Point',
-      // custom tooltip
-      // onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
-      style: (feature) => style(feature, colorMap)
-    })
-  )
+  return geoJsonLayer;
+}
+
+function highlightFeature(e) {
+  var layer = e.target;
+
+  layer.setStyle({
+    weight: 5,
+    color: '#666',
+    dashArray: '',
+    fillOpacity: 0.7
+  });
+
+  layer.bringToFront();
 }
 
 
