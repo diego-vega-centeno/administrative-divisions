@@ -1,7 +1,6 @@
-
 import styles from '../styles/Main.module.css'
 
-function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, ranges) {
+function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, ranges, legendTitle) {
 
   //* legend control
   if (leafletState.legendControl) leafletState.legendControl.remove();
@@ -12,13 +11,14 @@ function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, range
 
     const div = L.DomUtil.create('div', `${styles['info']} ${styles['legend']}`);
     const grades = ranges.map(range => range[0]).reverse();
-    div.innerHTML = '<div style="text-align: center; font-weight:bold">Population</div>';
+    div.innerHTML = `<div style="text-align: center; font-weight:bold">${legendTitle}</div>`;
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML +=
 
         '<i style="background:' + getColor(grades[i] + 1, ranges, colors) + '"></i> ' +
         grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
     }
+    leafletState.legendControl.div = div;
     return div;
   };
 
@@ -96,4 +96,18 @@ function style(feature, colorMap) {
 }
 
 
-export { createChoroplethLayer, getChoroplethRanges, getColor, generateHueColors }
+function updateLegend(L, leafletState, colorMap, colors, ranges, legendTitle) {
+
+  const div = leafletState.legendControl.div;
+
+  const grades = ranges.map(range => range[0]).reverse();
+  div.innerHTML = `<div style="text-align: center; font-weight:bold">${legendTitle}</div>`;
+  for (var i = 0; i < grades.length; i++) {
+    div.innerHTML +=
+      '<i style="background:' + getColor(grades[i] + 1, ranges, colors) + '"></i> ' +
+      grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+  }
+
+}
+
+export { createChoroplethLayer, getChoroplethRanges, getColor, generateHueColors, updateLegend }

@@ -2,7 +2,7 @@ import osmtogeojson from 'osmtogeojson';
 import L from 'leaflet';
 import {
   createChoroplethLayer,
-  getChoroplethRanges, getColor, generateHueColors
+  getChoroplethRanges, getColor, generateHueColors, updateLegend
 } from './leafletChoroplethLayer';
 import { onEachFeature } from './leafletUtilities';
 
@@ -90,10 +90,11 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
 
   //* Choropleth layer
   // population layer
-  leafletState.baseLayer = createChoroplethLayer(L, leafletState, geojson, ...getChoroplethParams(computedDataRels, 'population'));
+  const popParams = getChoroplethParams(computedDataRels, 'population');
+  leafletState.baseLayer = createChoroplethLayer(L, leafletState, geojson, ...popParams, 'Population');
   leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
-  leafletState.popDensityLayer = createChoroplethLayer(L, leafletState, geojson, ...getChoroplethParams(computedDataRels, 'popDensity'));
-
+  const popDensityParams = getChoroplethParams(computedDataRels, 'popDensity');
+  leafletState.popDensityLayer = createChoroplethLayer(L, leafletState, geojson, ...popDensityParams, 'Population density');
 
   leafletState.baseLayer.addTo(leafletState.map);
   leafletState.popDensityLayer.addTo(leafletState.map);
@@ -109,6 +110,15 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
   ).addTo(leafletState.map);
   if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
 
+  //* Add layer switching event listener
+  leafletState.map.on('overlayadd', function (e) {
+    // Update legend when layer is switched
+    if (e.layer === leafletState.baseLayer) {
+      updateLegend(L, leafletState, ...popParams, 'Population');
+    } else if (e.layer === leafletState.popDensityLayer) {
+      updateLegend(L, leafletState, ...popDensityParams, 'Population density');
+    }
+  });
 }
 
 export { addToLeafletMap }
