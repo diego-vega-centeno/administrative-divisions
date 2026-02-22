@@ -91,17 +91,17 @@ function getValues(computedDataRels, prop) {
 
 function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro) {
 
-  //* Choropleth layer
-  // population is the base layer
-  const popParams = getChoroplethParams(computedDataRels, 'population');
-  leafletState.baseLayer = createChoroplethLayer(L, leafletState, geojson, ...popParams, 'Population');
-  leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
-
+  //* Choropleth layers
   const popDensityParams = getChoroplethParams(computedDataRels, 'popDensity');
   leafletState.popDensityLayer = createChoroplethLayer(L, leafletState, geojson, ...popDensityParams, 'Population density');
 
   const areaParams = getChoroplethParams(computedDataRels, 'area');
   leafletState.areaLayer = createChoroplethLayer(L, leafletState, geojson, ...areaParams, 'Area');
+
+  // population is the base layer
+  const popParams = getChoroplethParams(computedDataRels, 'population');
+  leafletState.baseLayer = createChoroplethLayer(L, leafletState, geojson, ...popParams, 'Population');
+  leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
 
   leafletState.baseLayer.addTo(leafletState.map);
 
