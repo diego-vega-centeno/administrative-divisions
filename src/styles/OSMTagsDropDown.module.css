@@ -48,7 +48,15 @@
 
 .cell-key {
   background-color: #E2E3E5;
+  word-wrap: break-word;
+  word-break: break-all;
   width: 11rem;
+}
+
+@media (max-width: 768px) {
+  .cell-key {
+    width: 8rem;
+  }
 }
 
 .row {
