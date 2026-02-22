@@ -22,7 +22,6 @@ const Map = memo(({
     type: type,
     tileLayer: null,
     baseLayer: null,
-    choroplethLayer: null,
     layerControl: null,
     legendControl: null,
     choroplethInfoPanel: null,
