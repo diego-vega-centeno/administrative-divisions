@@ -1,6 +1,9 @@
 import styles from '../styles/Main.module.css'
 
-function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, ranges, legendTitle) {
+function createChoroplethLayer(
+  L, leafletState, geojson, colorMap, computedPropsMap, colors,
+  ranges, legendTitle
+) {
 
   //* legend control
   if (leafletState.legendControl) leafletState.legendControl.remove();
@@ -24,14 +27,29 @@ function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, range
 
   leafletState.legendControl.addTo(leafletState.map);
 
+  //* info panel
+  if (leafletState.choroplethInfoPanel) leafletState.choroplethInfoPanel.remove();
+  leafletState.choroplethInfoPanel = L.control({ position: 'topright' });
+
+  leafletState.choroplethInfoPanel.onAdd = function (map) {
+    const div = L.DomUtil.create('div', styles['info']);
+    leafletState.choroplethInfoPanel.div = div;
+    updateChoroplethInfoPanel(leafletState);
+    return div;
+  };
+
+  leafletState.choroplethInfoPanel.addTo(leafletState.map);
+
+  //* create geojson layer
   const geoJsonLayer = L.geoJSON(geojson, {
     filter: (feature) => feature.geometry.type !== 'Point',
     // custom tooltip
     // onEachFeature: (feature, layer) => onEachFeature(feature, layer, leafletState),
     style: (feature) => style(feature, colorMap),
     onEachFeature: (feature, layer) => {
+      layer._geoJsonParentTitle = legendTitle;
       layer.on({
-        mouseover: highlightFeature,
+        mouseover: (e) => highlightFeature(e, leafletState, legendTitle, computedPropsMap),
         mouseout: (e) => geoJsonLayer.resetStyle(e.target),
       })
     }
@@ -40,9 +58,8 @@ function createChoroplethLayer(L, leafletState, geojson, colorMap, colors, range
   return geoJsonLayer;
 }
 
-function highlightFeature(e) {
-  var layer = e.target;
-
+function highlightFeature(e, leafletState, legendTitle, computedPropsMap) {
+  const layer = e.target;
   layer.setStyle({
     weight: 5,
     color: '#666',
@@ -51,6 +68,28 @@ function highlightFeature(e) {
   });
 
   layer.bringToFront();
+
+  const featureProps = computedPropsMap.get(layer.feature.id);
+  let val = null;
+  let unit = '';
+  switch (legendTitle) {
+    case 'Population':
+      val = Math.round(featureProps.population);
+      unit = 'person'
+      break;
+    case 'Population density':
+      val = featureProps.popDensity.toFixed(2);
+      unit = '(person/km²)'
+      break;
+    case 'Area':
+      val = featureProps.area.toFixed(2);
+      unit = '(km²)'
+      break;
+    default:
+      break;
+  }
+
+  updateChoroplethInfoPanel(leafletState, legendTitle, featureProps.name, val, unit);
 }
 
 
@@ -114,7 +153,7 @@ function style(feature, colorMap) {
 }
 
 
-function updateLegend(L, leafletState, colorMap, colors, ranges, legendTitle) {
+function updateLegend(L, leafletState, colorMap, computedPropsMap, colors, ranges, legendTitle) {
 
   const div = leafletState.legendControl.div;
 
@@ -128,4 +167,16 @@ function updateLegend(L, leafletState, colorMap, colors, ranges, legendTitle) {
 
 }
 
-export { createChoroplethLayer, getChoroplethRanges, getColor, generateHueColors, updateLegend }
+function updateChoroplethInfoPanel(leafletState, legendTitle, name, val, unit) {
+  leafletState.choroplethInfoPanel.div.innerHTML = val ?
+    (`<h4>${legendTitle}</h4>` + '<b>' + name + '</b><br />' + val + ` ${unit}`)
+    :
+    'Hover over a state'
+}
+
+
+export {
+  createChoroplethLayer,
+  getChoroplethRanges, getColor, generateHueColors,
+  updateLegend, updateChoroplethInfoPanel
+}
