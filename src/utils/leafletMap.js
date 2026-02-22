@@ -9,17 +9,18 @@ import { onEachFeature } from './leafletUtilities';
 /* main leaflet map creation */
 
 function addToLeafletMap(osmRels, computedDataRels, leafletState) {
-
-  //* store old layers references for the layer control
-  // this will be cleared by garbage collection
-  const oldBase = leafletState.baseLayer;
-  const oldChoro = leafletState.choroplethLayer;
   // clear highlighted
   leafletState.highlightedLayer = null;
 
   //* remove previous layers except tile layers
+  // remove references from layer control
+  if (leafletState.layerControl) {
+    if (leafletState.baseLayer) leafletState.layerControl.removeLayer(leafletState.baseLayer);
+    if (leafletState.popDensityLayer) leafletState.layerControl.removeLayer(leafletState.popDensityLayer);
+  }
+  // remove references from map
   if (leafletState.baseLayer) leafletState.map.removeLayer(leafletState.baseLayer);
-  if (leafletState.choroplethLayer) leafletState.map.removeLayer(leafletState.choroplethLayer);
+  if (leafletState.popDensityLayer) leafletState.map.removeLayer(leafletState.popDensityLayer);
 
   //* base tile layer
   if (!leafletState.tileLayer) {
@@ -53,16 +54,14 @@ function addToLeafletMap(osmRels, computedDataRels, leafletState) {
     leafletState.map.off('click', leafletState.handleMapClick);
     leafletState.map.on('click', leafletState.handleMapClick);
   }
-
   //* add buttons
   if (!leafletState.centerBtn._map) {
     leafletState.centerBtn.addTo(leafletState.map);
   }
 
   if (leafletState.type === 'choropleth') {
-    addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldBase, oldChoro);
+    addChoroplethLayer(computedDataRels, geojson, L, leafletState);
   }
-
 }
 
 //* compute ranges and colors
@@ -87,7 +86,7 @@ function getValues(computedDataRels, prop) {
   }, [])
 }
 
-function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldBase, oldChoro) {
+function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro) {
 
   //* Choropleth layer
   // population layer
@@ -100,23 +99,15 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldBase,
   leafletState.popDensityLayer.addTo(leafletState.map);
 
   //* add control layers
-  if (!leafletState.layerControl) {
-    leafletState.layerControl = L.control.layers(
-      null,
-      {
-        'Population': leafletState.baseLayer,
-        'Population density': leafletState.popDensityLayer,
-      },
-      { position: 'topleft' }
-    ).addTo(leafletState.map);
-  } else {
-    // remove old overlays
-    if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
-
-    // add new ones
-    leafletState.layerControl.addOverlay(leafletState.baseLayer, 'Population');
-    leafletState.layerControl.addOverlay(leafletState.popDensityLayer, 'Population density');
-  }
+  leafletState.layerControl = L.control.layers(
+    null,
+    {
+      'Population': leafletState.baseLayer,
+      'Population density': leafletState.popDensityLayer,
+    },
+    { position: 'topleft' }
+  ).addTo(leafletState.map);
+  if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
 
 }
 
