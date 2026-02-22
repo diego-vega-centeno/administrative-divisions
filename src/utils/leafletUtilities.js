@@ -24,8 +24,28 @@ function onEachFeature(feature, layer, leafletState) {
     'mouseover': function (e) {
       this.openTooltip();
     },
-    'click': (event) => highlightFeature(event, leafletState)
+    'click': (event) => highlightFeature(event, leafletState),
+    mouseover: (e) => {
+      if (leafletState.highlightedLayer?.feature.id === e.target.feature.id) return;
+      hoverHighlight(e, leafletState)
+    },
+    mouseout: (e) => {
+      if (leafletState.highlightedLayer?.feature.id === e.target.feature.id) return;
+      leafletState.baseLayer.resetStyle(e.target)
+    },
   });
+}
+
+function hoverHighlight(e) {
+  const layer = e.target;
+  layer.setStyle({
+    weight: 5,
+    color: '#608345ff',
+    dashArray: '',
+    fillOpacity: 0.7
+  });
+
+  layer.bringToFront();
 }
 
 function highlightFeature(event, leafletState) {
@@ -106,7 +126,7 @@ L.Control.Button = L.Control.extend({
 
     button.onclick = () => {
       const state = this.options.leafletState;
-        state.map.fitBounds(state.baseLayer.getBounds());
+      state.map.fitBounds(state.baseLayer.getBounds());
     }
 
     L.DomEvent.disableClickPropagation(button);
