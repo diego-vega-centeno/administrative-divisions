@@ -2,7 +2,8 @@ import osmtogeojson from 'osmtogeojson';
 import L from 'leaflet';
 import {
   createChoroplethLayer,
-  getChoroplethRanges, getColor, generateHueColors, updateLegend
+  getChoroplethRanges, getColor, generateHueColors, updateLegend,
+  updateChoroplethInfoPanel
 } from './leafletChoroplethLayer';
 import { onEachFeature } from './leafletUtilities';
 
@@ -71,11 +72,13 @@ function getChoroplethParams(computedDataRels, prop) {
   const colors = generateHueColors(7);
 
   const colorMap = new Map();
+  const computedPropsMap = new Map();
   computedDataRels.forEach(rel => {
     const val = rel[prop];
     colorMap.set('relation/' + rel.id, getColor(val, ranges, colors));
+    computedPropsMap.set('relation/' + rel.id, rel);
   });
-  return [colorMap, colors, ranges]
+  return [colorMap, computedPropsMap, colors, ranges]
 }
 
 function getValues(computedDataRels, prop) {
@@ -123,7 +126,7 @@ function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro
         updateLegend(L, leafletState, ...popParams, 'Population');
         break;
       case leafletState.popDensityLayer._leaflet_id:
-        updateLegend(L, leafletState, ...popParams, 'Population density');
+        updateLegend(L, leafletState, ...popDensityParams, 'Population density');
         break;
       case leafletState.baseLayer._leaflet_id:
         updateLegend(L, leafletState, ...areaParams, 'Area');

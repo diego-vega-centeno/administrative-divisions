@@ -25,6 +25,7 @@ const Map = memo(({
     choroplethLayer: null,
     layerControl: null,
     legendControl: null,
+    choroplethInfoPanel: null,
     highlightedLayer: null,
     mapControl: null,
     mapControlIsCollapsed: false,
