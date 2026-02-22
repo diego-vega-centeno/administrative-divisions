@@ -2,24 +2,25 @@ import osmtogeojson from 'osmtogeojson';
 import L from 'leaflet';
 import {
   createChoroplethLayer,
-  getChoroplethRanges, getColor, generateHueColors
+  getChoroplethRanges, getColor, generateHueColors, updateLegend
 } from './leafletChoroplethLayer';
 import { onEachFeature } from './leafletUtilities';
 
 /* main leaflet map creation */
 
-function addToLeafletMap(osmBaseData, leafletState) {
-
-  //* store old layers references for the layer control
-  // this will be cleared by garbage collection
-  const oldBase = leafletState.baseLayer;
-  const oldChoro = leafletState.choroplethLayer;
+function addToLeafletMap(osmRels, computedDataRels, leafletState) {
   // clear highlighted
   leafletState.highlightedLayer = null;
 
   //* remove previous layers except tile layers
+  // remove references from layer control
+  if (leafletState.layerControl) {
+    if (leafletState.baseLayer) leafletState.layerControl.removeLayer(leafletState.baseLayer);
+    if (leafletState.popDensityLayer) leafletState.layerControl.removeLayer(leafletState.popDensityLayer);
+  }
+  // remove references from map
   if (leafletState.baseLayer) leafletState.map.removeLayer(leafletState.baseLayer);
-  if (leafletState.choroplethLayer) leafletState.map.removeLayer(leafletState.choroplethLayer);
+  if (leafletState.popDensityLayer) leafletState.map.removeLayer(leafletState.popDensityLayer);
 
   //* base tile layer
   if (!leafletState.tileLayer) {
@@ -31,7 +32,7 @@ function addToLeafletMap(osmBaseData, leafletState) {
   }
 
   //* conver to geojson
-  const geojson = osmtogeojson(osmBaseData);
+  const geojson = osmtogeojson({ 'elements': osmRels });
 
   if (leafletState.type === 'base') {
     //* base layer
@@ -53,58 +54,85 @@ function addToLeafletMap(osmBaseData, leafletState) {
     leafletState.map.off('click', leafletState.handleMapClick);
     leafletState.map.on('click', leafletState.handleMapClick);
   }
-
   //* add buttons
   if (!leafletState.centerBtn._map) {
     leafletState.centerBtn.addTo(leafletState.map);
   }
 
   if (leafletState.type === 'choropleth') {
-    addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro);
+    addChoroplethLayer(computedDataRels, geojson, L, leafletState);
   }
-
 }
 
-function addChoroplethLayer(osmBaseData, geojson, L, leafletState, oldBase, oldChoro) {
-
-  //* compute ranges and colors
-  const pops = osmBaseData.elements.reduce((acc, rel) => {
-    const val = parseInt(rel.tags.population);
-    if (!isNaN(val)) acc.push(val);
-    return acc;
-  }, []);
-  const ranges = getChoroplethRanges(pops, 7);
-  const colors = generateHueColors(ranges.length);
+//* compute ranges and colors
+function getChoroplethParams(computedDataRels, prop) {
+  const values = getValues(computedDataRels, prop);
+  const ranges = getChoroplethRanges(values, 7);
+  const colors = generateHueColors(7);
 
   const colorMap = new Map();
-  geojson.features.forEach(f => {
-    const val = f.properties.population;
-    colorMap.set(f.id, getColor(val, ranges, colors));
+  computedDataRels.forEach(rel => {
+    const val = rel[prop];
+    colorMap.set('relation/' + rel.id, getColor(val, ranges, colors));
   });
+  return [colorMap, colors, ranges]
+}
+
+function getValues(computedDataRels, prop) {
+  return computedDataRels.reduce((acc, rel) => {
+    const val = parseInt(rel[prop]);
+    if (!isNaN(val)) acc.push(val);
+    return acc;
+  }, [])
+}
+
+function addChoroplethLayer(computedDataRels, geojson, L, leafletState, oldChoro) {
 
   //* Choropleth layer
-  leafletState.choroplethLayer = createChoroplethLayer(L, leafletState, geojson, colorMap, colors, ranges);
-  leafletState.map.fitBounds(leafletState.choroplethLayer.getBounds());
-  leafletState.choroplethLayer.addTo(leafletState.map);
+  // population is the base layer
+  const popParams = getChoroplethParams(computedDataRels, 'population');
+  leafletState.baseLayer = createChoroplethLayer(L, leafletState, geojson, ...popParams, 'Population');
+  leafletState.map.fitBounds(leafletState.baseLayer.getBounds());
+
+  const popDensityParams = getChoroplethParams(computedDataRels, 'popDensity');
+  leafletState.popDensityLayer = createChoroplethLayer(L, leafletState, geojson, ...popDensityParams, 'Population density');
+
+  const areaParams = getChoroplethParams(computedDataRels, 'area');
+  leafletState.areaLayer = createChoroplethLayer(L, leafletState, geojson, ...areaParams, 'Area');
+
+  leafletState.baseLayer.addTo(leafletState.map);
+  leafletState.popDensityLayer.addTo(leafletState.map);
 
   //* add control layers
-  if (!leafletState.layerControl) {
-    leafletState.layerControl = L.control.layers(
-      null,
-      {
-        'Population': leafletState.choroplethLayer,
-      },
-      { position: 'topleft' }
-    ).addTo(leafletState.map);
-  } else {
-    // remove old overlays
-    if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
+  leafletState.layerControl = L.control.layers(
+    {
+      'Population': leafletState.baseLayer,
+      'Population density': leafletState.popDensityLayer,
+      'Area': leafletState.areaLayer
+    },
+    null,
+    { position: 'topleft' }
+  ).addTo(leafletState.map);
+  if (oldChoro) leafletState.layerControl.removeLayer(oldChoro);
 
-    // add new ones
-    leafletState.layerControl.addOverlay(leafletState.baseLayer, 'Base');
-    leafletState.layerControl.addOverlay(leafletState.choroplethLayer, 'Population');
-  }
+  //* Add layer switching event listener
+  leafletState.map.on('baselayerchange', function (e) {
+    // Update legend when layer is switched
+    switch (e.layer._leaflet_id) {
+      case leafletState.baseLayer._leaflet_id:
+        updateLegend(L, leafletState, ...popParams, 'Population');
+        break;
+      case leafletState.popDensityLayer._leaflet_id:
+        updateLegend(L, leafletState, ...popParams, 'Population density');
+        break;
+      case leafletState.baseLayer._leaflet_id:
+        updateLegend(L, leafletState, ...areaParams, 'Area');
+        break;
 
+      default:
+        break;
+    }
+  });
 }
 
 export { addToLeafletMap }
