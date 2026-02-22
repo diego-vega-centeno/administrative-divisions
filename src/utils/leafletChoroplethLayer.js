@@ -89,6 +89,11 @@ function highlightFeature(e, leafletState, legendTitle, computedPropsMap) {
       break;
   }
 
+  if (!val) {
+    val = '---';
+    unit = ''
+  }
+
   updateChoroplethInfoPanel(leafletState, legendTitle, featureProps.name, val, unit);
 }
 
