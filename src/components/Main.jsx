@@ -136,6 +136,7 @@ export default function Main() {
         <div className={styles['main-content']}>
           <Map
             osmRels={osmRels}
+            computedDataRels={[]}
             onError={handleError}
             isProgressIconActive={isProgressIconActive}
             setIsProgressIconActive={setIsProgressIconActive}

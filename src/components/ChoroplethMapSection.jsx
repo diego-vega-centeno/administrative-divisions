@@ -45,6 +45,7 @@ const ChoroplethMapSection = memo(({
         </ListItem>
         <Map
           osmRels={osmRels}
+          computedDataRels={computedDataRels}
           onError={onError}
           isProgressIconActive={isProgressIconActive}
           setIsProgressIconActive={setIsProgressIconActive}

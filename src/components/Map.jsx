@@ -8,7 +8,14 @@ import { addToLeafletMap } from '../utils/leafletMap.js';
 import { makeTagsPanel, createCenterButton } from '../utils/leafletUtilities.js';
 import logger from '../utils/logger.js';
 
-const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconActive, type }) => {
+const Map = memo(({
+  osmRels,
+  onError,
+  isProgressIconActive,
+  setIsProgressIconActive,
+  type,
+  computedDataRels
+}) => {
   const mapContainerRef = useRef(null); // will hold map container dom element
 
   const leafletStateRef = useRef({
@@ -75,7 +82,7 @@ const Map = memo(({ osmRels, onError, isProgressIconActive, setIsProgressIconAct
 
   const addToMap = (osmRels) => {
     // add to map
-    addToLeafletMap({ 'elements': osmRels }, leafletStateRef.current);
+    addToLeafletMap(osmRels, computedDataRels, leafletStateRef.current);
     setIsProgressIconActive(false)
   }
 
