@@ -145,6 +145,11 @@ function createCenterButton(leafletState) {
 //* update tags panel
 function updateTagsPanel(leafletState, tags, id) {
 
+  if(!id) {
+    leafletState.mapControl.tbody.innerHTML = '';
+    return;
+  }
+
   const control = leafletState.mapControl;
 
   let rows = "";
