@@ -107,12 +107,24 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
 
       tree.open_node(countryNode, function () {
         const node = tree.get_node(rel.id);
-        // this order matters because the select_node trigger implicit after_open
+
+        if (tree.is_selected(node)) {
+          const domNode = tree.get_node(rel.id, true)[0];
+          scrollToNode(domNode);
+          return;
+        }
+        // this select before matters because the select_node trigger implicit after_open
         tree.select_node(node);
         tree.element.one('after_open.jstree', function () {
           const domNode = tree.get_node(rel.id, true)[0];
           scrollToNode(domNode);
-        })
+        });
+
+        tree.element.one('select_node.jstree', function () {
+          console.log('h');
+          const domNode = tree.get_node(rel.id, true)[0];
+          scrollToNode(domNode);
+        });
       });
     }
 
