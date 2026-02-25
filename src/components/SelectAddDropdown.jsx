@@ -21,6 +21,7 @@ import SearchTreeResultList from './SearchTreeResultList.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressIcon } from '../styles/SearchDropdown';
 import IconButton from '@mui/material/IconButton';
+import add_flat_countries from '../add_flat_countries.json'
 
 export default function SelectAddDropdown({ text = '', onPlotRequest, onError }) {
 
@@ -47,8 +48,8 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
   // }
 
   function handleReset() {
-    treeRef.current?.tree().deselect_all();
-    treeRef.current?.tree().close_all();
+    treeRef.current?.tree(true).deselect_all();
+    treeRef.current?.tree(true).close_all();
   }
 
   function handleSelect(selected) {
@@ -90,6 +91,38 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
       setIsProgressIconActive(false);
     } catch (error) {
       logger.error(`Failed to search relations: ${error.message}`)
+    }
+  }
+
+  function handleSearchSelection(rel) {
+    const tree = treeRef.current?.tree(true);
+
+    // find country dom node
+    if (rel.path.length === 0) {
+      const countryDomNode = tree.get_node(rel.id, true)[0];
+      tree.select_node(countryDomNode);
+      scrollToNode(countryDomNode)
+    } else {
+      const countryNode = add_flat_countries.find(node => node.text === rel.path.at(-1));
+
+      tree.open_node(countryNode, function () {
+        const node = tree.get_node(rel.id);
+        tree.open_node(node, function () {
+          // this order matters because the select_node delays the fire of after_open
+          tree.select_node(node);
+          tree.element.one('after_open.jstree', function () {
+            const domNode = tree.get_node(rel.id, true)[0];
+            scrollToNode(domNode);
+          })
+        });
+      });
+    }
+
+    function scrollToNode(node) {
+      const container = document.getElementsByTagName('aside')[0];
+      const offset = 500; // pixels
+      const top = node.offsetTop - offset;
+      container.scrollTo({ top: top, behavior: 'smooth' });
     }
   }
 
@@ -141,7 +174,7 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         )}
         <SearchTreeResultList
           relations={searchResult}
-          onSelect={(rel) => onPlotRequest([rel.id])}
+          onSelect={handleSearchSelection}
         />
         <Box sx={addTools}>
           <Button sx={addToolsButton}

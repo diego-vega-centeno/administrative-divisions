@@ -20,6 +20,7 @@ const JsTreeWrapper = forwardRef(({ onSelect }, ref) => {
   useEffect(() => {
     $(treeRef.current).jstree({
       'core': {
+        // 'animation': 0,
         // jsTree calls this function whenever it needs data
         // passes the node on the 'node' parameter
         'data': async function (node, callback) {
