@@ -79,7 +79,8 @@ const progressIcon = {
   '& .MuiCircularProgress-root': {
     color: 'green',
     strokeLinecap: 'round'
-  }
+  },
+  backgroundColor: 'var(--color-primary)'
 }
 
 export {
