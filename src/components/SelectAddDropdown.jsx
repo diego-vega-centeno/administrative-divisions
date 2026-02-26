@@ -121,7 +121,6 @@ export default function SelectAddDropdown({ text = '', onPlotRequest, onError })
         });
 
         tree.element.one('select_node.jstree', function () {
-          console.log('h');
           const domNode = tree.get_node(rel.id, true)[0];
           scrollToNode(domNode);
         });
