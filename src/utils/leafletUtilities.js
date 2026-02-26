@@ -10,34 +10,44 @@ function onEachFeature(feature, layer, leafletState) {
     feature.properties?.['alt_name:en'] ||
     'Missing name';
 
-  layer.bindTooltip(
-    `<span 
-            class="custom-bindPopup" 
-            href="https://www.openstreetmap.org/relation/${feature.properties.id.replace("relation/", "")}">
-             ${name}
-        </span>`
-  );
+  layer.bindTooltip(`<span class="custom-bindPopup">${name}</span>`);
 
   layer.on({
     // 'e' is the event and 'this' is the layer
     // the layer created with each applied feature
     'mouseover': function (e) {
+      if (leafletState.openedTooltip) leafletState.map.closeTooltip(leafletState.openedTooltip);
       this.openTooltip();
+      leafletState.openedTooltip = this.getTooltip();
+      hoverHighlight(e, leafletState);
     },
-    'click': (event) => highlightFeature(event, leafletState),
-    mouseover: (e) => {
-      if (leafletState.highlightedLayer?.feature.id === e.target.feature.id) return;
-      hoverHighlight(e, leafletState)
-    },
-    mouseout: (e) => {
-      if (leafletState.highlightedLayer?.feature.id === e.target.feature.id) return;
-      leafletState.baseLayer.resetStyle(e.target)
-    },
+    'click': (e) => highlightFeature(e, leafletState),
+    'mouseout': (e) => resetHighlight(e, leafletState),
   });
 }
 
-function hoverHighlight(e) {
+function resetHighlight(e, leafletState) {
+  if (leafletState.highlightedLayer === e.target) return;
+  leafletState.baseLayer.resetStyle(e.target);
+  leafletState.hoverHighlightedLayer = null;
+}
+
+function hoverHighlight(e, leafletState) {
+
+  if (
+    leafletState.highlightedLayer &&
+    leafletState.hoverHighlightedLayer &&
+    leafletState.highlightedLayer !== leafletState.hoverHighlightedLayer
+  ) {
+    leafletState.baseLayer.resetStyle(leafletState.hoverHighlightedLayer);
+  };
+
+  if (e.target === leafletState.highlightedLayer) return;
+
+
   const layer = e.target;
+  leafletState.hoverHighlightedLayer = layer;
+
   layer.setStyle({
     weight: 5,
     color: '#608345ff',
@@ -48,17 +58,17 @@ function hoverHighlight(e) {
   layer.bringToFront();
 }
 
-function highlightFeature(event, leafletState) {
+function highlightFeature(e, leafletState) {
 
   // stop event propagation to prevent map click
-  L.DomEvent.stopPropagation(event);
+  L.DomEvent.stopPropagation(e);
 
   // remove highlighted layer if it exist
   if (leafletState.highlightedLayer) {
     leafletState.baseLayer.resetStyle(leafletState.highlightedLayer);
   }
 
-  const layer = event.target;
+  const layer = e.target;
   layer.setStyle({
     color: "red"
   });
@@ -145,7 +155,7 @@ function createCenterButton(leafletState) {
 //* update tags panel
 function updateTagsPanel(leafletState, tags, id) {
 
-  if(!id) {
+  if (!id) {
     leafletState.mapControl.tbody.innerHTML = '';
     return;
   }
