@@ -1,6 +1,6 @@
 # Administrative divisions from OpenStreetMap
 
-**[Live site: osm-administrative-divisions.vercel.app](https://osm-administrative-divisions.vercel.app/)**
+**Live site: [osm-administrative-divisions.vercel.app](https://osm-administrative-divisions.vercel.app/)**
 
 ![App Screenshot](./app_sample.png)
 *Browse, compare, and export 178k+ administrative divisions with interactive maps and charts*
