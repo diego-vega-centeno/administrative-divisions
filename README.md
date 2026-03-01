@@ -1,5 +1,4 @@
 # Administrative divisions from OpenStreetMap
-Obtained by using a recursive query from Overpass api
 
 ## What is this?
 This is an interactive tool to explore, compare, and export administrative divisions from OpenStreetMap. Browse 178,000+ divisions across 70 countries via hierarchical tree or search, visualize on maps, compare stats, and download structured data.
@@ -11,7 +10,7 @@ This is an interactive tool to explore, compare, and export administrative divis
 * Use the rest API to directly get the hierarchy of each country
 
 ## Why did I build it?
-OpendStreeMap offers a query to get administrative boundaries but there’s no direct way of getting and display the hierarchy and compare them. I’ve scraped, tested and collected other information of the structure in an easy to select, display and get compare table, charts and map from this divisions.
+OpenStreetMap offers a query to get administrative boundaries but there’s no direct way of getting and display the hierarchy and compare them. I’ve scraped, tested and collected other information of the structure in an easy to select, display and get compare table, charts and map from this divisions.
 
 Others solutions like GADM are slow to update, Wikipedia lacks geometry and QGIS has steep learning curve.
 This app gives researchers and journalists a fast way to explore current OSM data, compare divisions visually, and export analysis-ready files.
@@ -27,7 +26,7 @@ Data pipeline:
 ## Performance optimizations:
 
 * Queries are done in the frontend to OSM. Taking advantage of OSM infrastructure avoids expensive storage/maintenance of duplicate geometry data and reduces load on the backend
-* Divisions data (tags and geomtry) are cached using indexedDB (100MB limit) to reduce queries and improve user experience
+* Divisions data (tags and geometry) are cached using indexedDB (100MB limit) to reduce queries and improve user experience
 * Built a resumable Github workflows (scrape, clean and 3 spatial test) with persistent storage in backblaze b2
 * Lazy loading on jstree by country to reduce total blocking time of page.
 * Backend search being done in the backend.
