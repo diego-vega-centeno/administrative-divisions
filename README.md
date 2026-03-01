@@ -10,13 +10,12 @@ This is an interactive tool to explore, compare, and export administrative divis
 * Use the rest API to directly get the hierarchy of each country
 
 ## Why did I build it?
-OpenStreetMap offers a query to get administrative boundaries but there’s no direct way of getting and display the hierarchy and compare them. I’ve scraped, tested and collected other information of the structure in an easy to select, display and get compare table, charts and map from this divisions.
+OpenStreetMap offers a query to get administrative boundaries but there’s no direct way of getting and displaying the hierarchy and compare them. I’ve scraped, tested and collected other information of the structure in an easy to select, display and get compare table, charts and map from this divisions.
 
 Others solutions like GADM are slow to update, Wikipedia lacks geometry and QGIS has steep learning curve.
 This app gives researchers and journalists a fast way to explore current OSM data, compare divisions visually, and export analysis-ready files.
 
-## How it works?
-Data pipeline:
+## How did I build it?
 
 * Scraped 178k divisions from OSM using recursive Overpass API queries (via area element)
 * Cleaned and validated through spatial checks and tag verification
