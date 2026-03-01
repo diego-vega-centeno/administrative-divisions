@@ -60,7 +60,7 @@ This app gives researchers and journalists a fast way to explore current OSM dat
 
 Public REST API to get hierarchy:
 
-**Example: Returns admin divisions at levels 4 and 6 for country ID 80500 (Peru) with hierarchy and metadata.**
+**Example: Returns admin divisions at levels 4 and 6 for country ID 80500 (Australia) with hierarchy and metadata.**
 ```
 GET https://administrative-divisions-server.onrender.com/api/v1/countries/80500?levels=4,6
 ```
