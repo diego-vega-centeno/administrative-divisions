@@ -5,7 +5,7 @@
 ![App Screenshot](./docs/app_sample.png)
 *Browse, compare, and export 178k+ administrative divisions with interactive maps and charts*
 
-**[📹 Watch demo (1 min)](./docs/app_demo.mp4)**
+<video src="./docs/app_demo.mp4" width="100%" controls></video>
 
 ## What is this?
 This is an interactive tool to explore, compare, and export administrative divisions from OpenStreetMap. Browse 178,000+ divisions across 70 countries via hierarchical tree or search, visualize on maps, compare stats, and download structured data.
