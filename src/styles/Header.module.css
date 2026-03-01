@@ -1,4 +1,4 @@
-.header{
+.header {
   color: var(--color-text);
   background-color: var(--color-secondary);
   display: flex;
@@ -14,14 +14,23 @@
 .header-menu-item {
   margin: 0 1rem;
 }
+.header-menu-item-about{
+  padding: .4rem;
+}
 
-.header-menu{
+.header-menu-item-about:hover {
+  background-color: #5c6266;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.header-menu {
   display: flex;
   align-items: center;
 }
 
 @media screen and (max-width: 768px) {
-  .header{
+  .header {
     flex-direction: column;
     height: calc(1.3 * var(--header-footer-height))
   }
