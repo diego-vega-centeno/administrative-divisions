@@ -5,7 +5,7 @@ import Collapse from '@mui/material/Collapse';
 export default function TagsTable({ osmRel }) {
   if (!osmRel) return null;
 
-  // SubTable compoenent needs to be in top level due to useState
+  // SubTable component needs to be in top level due to useState
   function SubTable({ label, rows }) {
     const [open, setOpen] = useState(false);
 
