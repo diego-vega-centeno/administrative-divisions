@@ -26,6 +26,7 @@ const ChoroplethMapSection = memo(({
     }
   }, [computedDataRels, isComputingIconActive]);
 
+  // return needs to be after hooks
   if (!computedDataRels.length && !isComputingIconActive) return null;
 
   return (
