@@ -1,5 +1,5 @@
 import styles from '../styles/Header.module.css'
-import NavSidebar from './navSidebar.jsx'
+import NavSidebar from './navSidebar'
 import { useNavigate } from 'react-router'
 
 export default function Header() {
