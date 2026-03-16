@@ -3,24 +3,31 @@ import { useContext, useState } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { navSideBox, navSideBarButton, navSideBarIcon, navSideItem } from "../styles/navSidebar";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import {
+  navSideBox,
+  navSideBarButton,
+  navSideBarIcon,
+  navSideItem,
+} from "../styles/navSidebar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { IconButton } from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
-import LoginMenu from './LoginMenu.jsx'
-import FavoritesMenu from "./FavoritesMenu.jsx";
+import LoginMenu from "./LoginMenu";
+import FavoritesMenu from "./FavoritesMenu";
 
-import { AuthContext } from "./AuthContext.jsx";
-import logger from "../utils/logger.js";
+import { AuthContext, AuthContextType } from "./AuthContext";
+import logger from "../utils/logger";
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
   const [isFavoritesMenuOpen, setIsFavoritesMenuOpen] = useState(false);
-  const { userData, setUserData, loading } = useContext(AuthContext);
+  const { userData, setUserData, loading } = useContext(
+    AuthContext,
+  ) as AuthContextType;
 
-  const toggleDrawer = (bool) => () => setOpen(bool);
+  const toggleDrawer = (bool: boolean) => () => setOpen(bool);
 
   const handleUserStateButton = () => {
     if (userData) {
@@ -28,27 +35,27 @@ export default function NavSidebar() {
     } else {
       setIsLoginMenuOpen(true);
     }
-  }
+  };
 
   const handleFavoritesButton = () => {
     setIsFavoritesMenuOpen(true);
-  }
+  };
 
   const logoutUser = async () => {
     try {
-      await fetch(import.meta.env.VITE_BACKEND_URL + '/user/logout',
-        { credentials: 'include' }
-      )
+      await fetch(import.meta.env.VITE_BACKEND_URL + "/user/logout", {
+        credentials: "include",
+      });
       setUserData(null);
       window.location.reload();
     } catch (error) {
-      logger.error(`Logout failed: ${error}`)
+      logger.error(`Logout failed: ${error}`);
     }
-  }
+  };
 
   let userState;
-  if (loading) userState = 'Loading ...'
-  else userState = userData ? 'Log out' : 'Log in'
+  if (loading) userState = "Loading ...";
+  else userState = userData ? "Log out" : "Log in";
 
   const navList = (
     <Box sx={navSideBox} onClick={toggleDrawer(false)}>
@@ -62,34 +69,33 @@ export default function NavSidebar() {
           <ListItemButton
             onClick={handleFavoritesButton}
             sx={navSideItem}
-            disabled={!Boolean(userData)}>
+            disabled={!Boolean(userData)}
+          >
             Favorites
           </ListItemButton>
         </ListItem>
       </List>
     </Box>
-  )
+  );
 
   return (
     <div>
       <IconButton onClick={toggleDrawer(true)} sx={navSideBarButton}>
         <FontAwesomeIcon style={navSideBarIcon} icon={faBars} />
       </IconButton>
-      <Drawer
-        open={open}
-        onClose={toggleDrawer(false)}
-        anchor="right"
-      >
+      <Drawer open={open} onClose={toggleDrawer(false)} anchor="right">
         {navList}
       </Drawer>
-      {isLoginMenuOpen && <LoginMenu
-        open={isLoginMenuOpen}
-        onClose={() => setIsLoginMenuOpen(false)}
-      />}
+      {isLoginMenuOpen && (
+        <LoginMenu
+          open={isLoginMenuOpen}
+          onClose={() => setIsLoginMenuOpen(false)}
+        />
+      )}
       <FavoritesMenu
         open={isFavoritesMenuOpen}
         onClose={() => setIsFavoritesMenuOpen(false)}
       />
     </div>
-  )
+  );
 }
