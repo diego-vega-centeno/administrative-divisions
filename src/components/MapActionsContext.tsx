@@ -4,7 +4,7 @@ interface MapActionsProviderProps {
   children: React.ReactNode;
 }
 
-interface MapActionsContextType {
+export interface MapActionsContextType {
   selected: any[];
   setSelected: (selected: any[]) => void;
 }
