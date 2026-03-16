@@ -8,7 +8,7 @@ export interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
-let logout = null;
+let logout: (() => void) | null = null;
 
 interface AuthProviderProps {
   children: React.ReactNode;
