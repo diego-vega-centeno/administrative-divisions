@@ -1,9 +1,9 @@
 import { logout } from "../components/AuthContext";
 
-async function fetchWithUserUpdate(url, options = {}) {
+async function fetchWithUserUpdate(url: string, options = {}) {
   const res = await fetch(url, {
     ...options,
-    credentials: 'include',
+    credentials: "include",
   });
 
   // If fetch return a lack of valid credentials
@@ -15,4 +15,4 @@ async function fetchWithUserUpdate(url, options = {}) {
   return res;
 }
 
-export { fetchWithUserUpdate }
+export { fetchWithUserUpdate };
