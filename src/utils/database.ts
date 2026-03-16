@@ -1,14 +1,11 @@
 import { fetchWithUserUpdate } from "./fetch";
+import { CustomError } from "../types/index.ts";
 
 interface formattedRelsType {
   relId: string;
   relName: string;
   adminLevel: string;
   parentsNames: string[];
-}
-
-interface CustomError extends Error {
-  code: string;
 }
 
 async function saveLayerToDB(title: string, formattedRels: formattedRelsType) {
@@ -69,7 +66,7 @@ async function deleteLayer(layerId: string) {
   return;
 }
 
-async function dbDeleteLayerRels(layerId: string, ids: string[]) {
+async function dbDeleteLayerRels(layerId: string, ids: Set<string>) {
   const response = await fetchWithUserUpdate(
     import.meta.env.VITE_BACKEND_URL + `/layer/${layerId}/rels`,
     {
