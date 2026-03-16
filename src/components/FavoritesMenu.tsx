@@ -21,8 +21,8 @@ import logger from "../utils/logger.js";
 
 interface FavoritesMenuProps {
   open: boolean;
-  onClose: any;
-  onError: any;
+  onClose: () => void;
+  onError?: () => void;
 }
 
 import { MapActionsContextType } from "./MapActionsContext";
