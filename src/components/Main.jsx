@@ -1,13 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import styles from '../styles/Main.module.css'
-import Footer from './Footer.jsx'
-import SearchDropdown from './SearchDropdown.jsx'
-import SelectAddDropdown from './SelectAddDropdown.jsx'
+import Footer from './Footer'
+import SearchDropdown from './SearchDropdown'
+import SelectAddDropdown from './SelectAddDropdown'
 import 'leaflet/dist/leaflet.css';
 import AlertDialog from './AlertDialog.jsx';
 import { useSearchParams } from "react-router";
 import Map from './Map.jsx';
-import { MapActionsContext } from './MapActionsContext.jsx';
+import { MapActionsContext } from './MapActionsContext';
 import TagsSection from './TagsSection.jsx';
 import logger from '../utils/logger.js';
 import { getRelationsDataWithCache } from '../utils/overpass';
