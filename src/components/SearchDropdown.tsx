@@ -1,43 +1,59 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faX } from '@fortawesome/free-solid-svg-icons';
-import { dropdown, dropdownIcon } from '../styles/SearchDropdown';
-import { useState } from 'react';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import Box from '@mui/material/Box';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { searchFieldBox, searchField, searchFieldIconBox, progressIcon } from '../styles/SearchDropdown';
-import { cancelButton } from '../styles/SelectAddDropdown.jsx';
-import TextField from '@mui/material/TextField';
-import { getNominatimSearch } from '../utils/nominatim.js';
-import SearchResultList from './SearchResultList.jsx';
-import CircularProgress from '@mui/material/CircularProgress';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight, faX } from "@fortawesome/free-solid-svg-icons";
+import { dropdown, dropdownIcon } from "../styles/SearchDropdown.js";
+import { useState } from "react";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import Box from "@mui/material/Box";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  searchFieldBox,
+  searchField,
+  searchFieldIconBox,
+  progressIcon,
+} from "../styles/SearchDropdown.js";
+import { cancelButton } from "../styles/SelectAddDropdown.js";
+import TextField from "@mui/material/TextField";
+import { getNominatimSearch } from "../utils/nominatim.js";
+import SearchResultList from "./SearchResultList.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
 import logger from "../utils/logger.js";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
+import { CustomError } from "../types/index.js";
 
-export default function SearchDropdown({ text = '', onSelect, onError }) {
+interface SearchDropdownProps {
+  text: string;
+  onSelect: () => void;
+  onError: (_:any) => void;
+}
 
+export default function SearchDropdown({
+  text = "",
+  onSelect,
+  onError,
+}: SearchDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [entities, setEntities] = useState([]);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
 
   function handleClick() {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   }
 
   async function handleSearch() {
-    if (input == '') return;
-    setEntities([])
+    if (input == "") return;
+    setEntities([]);
     setIsProgressIconActive(true);
     try {
       const entities = await getNominatimSearch(input);
       setIsProgressIconActive(false);
-      setEntities(entities)
+      setEntities(entities);
     } catch (error) {
+      const err = error as CustomError;
       setIsProgressIconActive(false);
-      onError(error.message);
+      onError(err.message);
       logger.error(error);
     }
   }
@@ -56,23 +72,25 @@ export default function SearchDropdown({ text = '', onSelect, onError }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') { handleSearch(); }
+              if (e.key === "Enter") {
+                handleSearch();
+              }
             }}
             slotProps={{
               input: {
                 endAdornment: (
                   <IconButton
-                    size='small'
+                    size="small"
                     sx={cancelButton}
                     onClick={() => {
                       setEntities([]);
-                      setInput('')
+                      setInput("");
                     }}
                   >
                     <FontAwesomeIcon icon={faX} />
                   </IconButton>
-                )
-              }
+                ),
+              },
             }}
           />
           <Box sx={searchFieldIconBox} onClick={handleSearch}>
@@ -88,5 +106,5 @@ export default function SearchDropdown({ text = '', onSelect, onError }) {
         <SearchResultList entities={entities} onSelect={onSelect} />
       </Collapse>
     </Box>
-  )
+  );
 }
