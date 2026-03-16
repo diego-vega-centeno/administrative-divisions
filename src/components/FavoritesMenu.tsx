@@ -39,9 +39,9 @@ export default function FavoritesMenu({
     osm_relation_id: string;
   }
 
-  interface CustomError extends Error{
-    code:string;
-    message:string;
+  interface CustomError extends Error {
+    code: string;
+    message: string;
   }
 
   const [relsPerLayer, setRelsPerLayer] = useState<
@@ -54,7 +54,9 @@ export default function FavoritesMenu({
   const [activeLayer, setActiveLayer] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const [selectedLayerRelsIds, setSelectedLayerRelsIds] = useState(new Set());
+  const [selectedLayerRelsIds, setSelectedLayerRelsIds] = useState<Set<string>>(
+    new Set(),
+  );
   const [error, setError] = useState("");
 
   useEffect(() => {
