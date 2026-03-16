@@ -1,8 +1,8 @@
-import Home from "../pages/Home.jsx"
-import About from "../pages/About.jsx"
+import Home from "../pages/Home"
+import About from "../pages/About"
 import { BrowserRouter, Routes, Route } from "react-router"
-import { AuthProvider } from "./AuthContext.jsx"
-import { MapActionsProvider } from './MapActionsContext.jsx'
+import { AuthProvider } from "./AuthContext"
+import { MapActionsProvider } from './MapActionsContext'
 
 function App() {
 
