@@ -18,6 +18,7 @@ import Modal from "@mui/material/Modal";
 import { MapActionsContext } from "./MapActionsContext";
 import FavoritesMenuTable from "./FavoritesMenuTable";
 import logger from "../utils/logger.js";
+import { RelationsType, CustomError } from "../types/index.ts";
 
 interface FavoritesMenuProps {
   open: boolean;
@@ -32,17 +33,6 @@ export default function FavoritesMenu({
   onClose,
   onError,
 }: FavoritesMenuProps) {
-  interface RelationsType {
-    id: string;
-    layer_id: string;
-    layer_title: string;
-    osm_relation_id: string;
-  }
-
-  interface CustomError extends Error {
-    code: string;
-    message: string;
-  }
 
   const [relsPerLayer, setRelsPerLayer] = useState<
     Record<string, RelationsType[]>
@@ -51,13 +41,13 @@ export default function FavoritesMenu({
     MapActionsContext,
   ) as MapActionsContextType;
   const [loading, setLoading] = useState(false);
-  const [activeLayer, setActiveLayer] = useState("");
-  const [editMode, setEditMode] = useState(false);
-  const [confirm, setConfirm] = useState(false);
+  const [activeLayer, setActiveLayer] = useState<string>("");
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [confirm, setConfirm] = useState<boolean>(false);
   const [selectedLayerRelsIds, setSelectedLayerRelsIds] = useState<Set<string>>(
     new Set(),
   );
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     if (!open) return;
@@ -104,7 +94,7 @@ export default function FavoritesMenu({
     return () => controller.abort();
   }, [open]);
 
-  const plotLayer = (groupKey: string) => {
+  const plotLayer: (_: string) => void = (groupKey: string) => {
     onClose();
     setSelected(relsPerLayer[groupKey].map((rel) => rel["osm_relation_id"]));
   };
