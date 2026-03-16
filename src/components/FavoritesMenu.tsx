@@ -18,7 +18,7 @@ import Modal from "@mui/material/Modal";
 import { MapActionsContext } from "./MapActionsContext";
 import FavoritesMenuTable from "./FavoritesMenuTable";
 import logger from "../utils/logger.js";
-import { RelationsType, CustomError } from "../types/index.ts";
+import { RelationsUserLayersType, CustomError } from "../types/index.ts";
 
 interface FavoritesMenuProps {
   open: boolean;
@@ -33,9 +33,8 @@ export default function FavoritesMenu({
   onClose,
   onError,
 }: FavoritesMenuProps) {
-
   const [relsPerLayer, setRelsPerLayer] = useState<
-    Record<string, RelationsType[]>
+    Record<string, RelationsUserLayersType[]>
   >({});
   const { setSelected } = useContext(
     MapActionsContext,
@@ -96,7 +95,9 @@ export default function FavoritesMenu({
 
   const plotLayer: (_: string) => void = (groupKey: string) => {
     onClose();
-    setSelected(relsPerLayer[groupKey].map((rel) => rel["osm_relation_id"]));
+    setSelected(
+      relsPerLayer[groupKey].map((rel) => (rel as any)["osm_relation_id"]),
+    );
   };
 
   const deleteSelectedLayer = async (layerId: string) => {
@@ -146,7 +147,7 @@ export default function FavoritesMenu({
 
         // update react state
         setRelsPerLayer((prev) => {
-          const newRelsPerLayer: Record<string, RelationsType[]> = {};
+          const newRelsPerLayer: Record<string, RelationsUserLayersType[]> = {};
 
           const oldKey = `${layerTitle}|${layerId}`;
           const newKey = `${newTitle}|${layerId}`;
