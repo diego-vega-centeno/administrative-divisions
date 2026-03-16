@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import logger from "../utils/logger";
 
-interface AuthContextType {
+export interface AuthContextType {
   userData: any;
   setUserData: (data: any) => void;
   loading: boolean;
