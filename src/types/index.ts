@@ -46,4 +46,12 @@ export type FormattedRelsType = {
   relName: string;
   adminLevel: string;
   parentsNames: string | undefined;
-}[]
+}[];
+
+export interface osmRel {
+  bounds: Record<string, number>;
+  id: number;
+  members: object[];
+  tags: Record<string, string>;
+  type: string;
+}
