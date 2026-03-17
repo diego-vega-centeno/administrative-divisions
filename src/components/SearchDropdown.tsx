@@ -25,7 +25,7 @@ import { CustomError } from "../types/index.js";
 interface SearchDropdownProps {
   text: string;
   onSelect: () => void;
-  onError: (_:any) => void;
+  onError: (_: any) => void;
 }
 
 export default function SearchDropdown({
@@ -103,7 +103,9 @@ export default function SearchDropdown({
           </Box>
         )}
 
-        <SearchResultList entities={entities} onSelect={onSelect} />
+        {entities.length > 0 && (
+          <SearchResultList entities={entities} onSelect={onSelect} />
+        )}
       </Collapse>
     </Box>
   );
