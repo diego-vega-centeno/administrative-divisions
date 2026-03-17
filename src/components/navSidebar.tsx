@@ -21,7 +21,7 @@ import logger from "../utils/logger";
 
 export default function NavSidebar() {
   const [open, setOpen] = useState(false);
-  const [isLoginMenuOpen, setIsLoginMenuOpen] = useState(false);
+  const [isLoginMenuOpen, setIsLoginMenuOpen] = useState<boolean>(false);
   const [isFavoritesMenuOpen, setIsFavoritesMenuOpen] = useState(false);
   const { userData, setUserData, loading } = useContext(
     AuthContext,

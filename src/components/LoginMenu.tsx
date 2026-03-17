@@ -9,13 +9,20 @@ import {
   menuContainer,
   menuHeader,
   menuDescription,
-} from "../styles/LoginMenu.jsx";
+} from "../styles/LoginMenu";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import logger from "../utils/logger.js";
+import { Dispatch, SetStateAction } from "react";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-export default function LoginMenu({ open, onClose }) {
-  const handleClick = (method) => {
+interface LoginMenuProps {
+  open: boolean;
+  onClose: (_:boolean) => void;
+}
+
+export default function LoginMenu({ open, onClose }: LoginMenuProps) {
+  const handleClick = (method: string) => {
     let authUrl;
 
     switch (method) {
@@ -32,8 +39,6 @@ export default function LoginMenu({ open, onClose }) {
       default:
         break;
     }
-
-    location.href = authUrl;
   };
 
   return (
@@ -44,13 +49,13 @@ export default function LoginMenu({ open, onClose }) {
         <Box sx={menu}>
           <Box sx={selection} onClick={() => handleClick("google")}>
             <Icon sx={selectionIcon}>
-              <FontAwesomeIcon icon={faGoogle} />
+              <FontAwesomeIcon icon={faGoogle as IconProp} />
             </Icon>
             <span>Continue with Google</span>
           </Box>
           <Box sx={selection} onClick={() => handleClick("osm")}>
             <Icon sx={selectionIcon}>
-              <FontAwesomeIcon icon={faOpenstreetmap} />
+              <FontAwesomeIcon icon={faOpenstreetmap as IconProp} />
             </Icon>
             <span>Continue with OpenStreeMap</span>
           </Box>
