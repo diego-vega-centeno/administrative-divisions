@@ -12,7 +12,6 @@ export default function SearchResultList({
   entities,
   onSelect,
 }: SearchResultListProps) {
-  console.log(entities);
   if (!entities || entities.length == 0) return null;
 
   return (
