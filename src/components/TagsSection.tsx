@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 // import { dataIndex } from '../utils/addData.js';
 import { listItem } from "../styles/Menu.js";
 import { useState, useEffect, memo } from "react";
-import TagsTable from "./TagsTable.jsx";
+import TagsTable from "./TagsTable";
 import { osmRel } from "../types/index.js";
 
 const TagsSection = memo(({ osmRels }: { osmRels: osmRel[] }) => {
@@ -45,7 +45,7 @@ const TagsSection = memo(({ osmRels }: { osmRels: osmRel[] }) => {
           </Box>
         </Box>
         <Box>
-          <TagsTable osmRel={selectedRel} />
+          <TagsTable osmRel={selectedRel || ({} as osmRel)} />
         </Box>
       </Box>
     </Box>
