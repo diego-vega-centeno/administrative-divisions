@@ -16,7 +16,7 @@ import {
 import { cancelButton } from "../styles/SelectAddDropdown.js";
 import TextField from "@mui/material/TextField";
 import { getNominatimSearch } from "../utils/nominatim.js";
-import SearchResultList from "./SearchResultList.jsx";
+import SearchResultList from "./SearchResultList";
 import CircularProgress from "@mui/material/CircularProgress";
 import logger from "../utils/logger.js";
 import IconButton from "@mui/material/IconButton";
