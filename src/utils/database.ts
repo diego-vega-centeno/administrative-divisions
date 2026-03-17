@@ -1,14 +1,7 @@
 import { fetchWithUserUpdate } from "./fetch";
-import { CustomError } from "../types/index.ts";
+import { CustomError, FormattedRelsType } from "../types/index.ts";
 
-interface formattedRelsType {
-  relId: string;
-  relName: string;
-  adminLevel: string;
-  parentsNames: string[];
-}
-
-async function saveLayerToDB(title: string, formattedRels: formattedRelsType) {
+async function saveLayerToDB(title: string, formattedRels: FormattedRelsType) {
   const response = await fetchWithUserUpdate(
     import.meta.env.VITE_BACKEND_URL + "/layer",
     {
