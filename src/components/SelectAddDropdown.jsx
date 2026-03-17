@@ -4,7 +4,7 @@ import { useState, useRef, useContext } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
-import JsTreeWrapper from './jsTreeWrapper.jsx';
+import JsTreeWrapper from './jsTreeWrapper';
 import { searchFieldBox, searchField, searchFieldIconBox } from '../styles/SearchDropdown';
 import TextField from '@mui/material/TextField';
 import { faSearch, faX } from '@fortawesome/free-solid-svg-icons';
