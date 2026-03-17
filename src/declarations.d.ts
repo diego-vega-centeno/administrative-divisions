@@ -12,3 +12,8 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+interface Window {
+  jQuery: typeof jQuery;
+  $: typeof jQuery;
+}
