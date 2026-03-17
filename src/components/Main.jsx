@@ -6,7 +6,7 @@ import SelectAddDropdown from './SelectAddDropdown'
 import 'leaflet/dist/leaflet.css';
 import AlertDialog from './AlertDialog';
 import { useSearchParams } from "react-router";
-import Map from './Map.jsx';
+import Map from './Map';
 import { MapActionsContext } from './MapActionsContext';
 import TagsSection from './TagsSection.jsx';
 import logger from '../utils/logger.js';
@@ -15,7 +15,7 @@ import { profileSize } from '../utils/overpass';
 import DataTable from './DataTable.jsx';
 import ChartsSection from './ChartsSection.jsx';
 import WikidataSection from './WikidataSection.jsx';
-import ChoroplethMapSection from './ChoroplethMapSection.jsx';
+import ChoroplethMapSection from './ChoroplethMapSection';
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState(null);
