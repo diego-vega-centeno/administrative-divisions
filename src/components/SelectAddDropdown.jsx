@@ -17,7 +17,7 @@ import DownloadMenu from './DownloadMenu.jsx';
 import SaveMenu from './SaveMenu.jsx';
 import { AuthContext } from './AuthContext.jsx';
 import logger from '../utils/logger.js';
-import SearchTreeResultList from './SearchTreeResultList.jsx';
+import SearchTreeResultList from './SearchTreeResultList';
 import CircularProgress from '@mui/material/CircularProgress';
 import { progressIcon } from '../styles/SearchDropdown';
 import IconButton from '@mui/material/IconButton';
