@@ -4,7 +4,7 @@ import Footer from './Footer'
 import SearchDropdown from './SearchDropdown'
 import SelectAddDropdown from './SelectAddDropdown'
 import 'leaflet/dist/leaflet.css';
-import AlertDialog from './AlertDialog.jsx';
+import AlertDialog from './AlertDialog';
 import { useSearchParams } from "react-router";
 import Map from './Map.jsx';
 import { MapActionsContext } from './MapActionsContext';
