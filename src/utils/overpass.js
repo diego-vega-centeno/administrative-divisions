@@ -4,27 +4,34 @@ import logger from './logger';
 
 async function getRelationsOSMData(ids, out = "geom") {
 
-  const endPoint = "https://maps.mail.ru/osm/tools/overpass/api/interpreter";
+  const endPoints = [
+    "https://maps.mail.ru/osm/tools/overpass/api/",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.private.coffee/api/interpreter"
+  ];
 
   // to accept an array
   const idsArray = ((typeof ids) == "number") ? [ids] : ids;
 
   const query = `[out:json][timeout:90];rel(id:${idsArray.join(",")});out ${out};`;
+  for (const endpoint of endPoints) {
+    logger.info(`Trying endpoint: ${endpoint}`)
+    const response = await fetch(endpoint + "?data=" + encodeURIComponent(query));
 
-  const response = await fetch(endPoint + "?data=" + encodeURIComponent(query));
+    if (response.ok) {
+      const osmRes = await response.json();
+      if (osmRes.elements.length === 0) {
+        throw new Error("Fetch response has empty elements");
+      }
+      return osmRes;
+    }
 
-  if (!response.ok) {
-    // A 'not ok' response doesn't throw an error, so throw one and add status
-    throw new Error(`Fetch response was not ok: ${response.status} - ${response.statusText}`);
+    logger.info(`endpoint failed`)
   }
 
-  const osmRes = await response.json();
-
-  if (osmRes.elements.length === 0) {
-    throw new Error("Fetch response has empty elements");
-  }
-
-  return osmRes;
+  // if no endpoint returned ok then throw
+  // A 'not ok' response doesn't throw an error, so throw one and add status
+  throw new Error(`Fetch response was not ok: ${response.status} - ${response.statusText}`);
 }
 
 function formatData(osmElems, params, selectedNodes) {

@@ -51,6 +51,7 @@ export default function Main() {
       setOsmRels(queryOSMRels)
       // setIsProgressIconActive(false)
     } catch (error) {
+      setIsProgressIconActive(false)
       handleError(error.message);
       logger.error('An error ocurred: ', error);
     }
