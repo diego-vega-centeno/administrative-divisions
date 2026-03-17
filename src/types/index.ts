@@ -15,7 +15,7 @@ export interface RelationsUserLayersType {
   parents_names: string;
 }
 
-interface JstreeNode {
+export interface JstreeNode {
   id: string;
   text: string;
   icon: boolean;
