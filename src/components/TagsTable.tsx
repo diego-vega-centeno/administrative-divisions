@@ -1,20 +1,20 @@
-import { useMemo, useState } from 'react';
-import styles from '../styles/OSMTagsDropDown.module.css'
-import Collapse from '@mui/material/Collapse';
+import { useMemo, useState } from "react";
+import styles from "../styles/OSMTagsDropDown.module.css";
+import Collapse from "@mui/material/Collapse";
+import { osmRel } from "../types";
 
-export default function TagsTable({ osmRel }) {
+export default function TagsTable({ osmRel }: { osmRel: osmRel }) {
   if (!osmRel) return null;
 
   // SubTable component needs to be in top level due to useState
-  function SubTable({ label, rows }) {
+  function SubTable({ label, rows }: { label: string | React.ReactNode; rows: [string, string][] }) {
     const [open, setOpen] = useState(false);
 
     return (
       <div className={styles["sub-table-dropdown"]}>
         <div className={styles["sub-table-toggle"]}>
-          {label} <span
-            onClick={() => setOpen(prev => !prev)}
-          >{"(more)"}</span>
+          {label}{" "}
+          <span onClick={() => setOpen((prev) => !prev)}>{"(more)"}</span>
         </div>
         <Collapse in={open}>
           <table>
@@ -29,15 +29,20 @@ export default function TagsTable({ osmRel }) {
           </table>
         </Collapse>
       </div>
-    )
+    );
   }
 
   // memoize the sub tables and recompute based on elemenData
   const filteredTags = useMemo(() => {
-    const toFilterTags = ['name', 'official_name', 'long_name'];
-    const regexes = toFilterTags.map(tag => [tag, new RegExp(`^${tag}.+$`)]);
-    const matchedTags = Object.fromEntries(toFilterTags.map(tag => [tag, []]));
-    const filteredTags = {};
+    const toFilterTags = ["name", "official_name", "long_name"];
+    const regexes: [string, RegExp][] = toFilterTags.map((tag) => [
+      tag,
+      new RegExp(`^${tag}.+$`),
+    ]);
+    const matchedTags: Record<string, [string, string][]> = Object.fromEntries(
+      toFilterTags.map((tag) => [tag, []]),
+    );
+    const filteredTags: Record<string, string | React.ReactNode> = {};
 
     // iterate over element data tags
     for (const [key, value] of Object.entries(osmRel.tags)) {
@@ -53,14 +58,11 @@ export default function TagsTable({ osmRel }) {
     // Define SubTable and add to corresponding key
     for (const [key, tags] of Object.entries(matchedTags)) {
       if (tags.length > 0) {
-        filteredTags[key] = <SubTable
-          label={filteredTags[key]}
-          rows={tags}
-        />
+        filteredTags[key] = <SubTable label={filteredTags[key]} rows={tags} />;
       }
     }
 
-    return filteredTags
+    return filteredTags;
   }, [osmRel]);
 
   return (
@@ -77,5 +79,6 @@ export default function TagsTable({ osmRel }) {
           </tbody>
         </table>
       </div>
-    </div>)
+    </div>
+  );
 }
