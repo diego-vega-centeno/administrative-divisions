@@ -18,13 +18,12 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 interface LoginMenuProps {
   open: boolean;
-  onClose: (_:boolean) => void;
+  onClose: (_: boolean) => void;
 }
 
 export default function LoginMenu({ open, onClose }: LoginMenuProps) {
   const handleClick = (method: string) => {
     let authUrl;
-
     switch (method) {
       case "google":
         authUrl = import.meta.env.VITE_GOOGLE_AUTH_URL;
@@ -39,6 +38,7 @@ export default function LoginMenu({ open, onClose }: LoginMenuProps) {
       default:
         break;
     }
+    location.href = authUrl || "/";
   };
 
   return (
