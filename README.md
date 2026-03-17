@@ -16,6 +16,17 @@ This is an interactive tool to explore, compare, and export administrative divis
 * Save and edit favorite selections in your session
 * Use the rest API to directly get the hierarchy of each country
 
+## Features:
+* Select or search from 178,000+ administrative divisions within 70 countries
+* Plot OSM polygons in a map with included tags
+* Compare geospatial properties (area, perimeter, pop density) in sort-able tables
+* Choropleth map for visual comparison
+* Time series charts for computed properties.
+* Save favorites and edit for quick access.
+* Download tags and polygon data from OSM as json or geojson feature collection (both with hierarchy)
+* REST API to get admin divisions structure for each country
+* Wikidata integration for basic properties and population time series
+
 ## Why did I build it?
 OpenStreetMap offers a query to get administrative boundaries but there’s no direct way of getting and displaying the hierarchy and compare them. I’ve scraped, tested and collected other information of the structure in an easy to select, display and get compare table, charts and map from this divisions.
 
@@ -44,17 +55,6 @@ This app gives researchers and journalists a fast way to explore current OSM dat
 * Frontend: Vercel, node, javascript, react, react-chartjs-2, jstree, leaflet, turf, fortawesome and material UI
 * Backend: Render, REST API, OAuth (jsonwebtoken), express, passport, postgreSQL , pg, zod, jest.
 * User storage: Supabase
-
-## Features:
-* Select or search from 178,000+ administrative divisions within 70 countries
-* Plot OSM polygons in a map with included tags
-* Compare geospatial properties (area, perimeter, pop density) in sort-able tables
-* Choropleth map for visual comparison
-* Time series charts for computed properties.
-* Save favorites and edit for quick access.
-* Download tags and polygon data from OSM as json or geojson feature collection (both with hierarchy)
-* REST API to get admin divisions structure for each country
-* Wikidata integration for basic properties and population time series
 
 ## API
 
