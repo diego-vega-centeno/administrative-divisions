@@ -44,9 +44,7 @@ const TagsSection = memo(({ osmRels }: { osmRels: osmRel[] }) => {
             ))}
           </Box>
         </Box>
-        <Box>
-          <TagsTable osmRel={selectedRel || ({} as osmRel)} />
-        </Box>
+        <Box>{selectedRel && <TagsTable osmRel={selectedRel} />}</Box>
       </Box>
     </Box>
   );
