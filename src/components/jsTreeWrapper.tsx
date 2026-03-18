@@ -156,7 +156,7 @@ const JsTreeWrapper = forwardRef(
     }));
 
     return <div ref={treeRef} />;
-  },
+  }
 );
 
 export default JsTreeWrapper;
