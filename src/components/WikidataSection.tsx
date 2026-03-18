@@ -12,7 +12,7 @@ import { useState, useEffect, memo } from "react";
 import Table from "./WikidataTable.js";
 import { progressIcon } from "../styles/Main.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
-import BarChart from "./charts/BarChart.jsx";
+import BarChart from "./charts/BarChart";
 
 const WikidataSection = memo(
   ({
