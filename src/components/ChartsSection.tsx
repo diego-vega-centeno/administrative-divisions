@@ -38,7 +38,7 @@ const ChartsSection = memo(
           <Box sx={chartContainer}>
             <BarChart
               chartData={computedDataRels.map((rel) =>
-                parseInt(rel["population"]),
+                rel["population"],
               )}
               labels={labels}
               config={{
@@ -50,7 +50,7 @@ const ChartsSection = memo(
           </Box>
           <Box sx={chartContainer}>
             <BarChart
-              chartData={computedDataRels.map((rel) => parseInt(rel["area"]))}
+              chartData={computedDataRels.map((rel) => rel["area"])}
               labels={labels}
               config={{
                 type: "compare",
@@ -62,7 +62,7 @@ const ChartsSection = memo(
           <Box sx={chartContainer}>
             <BarChart
               chartData={computedDataRels.map((rel) =>
-                parseInt(rel["popDensity"]),
+                rel["popDensity"],
               )}
               labels={labels}
               config={{
