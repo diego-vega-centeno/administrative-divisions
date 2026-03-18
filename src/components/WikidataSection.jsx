@@ -7,7 +7,7 @@ import {
 import Box from '@mui/material/Box';
 import { listItem } from '../styles/Menu.jsx';
 import { useState, useEffect, memo } from 'react';
-import Table from './Table.jsx';
+import Table from './WikidataTable';
 import { progressIcon } from '../styles/Main.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import BarChart from './charts/BarChart.jsx';
