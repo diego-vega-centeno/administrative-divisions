@@ -34,10 +34,10 @@ import {
 
 interface SaveMenuProsp {
   open: boolean;
-  onClose: () => Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
   onError: (msg: string) => void;
   selectedNodes: SelectedNodesType;
-  getNodePath: (id: string) => string | undefined;
+  getNodePath: (id: string) => string;
 }
 
 interface FormattedRel {
