@@ -56,7 +56,7 @@ export interface osmRel {
   type: string;
 }
 
-interface ComputedDataRelType {
+export interface ComputedDataRelType {
   admin_level: string;
   area: number;
   id: string;
