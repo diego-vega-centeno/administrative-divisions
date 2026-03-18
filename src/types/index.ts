@@ -58,12 +58,12 @@ export interface osmRel {
 
 interface ComputedDataRelType {
   admin_level: string;
-  area: any;
+  area: number;
   id: string;
   name: string;
   perimeter: number;
-  popDensity: any;
-  population: any;
+  popDensity: number;
+  population: number;
 }
 
 export type ComputedDataRelsType = ComputedDataRelType[];
