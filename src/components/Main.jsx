@@ -13,8 +13,8 @@ import logger from '../utils/logger.js';
 import { getRelationsDataWithCache } from '../utils/overpass';
 import { profileSize } from '../utils/overpass';
 import DataTable from './DataTable.jsx';
-import ChartsSection from './ChartsSection.jsx';
-import WikidataSection from './WikidataSection.jsx';
+import ChartsSection from './ChartsSection';
+import WikidataSection from './WikidataSection';
 import ChoroplethMapSection from './ChoroplethMapSection';
 
 export default function Main() {
