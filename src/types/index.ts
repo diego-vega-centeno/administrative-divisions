@@ -55,3 +55,15 @@ export interface osmRel {
   tags: Record<string, string>;
   type: string;
 }
+
+interface ComputedDataRelType {
+  admin_level: string;
+  area: any;
+  id: string;
+  name: string;
+  perimeter: number;
+  popDensity: any;
+  population: any;
+}
+
+export type ComputedDataRelsType = ComputedDataRelType[];
