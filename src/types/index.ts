@@ -67,3 +67,10 @@ interface ComputedDataRelType {
 }
 
 export type ComputedDataRelsType = ComputedDataRelType[];
+
+export interface JsTreeWrapperRefType {
+  getSelected: () => any[];
+  filter: (filter: string) => void;
+  getNodePath: (nodeId: string) => string;
+  tree: (_: boolean) => any;
+}
