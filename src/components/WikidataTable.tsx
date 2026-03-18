@@ -5,7 +5,6 @@ export default function Table({
 }: {
   selectedIdMap: Record<string, any>;
 }) {
-  console.log(selectedIdMap);
   return (
     <div>
       <div className={styles["table-container"]}>
@@ -14,7 +13,6 @@ export default function Table({
             {Object.entries(selectedIdMap).map(([key, value]) => {
               if (key === "populationTS") return null;
               let displayValue = value;
-
               if (
                 [
                   "ethnicGroup",
