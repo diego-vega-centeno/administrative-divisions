@@ -5,7 +5,7 @@ import { tableContainerHeader } from "../styles/Menu.js";
 import { chartsContainer, chartContainer } from "../styles/Menu.js";
 import CircularProgress from "@mui/material/CircularProgress";
 import { progressIcon } from "../styles/Main.jsx";
-import BarChart from "./charts/BarChart.jsx";
+import BarChart from "./charts/BarChart";
 import { memo } from "react";
 import { ComputedDataRelsType } from "../types/index.js";
 
