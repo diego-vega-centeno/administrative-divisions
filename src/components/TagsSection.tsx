@@ -7,7 +7,6 @@ import {
   tagsItemList,
 } from "../styles/Menu.js";
 import Box from "@mui/material/Box";
-// import { dataIndex } from '../utils/addData.js';
 import { listItem } from "../styles/Menu.js";
 import { useState, useEffect, memo } from "react";
 import TagsTable from "./TagsTable";
