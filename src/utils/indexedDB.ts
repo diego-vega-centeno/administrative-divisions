@@ -1,26 +1,34 @@
-import logger from './logger';
+import { osmRel } from "../types";
+import logger from "./logger";
 
 // databse config
-const DB_NAME = 'osm-cache';
+const DB_NAME = "osm-cache";
 const DB_VERSION = 1;
-const STORE_NAME = 'relations';
+const STORE_NAME = "relations";
 
 const isMobile = isDeviceMobile();
 
 const MAX_AGE_DAYS = 7; // days
 const MAX_OBJECTS_COUNT = isMobile ? 100 : 200;
 const MAX_TOTAL_SIZE = isMobile ? 50 : 100; // MB
-const MS_PER_DAY = 24 * 60 * 60 * 1000
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function isDeviceMobile() {
   let isMobile = false;
 
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  if (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    )
+  ) {
     isMobile = true;
   }
 
   if (!isMobile) {
-    isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+    isMobile =
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      navigator.maxTouchPoints > 0;
   }
 
   return isMobile;
@@ -28,9 +36,9 @@ function isDeviceMobile() {
 
 //* initialize database
 
-let dbPromise;
+let dbPromise: Promise<any> | null;
 
-if (!('indexedDB' in window)) {
+if (!("indexedDB" in window)) {
   logger.info("Your browser doesn't support IndexedDB.");
 }
 
@@ -42,37 +50,42 @@ function initDB() {
 
     request.onerror = (event) => {
       dbPromise = null;
-      logger.info(`Database error: ${event.target.errorCode}`);
+      logger.info(
+        `Database error: ${(event.target as IDBOpenDBRequest).error}`,
+      );
       reject(event.target);
-    }
+    };
 
     request.onsuccess = (event) => {
       const db = request.result;
-      logger.info(`Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`);
+      logger.info(
+        `Database openend successfully: ${JSON.stringify(db.objectStoreNames)}`,
+      );
       resolve(db);
-    }
+    };
 
-    // triggered when higher version is used in open() than the one used previously 
+    // triggered when higher version is used in open() than the one used previously
     request.onupgradeneeded = (event) => {
-      const db = event.target.result;
+      const target = event.target as IDBOpenDBRequest;
+      const db = target.result;
       let store;
 
       if (!db.objectStoreNames.contains(STORE_NAME)) {
-        store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
+        store = db.createObjectStore(STORE_NAME, { keyPath: "id" });
       } else {
-        store = event.target.result.createObjectStore(STORE_NAME, { keyPath: 'id' })
+        store = target.result.createObjectStore(STORE_NAME, {
+          keyPath: "id",
+        });
       }
 
-      if (!store.indexNames.contains('storedAtIndex')) {
-        store.createIndex('storedAtIndex', 'storedAt');
+      if (!store.indexNames.contains("storedAtIndex")) {
+        store.createIndex("storedAtIndex", "storedAt");
       }
-    }
-
+    };
   });
 
   return dbPromise;
 }
-
 
 //* create transaction utility
 
@@ -92,17 +105,18 @@ function initDB() {
 
 //* read/write functions
 
-async function putStoreRelations(relations) {
+async function putStoreRelations(relations: osmRel[]) {
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const tx = db.transaction(STORE_NAME, "readwrite");
   const store = tx.objectStore(STORE_NAME);
 
-  tx.oncomplete = (event) => {
-    logger.info(`IndexedDB: Transaction successful: ${relations.length} relations stored`);
-  }
+  tx.oncomplete = (event: Event) => {
+    logger.info(
+      `IndexedDB: Transaction successful: ${relations.length} relations stored`,
+    );
+  };
 
-  relations.forEach(rel => {
-
+  relations.forEach((rel) => {
     // add stored time
     const request = store.put({ ...rel, storedAt: Date.now() });
 
@@ -111,39 +125,48 @@ async function putStoreRelations(relations) {
 
     request.onerror = () => {
       logger.error(`Error while adding relation: ${request.error}`);
-    }
+    };
   });
 }
 
-async function getStoreRelation(ids) {
+interface StoreRelationItem {
+  storeAt?: number;
+  [key: string]: any;
+}
+
+async function getStoreRelation(ids: number[]) {
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readonly');
+  const tx = db.transaction(STORE_NAME, "readonly");
   const store = tx.objectStore(STORE_NAME);
 
   const results = await Promise.all(
-    ids.map(id => new Promise((resolve, reject) => {
-      const request = store.get(id);
-      request.onsuccess = () => resolve(request.result ?? null);
-      request.onerror = () => reject(request.error);
-    }))
+    ids.map(
+      (id) =>
+        new Promise<StoreRelationItem | null>((resolve, reject) => {
+          const request = store.get(id);
+          request.onsuccess = () => resolve(request.result ?? null);
+          request.onerror = () => reject(request.error);
+        }),
+    ),
   );
 
-  return results.filter(Boolean).map(item => {
-    delete item.storedAt;
-    return item;
-  });
+  return results
+    .filter((item): item is StoreRelationItem => item != null)
+    .map(({ storedAt, ...rest }) => rest);
 }
 
 async function getAllStoredRelations() {
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readonly');
+  const tx = db.transaction(STORE_NAME, "readonly");
   const store = tx.objectStore(STORE_NAME);
 
   return new Promise((resolve, reject) => {
     const request = store.getAll();
 
     request.onsuccess = () => {
-      logger.info(`IndexedDB: All stored relations: ${request.result.length} items`);
+      logger.info(
+        `IndexedDB: All stored relations: ${request.result.length} items`,
+      );
       console.table(request.result);
       resolve(request.result);
     };
@@ -151,27 +174,27 @@ async function getAllStoredRelations() {
     request.onerror = () => {
       logger.error(`IndexedDB: Error getting all relations: ${request.error}`);
       reject(request.error);
-    }
+    };
   });
 }
 
 async function clearAllStoredRelations() {
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const tx = db.transaction(STORE_NAME, "readwrite");
   const store = tx.objectStore(STORE_NAME);
 
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const request = store.clear();
 
     request.onsuccess = () => {
-      logger.info('IndexedDB: All stored relations cleared');
+      logger.info("IndexedDB: All stored relations cleared");
       resolve();
     };
 
     request.onerror = () => {
       logger.error(`IndexedDB: Error clearing relations: ${request.error}`);
       reject(request.error);
-    }
+    };
   });
 }
 
@@ -182,26 +205,26 @@ async function cleanDBCache() {
   const db = await initDB();
   const estimate = await navigator.storage.estimate();
 
-  const usage = estimate.usage / 1_000_000; // MB
-  const quota = estimate.quota / 1_000_000; // MB
+  const usage = estimate.usage! / 1_000_000; // MB
+  const quota = estimate.quota! / 1_000_000; // MB
 
   // compare with indexedDB caps
-  logger.info(`IndexedDB: storage quota: ${quota} (MB); cap: ${MAX_TOTAL_SIZE} (MB)`);
+  logger.info(
+    `IndexedDB: storage quota: ${quota} (MB); cap: ${MAX_TOTAL_SIZE} (MB)`,
+  );
   logger.info(`IndexedDB: storage usage: ${usage} (MB); `);
 
   if (usage > MAX_TOTAL_SIZE) {
     try {
       await cleanDBCacheLRU(db, usage);
     } catch (error) {
-      logger.error(error)
+      logger.error(error);
     }
   }
 }
 
-function cleanDBCacheMaxAge(store) {
-
+function cleanDBCacheMaxAge(store: IDBObjectStore) {
   return new Promise((resolve, reject) => {
-
     const cutoff = Date.now() - MAX_AGE_DAYS * MS_PER_DAY;
     const range = IDBKeyRange.upperBound(cutoff);
     const index = store.index("storedAtIndex");
@@ -209,38 +232,39 @@ function cleanDBCacheMaxAge(store) {
     let count = 0;
 
     request.onsuccess = (event) => {
-      const cursor = event.target.result;
+      const cursor = (event.target as IDBRequest).result;
       if (!cursor) {
         resolve(count);
         return;
-      };
+      }
       count++;
       cursor.delete();
       cursor.continue();
-    }
+    };
 
     request.onerror = () => reject(request.error);
-  })
+  });
 }
 
-async function cleanDBCacheLRU(db, usage) {
+async function cleanDBCacheLRU(db: IDBDatabase, usage: number) {
   let currentUsage = usage;
   let deleted = 0;
-  const threshold = (MAX_TOTAL_SIZE) * (80 / 100);
+  const threshold = MAX_TOTAL_SIZE * (80 / 100);
 
   while (currentUsage > threshold) {
     const batchDeleted = await deleteBatch(db, 10);
     if (batchDeleted === 0) break;
     deleted += batchDeleted;
 
-    const estimate = await navigator.storage.estimate();
-    currentUsage = estimate.usage / 1_000_000;
+    const estimate: StorageEstimate = await navigator.storage.estimate();
+    currentUsage = estimate.usage! / 1_000_000;
   }
 
-  if (deleted > 0) logger.info(`IndexedDB: cleanup done LRU: ${deleted} deleted`);
+  if (deleted > 0)
+    logger.info(`IndexedDB: cleanup done LRU: ${deleted} deleted`);
 }
 
-function deleteBatch(db, size) {
+function deleteBatch(db: IDBDatabase, size: number): Promise<number> {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
@@ -249,7 +273,7 @@ function deleteBatch(db, size) {
     let deleted = 0;
 
     index.openCursor().onsuccess = (event) => {
-      const cursor = event.target.result;
+      const cursor = (event.target as IDBRequest).result;
 
       if (!cursor || deleted >= size) return;
 
@@ -257,28 +281,27 @@ function deleteBatch(db, size) {
       deleted++;
 
       cursor.continue();
-    }
+    };
 
     tx.oncomplete = () => resolve(deleted);
     tx.onerror = () => reject(tx.error);
-  })
+  });
 }
 
-function cleanDBCacheObjectsCount(db) {
-
+function cleanDBCacheObjectsCount(db: IDBDatabase, store: IDBObjectStore) {
   return new Promise((resolve, reject) => {
     const index = store.index("storedAtIndex");
     // make cursor at index iterating from newest to oldest
-    const request = index.openCursor(null, 'prev');
+    const request = index.openCursor(null, "prev");
 
     let seen = 0;
     let deleted = 0;
     request.onsuccess = (event) => {
-      const cursor = event.target.result;
+      const cursor = (event.target as IDBRequest).result;
       if (!cursor) {
         resolve(deleted);
         return;
-      };
+      }
 
       seen++;
       if (seen > MAX_OBJECTS_COUNT) {
@@ -287,13 +310,17 @@ function cleanDBCacheObjectsCount(db) {
       }
 
       cursor.continue();
-    }
+    };
 
     request.onerror = () => reject(request.error);
   });
 }
 
 export {
-  putStoreRelations, getStoreRelation, getAllStoredRelations,
-  clearAllStoredRelations, cleanDBCache, initDB
-}
+  putStoreRelations,
+  getStoreRelation,
+  getAllStoredRelations,
+  clearAllStoredRelations,
+  cleanDBCache,
+  initDB,
+};
