@@ -1,5 +1,4 @@
 // import { dataIndex } from "./addData";
-// import { getParentNames } from "./addData";
 import osmtogeojson from "osmtogeojson";
 import { calculatePropsFromGeo } from "./calculateFromGeo";
 
