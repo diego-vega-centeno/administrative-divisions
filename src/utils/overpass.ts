@@ -1,5 +1,5 @@
 import osmtogeojson from "osmtogeojson";
-import { putStoreRelations, getStoreRelation } from "../utils/indexedDB.js";
+import { putStoreRelations, getStoreRelation } from "./indexedDB";
 import logger from "./logger";
 import {
   JstreeNode,
