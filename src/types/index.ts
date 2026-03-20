@@ -47,12 +47,11 @@ export type FormattedRelsType = {
   adminLevel: string;
   parentsNames: string | undefined;
 }[];
-
 export interface osmRel {
   bounds: Record<string, number>;
   id: number;
   members: object[];
-  tags: Record<string, string>;
+  tags: Record<string, any>;
   type: string;
 }
 
@@ -73,4 +72,16 @@ export interface JsTreeWrapperRefType {
   filter: (filter: string) => void;
   getNodePath: (id: string) => string;
   tree: (_: boolean) => any;
+}
+
+export interface formatOsmRel {
+  bounds: Record<string, number>;
+  id: string;
+  members: object[];
+  tags?: Record<string, any>;
+  parent: number;
+  parents: number[];
+  children: number[];
+  type: string;
+  geometry: any;
 }
