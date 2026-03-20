@@ -43,7 +43,6 @@ interface DataType {
 }
 
 export default function BarChart({ chartData, labels, config }: BarChartProps) {
-  console.log([chartData, labels, config]);
   const [data, setData] = useState<DataType>({
     datasets: [],
     labels: [] as string[],
