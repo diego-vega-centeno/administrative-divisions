@@ -28,7 +28,6 @@ import {
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSquare, faCheckSquare } from "@fortawesome/free-regular-svg-icons";
-// import { dataIndex, getParentNames } from "../utils/addData.js";
 import { addToolsButton } from "../styles/SelectAddDropdown";
 import TextField from "@mui/material/TextField";
 import { Dispatch, SetStateAction, useState } from "react";

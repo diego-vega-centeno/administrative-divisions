@@ -25,7 +25,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { saveLayerToDB } from "../utils/database.js";
 import logger from "../utils/logger.js";
 import Modal from "@mui/material/Modal";
-// import { getParentNames } from "../utils/addData.js";
 import {
   SelectedNodesType,
   CustomError,
