@@ -80,6 +80,7 @@ const WikidataSection = memo(
                 config={{
                   title: "population",
                   color: "rgba(30, 136, 229, 0.8)",
+                  type: "normal",
                 }}
               />
             </Box>
