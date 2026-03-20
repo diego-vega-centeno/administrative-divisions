@@ -1,4 +1,4 @@
-async function getNominatimSearch(query) {
+async function getNominatimSearch(query: string) {
   const endpoint = "https://nominatim.openstreetmap.org/search";
 
   // use the free-form query
@@ -14,7 +14,7 @@ async function getNominatimSearch(query) {
   const entitiesFound = await res.json();
   // filters to get relations only
   const relationsFound = entitiesFound.filter(
-    (ele) => ele.osm_type == "relation",
+    (ele: Record<string, any>) => ele.osm_type == "relation",
   );
 
   return relationsFound;
