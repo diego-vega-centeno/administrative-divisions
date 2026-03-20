@@ -9,7 +9,7 @@ import { saveActionSection } from "../styles/Main";
 import { getRelationsDataWithCache, formatData } from "../utils/overpass";
 import { donwloadJSONData } from "../utils/overpass";
 import logger from "../utils/logger";
-import { CustomError, SelectedNodesType } from "../types";
+import { CustomError, osmRel, SelectedNodesType } from "../types";
 
 interface DownloadMenuProps {
   open: boolean;
@@ -44,9 +44,9 @@ export default function DownloadMenu({
       let osmRels = await getRelationsDataWithCache(
         selectedNodes.map((rel) => rel.id),
       );
-      osmRels = formatData(osmRels, params, selectedNodes);
+      let formattedData  = formatData(osmRels, params, selectedNodes);
       setIsProgressIconActive(false);
-      donwloadJSONData(osmRels, "admin_divisions_selection.json");
+      donwloadJSONData(formattedData, "admin_divisions_selection.json");
     } catch (error) {
       const err = error as CustomError;
       setIsProgressIconActive(false);
