@@ -184,7 +184,7 @@ function updateTagsPanel(
   tags: Record<string, any>,
   id: string,
 ) {
-  if (!id) {
+  if (id == 'none') {
     leafletState.mapControl!.tbody.innerHTML = "";
     return;
   }
