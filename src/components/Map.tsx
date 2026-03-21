@@ -47,6 +47,8 @@ const Map = memo(
       mapControlIsCollapsed: false,
       map: null,
       centerBtn: null,
+      popDensityLayer: null,
+      areaLayer: null,
       handleMapClick: (e) => {
         if (leafletStateRef.current.highlightedLayer) {
           // unhighlight on click outside a feature
