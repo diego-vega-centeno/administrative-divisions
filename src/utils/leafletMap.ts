@@ -69,7 +69,7 @@ function addToLeafletMap(
       leafletState.mapControl!.addTo(leafletState.map!);
     }
     // clear body content of tags control
-    leafletState.mapControl!.updateTagsPanel(leafletState, {}, 'none');
+    leafletState.mapControl!.updateTagsPanel(leafletState, {}, "none");
 
     leafletState.map!.off("click", leafletState.handleMapClick);
     leafletState.map!.on("click", leafletState.handleMapClick);
@@ -88,7 +88,7 @@ function addToLeafletMap(
 function getChoroplethParams(
   computedDataRels: ComputedDataRelType[],
   prop: keyof Pick<ComputedDataRelType, "area" | "popDensity" | "population">,
-) {
+): [Map<string, string>, Map<string, any>, string[], Array<[number, number]>] {
   const values = getValues(computedDataRels, prop);
   const ranges = getChoroplethRanges(values, 7);
   const colors = generateHueColors(7);
@@ -120,8 +120,19 @@ function addChoroplethLayer(
   L: typeof import("leaflet"),
   leafletState: LeafletStateRefProps,
 ) {
+  type SpreadParams = [
+    Map<string, string>,
+    Map<string, any>,
+    string[],
+    Array<[number, number]>,
+  ];
+
   //* Choropleth layers
-  const popDensityParams = getChoroplethParams(computedDataRels, "popDensity");
+  const popDensityParams: SpreadParams = getChoroplethParams(
+    computedDataRels,
+    "popDensity",
+  );
+
   leafletState.popDensityLayer = createChoroplethLayer(
     L,
     leafletState,
@@ -140,7 +151,10 @@ function addChoroplethLayer(
   );
 
   // population is the base layer
-  const popParams = getChoroplethParams(computedDataRels, "population");
+  const popParams: SpreadParams = getChoroplethParams(
+    computedDataRels,
+    "population",
+  );
   leafletState.baseLayer = createChoroplethLayer(
     L,
     leafletState,
