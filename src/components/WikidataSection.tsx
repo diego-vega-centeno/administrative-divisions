@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import { listItem } from "../styles/Menu.js";
 import { useState, useEffect, memo } from "react";
 import Table from "./WikidataTable.js";
-import { progressIcon } from "../styles/Main.jsx";
+import { progressIcon } from "../styles/Main";
 import CircularProgress from "@mui/material/CircularProgress";
 import BarChart from "./charts/BarChart";
 

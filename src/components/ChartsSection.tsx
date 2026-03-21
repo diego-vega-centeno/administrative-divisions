@@ -4,7 +4,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { tableContainerHeader } from "../styles/Menu.js";
 import { chartsContainer, chartContainer } from "../styles/Menu.js";
 import CircularProgress from "@mui/material/CircularProgress";
-import { progressIcon } from "../styles/Main.jsx";
+import { progressIcon } from "../styles/Main";
 import BarChart from "./charts/BarChart";
 import { memo } from "react";
 import { ComputedDataRelsType } from "../types/index.js";

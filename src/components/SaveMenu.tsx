@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { saveActionSection } from "../styles/Main.jsx";
+import { saveActionSection } from "../styles/Main";
 import { addToolsButton } from "../styles/SelectAddDropdown.js";
 import { useState, useRef, Dispatch, SetStateAction } from "react";
 import {
