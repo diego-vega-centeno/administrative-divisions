@@ -85,3 +85,31 @@ export interface formatOsmRel {
   type: string;
   geometry: any;
 }
+
+export interface LeafletStateRefProps {
+  type: string;
+  tileLayer: L.TileLayer | null;
+  baseLayer: L.GeoJSON | null;
+  layerControl: L.Control.Layers | null;
+  legendControl: L.Control | null;
+  choroplethInfoPanel: L.Control | null;
+  highlightedLayer: L.Layer | null;
+  hoverHighlightedLayer: L.Layer | null;
+  openedTooltip: L.Tooltip | undefined;
+  mapControl: CustomMapControl | null;
+  mapControlIsCollapsed: boolean;
+  map: L.Map | null;
+  centerBtn: L.Control | null;
+  handleMapClick: (e: L.LeafletMouseEvent) => void;
+}
+
+export interface CustomMapControl extends L.Control {
+  updateTagsPanel: (
+    leafletState: LeafletStateRefProps,
+    tags: Record<string, any>,
+    featureId: string,
+  ) => void;
+  btn: HTMLButtonElement;
+  table: HTMLTableElement;
+  tbody: HTMLTableSectionElement;
+}
