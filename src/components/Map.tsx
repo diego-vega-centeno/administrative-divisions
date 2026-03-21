@@ -11,6 +11,7 @@ import {
 } from "../utils/leafletUtilities.js";
 import logger from "../utils/logger.js";
 import { CustomError } from "../types/index.js";
+import { LeafletStateRefProps } from "../types/index.js";
 
 interface MapProps {
   osmRels: any[];
@@ -19,23 +20,6 @@ interface MapProps {
   setIsProgressIconActive: Dispatch<SetStateAction<boolean>>;
   type: string;
   computedDataRels: any[];
-}
-
-interface LeafletStateRefProps {
-  type: string;
-  tileLayer: L.TileLayer | null;
-  baseLayer: L.GeoJSON | null;
-  layerControl: L.Control.Layers | null;
-  legendControl: L.Control | null;
-  choroplethInfoPanel: L.Control | null;
-  highlightedLayer: L.Layer | null;
-  hoverHighlightedLayer: L.Layer | null;
-  openedTooltip: L.Tooltip | null;
-  mapControl: L.Control | null;
-  mapControlIsCollapsed: boolean;
-  map: L.Map | null;
-  centerBtn: L.Control | null;
-  handleMapClick: (e: L.LeafletMouseEvent) => void;
 }
 
 const Map = memo(
@@ -58,7 +42,7 @@ const Map = memo(
       choroplethInfoPanel: null,
       highlightedLayer: null,
       hoverHighlightedLayer: null,
-      openedTooltip: null,
+      openedTooltip: undefined,
       mapControl: null,
       mapControlIsCollapsed: false,
       map: null,
