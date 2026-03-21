@@ -109,7 +109,7 @@ export interface CustomMapControl extends L.Control {
   updateTagsPanel: (
     leafletState: LeafletStateRefProps,
     tags: Record<string, any>,
-    featureId: string | null,
+    featureId: string,
   ) => void;
   btn: HTMLButtonElement;
   table: HTMLTableElement;
