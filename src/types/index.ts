@@ -100,6 +100,8 @@ export interface LeafletStateRefProps {
   mapControlIsCollapsed: boolean;
   map: L.Map | null;
   centerBtn: L.Control | null;
+  popDensityLayer: L.Layer | null;
+  areaLayer: L.Layer | null;
   handleMapClick: (e: L.LeafletMouseEvent) => void;
 }
 
@@ -107,9 +109,10 @@ export interface CustomMapControl extends L.Control {
   updateTagsPanel: (
     leafletState: LeafletStateRefProps,
     tags: Record<string, any>,
-    featureId: string,
+    featureId: string | null,
   ) => void;
   btn: HTMLButtonElement;
   table: HTMLTableElement;
   tbody: HTMLTableSectionElement;
+  _map: L.Map;
 }
