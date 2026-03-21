@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { visuallyHidden } from "@mui/utils";
-import { progressIcon } from "../styles/Main.jsx";
+import { progressIcon } from "../styles/Main";
 import {
   table,
   tableCell,

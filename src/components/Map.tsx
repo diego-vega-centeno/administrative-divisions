@@ -3,7 +3,7 @@ import styles from "../styles/Main.module.css";
 import L from "leaflet";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { progressMapIcon } from "../styles/Main.jsx";
+import { progressMapIcon } from "../styles/Main";
 import { addToLeafletMap } from "../utils/leafletMap.js";
 import {
   makeTagsPanel,

@@ -3,7 +3,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { tableContainerHeader } from "../styles/Menu.js";
 import CircularProgress from "@mui/material/CircularProgress";
-import { progressIcon } from "../styles/Main.jsx";
+import { progressIcon } from "../styles/Main";
 import { memo, useEffect, useState } from "react";
 import Map from "./Map.js";
 import { osmRel, ComputedDataRelsType } from "../types/index.js";
