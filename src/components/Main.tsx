@@ -16,7 +16,7 @@ import DataTable from "./DataTable";
 import ChartsSection from "./ChartsSection";
 import WikidataSection from "./WikidataSection";
 import ChoroplethMapSection from "./ChoroplethMapSection";
-import { CustomError, osmRel } from "../types/index.js";
+import { CustomError, osmRel } from "../types/index";
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
