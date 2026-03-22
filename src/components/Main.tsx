@@ -1,73 +1,78 @@
-import { useEffect, useState, useContext } from 'react';
-import styles from '../styles/Main.module.css'
-import Footer from './Footer'
-import SearchDropdown from './SearchDropdown'
-import SelectAddDropdown from './SelectAddDropdown'
-import 'leaflet/dist/leaflet.css';
-import AlertDialog from './AlertDialog';
+import { useEffect, useState, useContext } from "react";
+import styles from "../styles/Main.module.css";
+import Footer from "./Footer";
+import SearchDropdown from "./SearchDropdown";
+import SelectAddDropdown from "./SelectAddDropdown";
+import "leaflet/dist/leaflet.css";
+import AlertDialog from "./AlertDialog";
 import { useSearchParams } from "react-router";
-import Map from './Map';
-import { MapActionsContext } from './MapActionsContext';
-import TagsSection from './TagsSection';
-import logger from '../utils/logger.js';
-import { getRelationsDataWithCache } from '../utils/overpass';
-import { profileSize } from '../utils/overpass';
-import DataTable from './DataTable';
-import ChartsSection from './ChartsSection';
-import WikidataSection from './WikidataSection';
-import ChoroplethMapSection from './ChoroplethMapSection';
+import Map from "./Map";
+import { MapActionsContext, MapActionsContextType } from "./MapActionsContext";
+import TagsSection from "./TagsSection";
+import logger from "../utils/logger.js";
+import { getRelationsDataWithCache } from "../utils/overpass";
+import { profileSize } from "../utils/overpass";
+import DataTable from "./DataTable";
+import ChartsSection from "./ChartsSection";
+import WikidataSection from "./WikidataSection";
+import ChoroplethMapSection from "./ChoroplethMapSection";
+import { CustomError, osmRel } from "../types/index.js";
 
 export default function Main() {
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
-  const error = searchParams.get('error');
-  const message = searchParams.get('message');
-  const { selected, setSelected } = useContext(MapActionsContext);
-  const [osmRels, setOsmRels] = useState([]);
+  const error = searchParams.get("error");
+  const message = searchParams.get("message");
+  const { selected, setSelected } = useContext(
+    MapActionsContext,
+  ) as MapActionsContextType;
+  const [osmRels, setOsmRels] = useState<osmRel[]>([]);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [computedDataRels, setComputedDataRels] = useState([]);
   const [isComputingIconActive, setIsComputingIconActive] = useState(false);
   const [isFetchingIconActive, setIsFetchingIconActive] = useState(false);
-  const [wikidataIndex, setWikidataIndex] = useState({})
+  const [wikidataIndex, setWikidataIndex] = useState({});
 
   useEffect(() => {
-    if (error) setErrorMessage(`An error ocurred: ${error} \nmessage: ${message || 'Something went wrong!'}`);
+    if (error)
+      setErrorMessage(
+        `An error ocurred: ${error} \nmessage: ${message || "Something went wrong!"}`,
+      );
   }, [error]);
-
 
   useEffect(() => {
     if (!selected.length) return;
     handleADDPlot(selected);
   }, [selected]);
 
-
   // for add selection from tree
-  async function handleADDPlot(ids) {
+  async function handleADDPlot(ids: string[]) {
     try {
-      setIsProgressIconActive(true)
-      const queryOSMRels = await getRelationsDataWithCache(ids);
+      setIsProgressIconActive(true);
+      const queryOSMRels: osmRel[] = await getRelationsDataWithCache(ids);
       // aproximate size in KB
       // if (process.env.NODE_ENV === 'development') profileSize(queryOSMRels);
-      setOsmRels(queryOSMRels)
+      setOsmRels(queryOSMRels);
       // setIsProgressIconActive(false)
     } catch (error) {
-      setIsProgressIconActive(false)
-      handleError(error.message);
-      logger.error('An error ocurred: ', error);
+      const err = error as CustomError;
+      setIsProgressIconActive(false);
+      handleError(err.message);
+      logger.error("An error ocurred: ", error);
     }
   }
 
-  const handleError = (errorMessage) => {
+  const handleError = (errorMessage: string) => {
     setErrorMessage(errorMessage);
-  }
+  };
 
-  const handleSearchSelect = (item) => {
-    setSelected([item.osm_id.toString()])
-  }
+  const handleSearchSelect = (item: Record<string, string>) => {
+    setSelected([item.osm_id.toString()]);
+  };
 
-  const handleTreeSelect = (ids) => {
-    setSelected(ids)
-  }
+  const handleTreeSelect = (ids: string[]) => {
+    setSelected(ids);
+  };
 
   //* effect for computed props
   useEffect(() => {
@@ -75,8 +80,8 @@ export default function Main() {
 
     setIsComputingIconActive(true);
     const worker = new Worker(
-      new URL('../utils/computePropsWorker.js', import.meta.url),
-      { type: 'module' }
+      new URL("../utils/computePropsWorker.js", import.meta.url),
+      { type: "module" },
     );
     // send data
     worker.postMessage(osmRels);
@@ -90,64 +95,60 @@ export default function Main() {
 
     // unmount
     return () => worker.terminate();
-
   }, [osmRels]);
-
 
   //* fetch wikidata props
   useEffect(() => {
     if (!osmRels.length) return;
 
-    const wikidataIds = osmRels.map(rel => rel.tags.wikidata);
+    const wikidataIds = osmRels.map((rel) => rel.tags.wikidata);
 
     setIsFetchingIconActive(true);
     const worker = new Worker(
-      new URL('../utils/fetchWikidataPropsWorker.js', import.meta.url),
-      { type: 'module' }
+      new URL("../utils/fetchWikidataPropsWorker.js", import.meta.url),
+      { type: "module" },
     );
     worker.postMessage(wikidataIds);
     worker.onmessage = (e) => {
-      const index = {};
-      osmRels.forEach(rel => {
-        index[rel.tags['name:en'] ?? rel.tags['alt_name:en'] ?? rel.tags['name']] = e.data[rel.tags.wikidata];
+      const index = {} as Record<string, any>;
+      osmRels.forEach((rel) => {
+        index[
+          rel.tags["name:en"] ?? rel.tags["alt_name:en"] ?? rel.tags["name"]
+        ] = e.data[rel.tags.wikidata];
       });
       setWikidataIndex(index);
-      setIsFetchingIconActive(false)
+      setIsFetchingIconActive(false);
       worker.terminate();
     };
 
     return () => worker.terminate();
-  }, [osmRels])
+  }, [osmRels]);
 
   return (
     <main className={styles.main}>
       <aside className={styles.aside}>
         <SearchDropdown
-          text='Search OpenStreetMap'
+          text="Search OpenStreetMap"
           onSelect={handleSearchSelect}
           onError={handleError}
         />
         <SelectAddDropdown
-          text='Select administrative division'
+          text="Select administrative division"
           onPlotRequest={handleTreeSelect}
           onError={handleError}
         />
       </aside>
-      <section className={styles['main-body']}>
-        <div className={styles['main-content']}>
+      <section className={styles["main-body"]}>
+        <div className={styles["main-content"]}>
           <Map
             osmRels={osmRels}
             computedDataRels={[]}
             onError={handleError}
             isProgressIconActive={isProgressIconActive}
             setIsProgressIconActive={setIsProgressIconActive}
-            type={'base'}
+            type={"base"}
           />
-          {Boolean(osmRels.length != 0) && (
-            <TagsSection
-              osmRels={osmRels}
-            />
-          )}
+          {Boolean(osmRels.length != 0) && <TagsSection osmRels={osmRels} />}
           <DataTable
             computedDataRels={computedDataRels}
             isComputingIconActive={isComputingIconActive}
@@ -176,5 +177,5 @@ export default function Main() {
         onClose={() => setErrorMessage(null)}
       />
     </main>
-  )
+  );
 }
