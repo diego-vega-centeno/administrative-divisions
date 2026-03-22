@@ -24,8 +24,8 @@ import { CustomError } from "../types/index.js";
 
 interface SearchDropdownProps {
   text: string;
-  onSelect: () => void;
-  onError: (_: any) => void;
+  onSelect: (item: Record<string, any>) => void;
+  onError: (message: string) => void;
 }
 
 export default function SearchDropdown({
