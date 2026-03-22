@@ -104,7 +104,7 @@ export default function BarChart({ chartData, labels, config }: BarChartProps) {
     } else {
       setData({
         datasets: datasets,
-        labels: labels,
+        labels: [],
       });
     }
   }, [chartData]);
