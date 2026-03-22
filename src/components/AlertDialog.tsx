@@ -1,13 +1,16 @@
 import Dialog from "@mui/material/Dialog";
-import Alert, { AlertColor, AlertPropsColorOverrides } from "@mui/material/Alert";
+import Alert, {
+  AlertColor,
+  AlertPropsColorOverrides,
+} from "@mui/material/Alert";
 import { Dispatch, SetStateAction } from "react";
 import { OverridableStringUnion } from "@mui/types";
 
 interface AlertDialogProps {
   severity: OverridableStringUnion<AlertColor, AlertPropsColorOverrides>;
-  message: string;
+  message: string | null;
   open: boolean;
-  onClose: () => Dispatch<SetStateAction<string | null>>;
+  onClose: () => void;
 }
 
 export default function AlertDialog({
