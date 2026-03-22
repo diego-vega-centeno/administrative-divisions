@@ -149,7 +149,6 @@ function addChoroplethLayer(
     ...areaParams,
     "Area",
   );
-
   // population is the base layer
   const popParams: SpreadParams = getChoroplethParams(
     computedDataRels,
@@ -162,6 +161,7 @@ function addChoroplethLayer(
     ...popParams,
     "Population",
   );
+
   leafletState.map!.fitBounds(leafletState.baseLayer!.getBounds());
 
   leafletState.baseLayer!.addTo(leafletState.map!);
@@ -178,8 +178,6 @@ function addChoroplethLayer(
       { position: "topleft" },
     )
     .addTo(leafletState.map!);
-  if (leafletState.baseLayer)
-    leafletState.layerControl.removeLayer(leafletState.baseLayer);
 
   //* Add layer switching event listener
   leafletState.map!.on("baselayerchange", function (e) {
