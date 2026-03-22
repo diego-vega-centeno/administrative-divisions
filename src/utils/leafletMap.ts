@@ -30,10 +30,15 @@ function addToLeafletMap(
       leafletState.layerControl.removeLayer(leafletState.popDensityLayer);
   }
   // remove references from map
-  if (leafletState.baseLayer)
+  if (leafletState.baseLayer) {
+    leafletState.baseLayer.off();
     leafletState.map!.removeLayer(leafletState.baseLayer);
-  if (leafletState.popDensityLayer)
+  }
+
+  if (leafletState.popDensityLayer){
+    leafletState.popDensityLayer.off();
     leafletState.map!.removeLayer(leafletState.popDensityLayer);
+  }
 
   //* base tile layer
   if (!leafletState.tileLayer) {

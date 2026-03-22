@@ -63,9 +63,14 @@ function createChoroplethLayer(
     onEachFeature: (feature, layer) => {
       (layer as any)._geoJsonParentTitle = legendTitle;
       layer.on({
-        mouseover: (e: L.LeafletMouseEvent) =>
-          highlightFeature(e, leafletState, legendTitle, computedPropsMap),
-        mouseout: (e) => geoJsonLayer.resetStyle(e.target),
+        mouseover: (e: L.LeafletMouseEvent) => {
+          if (!e.target || !e.target._map) return;
+          highlightFeature(e, leafletState, legendTitle, computedPropsMap);
+        },
+        mouseout: (e) => {
+          if (!e.target || !e.target._map) return;
+          geoJsonLayer.resetStyle(e.target)
+        },
       });
     },
   });

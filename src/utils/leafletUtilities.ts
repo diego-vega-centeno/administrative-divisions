@@ -47,6 +47,9 @@ function hoverHighlight(
   e: L.LeafletMouseEvent,
   leafletState: LeafletStateRefProps,
 ) {
+
+  if (!e.target || !e.target._map) return;
+  
   if (
     leafletState.highlightedLayer &&
     leafletState.hoverHighlightedLayer &&
