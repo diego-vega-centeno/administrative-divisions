@@ -5,6 +5,8 @@ export interface AuthContextType {
   userData: any;
   setUserData: (data: any) => void;
   loading: boolean;
+  wakeUpMessage: string | null;
+  setWakeUpMessage: (message: string | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -18,15 +20,27 @@ interface AuthProviderProps {
 function AuthProvider({ children }: AuthProviderProps) {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [wakeUpMessage, setWakeUpMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    let wakeUpTimeout: ReturnType<typeof setTimeout> | null = null;
+
     async function getUserData() {
+      setLoading(true);
+      setWakeUpMessage(null);
+
+      wakeUpTimeout = setTimeout(() => {
+        setWakeUpMessage(
+          "Backend is asleep (cold-starting). Please wait a moment ...",
+        );
+      }, 1200);
+
       try {
         const response = await fetch(
           import.meta.env.VITE_BACKEND_URL + "/user/me",
           { credentials: "include" },
         );
-
+        
         if (response.ok) {
           const dataResponse = await response.json();
           setUserData(dataResponse.data);
@@ -39,7 +53,9 @@ function AuthProvider({ children }: AuthProviderProps) {
       } catch (error) {
         logger.error(`Failed user fetch: ${error}`);
       } finally {
+        if (wakeUpTimeout !== null) window.clearTimeout(wakeUpTimeout);
         setLoading(false);
+        setWakeUpMessage(null);
       }
     }
 
@@ -51,7 +67,15 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userData, setUserData, loading }}>
+    <AuthContext.Provider
+      value={{
+        userData,
+        setUserData,
+        loading,
+        wakeUpMessage,
+        setWakeUpMessage,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
