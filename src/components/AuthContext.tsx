@@ -31,7 +31,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       wakeUpTimeout = setTimeout(() => {
         setWakeUpMessage(
-          "Backend is asleep (cold-starting). Please wait a moment ...",
+          "Backend is asleep. Restarting, please wait a moment ...",
         );
       }, 1200);
 
