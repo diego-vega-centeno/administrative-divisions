@@ -15,6 +15,7 @@ import { IconButton } from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
 import LoginMenu from "./LoginMenu";
 import FavoritesMenu from "./FavoritesMenu";
+import AlertDialog from "./AlertDialog";
 
 import { AuthContext, AuthContextType } from "./AuthContext";
 import logger from "../utils/logger";
@@ -23,7 +24,7 @@ export default function NavSidebar() {
   const [open, setOpen] = useState(false);
   const [isLoginMenuOpen, setIsLoginMenuOpen] = useState<boolean>(false);
   const [isFavoritesMenuOpen, setIsFavoritesMenuOpen] = useState(false);
-  const { userData, setUserData, loading } = useContext(
+  const { userData, setUserData, loading, wakeUpMessage, setWakeUpMessage } = useContext(
     AuthContext,
   ) as AuthContextType;
 
@@ -80,6 +81,14 @@ export default function NavSidebar() {
 
   return (
     <div>
+      {wakeUpMessage && (
+        <AlertDialog
+          open={true}
+          severity="info"
+          message={wakeUpMessage}
+          onClose={() => setWakeUpMessage(null)}
+        />
+      )}
       <IconButton onClick={toggleDrawer(true)} sx={navSideBarButton}>
         <FontAwesomeIcon style={navSideBarIcon} icon={faBars} />
       </IconButton>
