@@ -6,8 +6,8 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 export default function Footer() {
   return (
     <footer className={styles.footer}>
-      <span>&copy; Cocobongo</span>
-      <a href="https://www.linkedin.com/" className={styles["footer-linkedin"]}>
+      <span>&copy; Diego Vega Centeno</span>
+      <a href="https://www.linkedin.com/in/diego-vega-cen/" className={styles["footer-linkedin"]}>
         <FontAwesomeIcon icon={faLinkedin as IconProp} />
       </a>
     </footer>
