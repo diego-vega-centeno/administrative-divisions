@@ -12,7 +12,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    // "allowJs": true
+    // "allowJs": true,
+    "types": ["node"]
   },
   "include": ["src"]
 }
