@@ -10,7 +10,7 @@ import {
 
 async function getRelationsOSMData(ids: string[], out = "geom") {
   const endPoints = [
-    "https://maps.mail.ru/osm/tools/overpass/api/",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
     // "https://overpass.openstreetmap.fr/api/interpreter",
     "https://overpass-api.de/api/interpreter",
     // "https://overpass.openstreetmap.ru/api/interpreter",
