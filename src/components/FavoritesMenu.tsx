@@ -13,12 +13,12 @@ import {
 } from "../utils/database";
 import Typography from "@mui/material/Typography";
 import TableContainer from "@mui/material/TableContainer";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import Modal from "@mui/material/Modal";
-import { MapActionsContext } from "./MapActionsContext";
 import FavoritesMenuTable from "./FavoritesMenuTable";
 import logger from "../utils/logger.js";
 import { RelationsUserLayersType, CustomError } from "../types/index.ts";
+import { setSelected as setSelectedAction } from "../utils/selectedSlice.ts";
 
 interface FavoritesMenuProps {
   open: boolean;
@@ -26,7 +26,7 @@ interface FavoritesMenuProps {
   onError?: () => void;
 }
 
-import { MapActionsContextType } from "./MapActionsContext";
+import { useDispatch } from "react-redux";
 
 export default function FavoritesMenu({
   open,
@@ -36,9 +36,6 @@ export default function FavoritesMenu({
   const [relsPerLayer, setRelsPerLayer] = useState<
     Record<string, RelationsUserLayersType[]>
   >({});
-  const { setSelected } = useContext(
-    MapActionsContext,
-  ) as MapActionsContextType;
   const [loading, setLoading] = useState(false);
   const [activeLayer, setActiveLayer] = useState<string>("");
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -47,6 +44,7 @@ export default function FavoritesMenu({
     new Set(),
   );
   const [error, setError] = useState<string>("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!open) return;
@@ -95,8 +93,10 @@ export default function FavoritesMenu({
 
   const plotLayer: (_: string) => void = (groupKey: string) => {
     onClose();
-    setSelected(
-      relsPerLayer[groupKey].map((rel) => (rel as any)["osm_relation_id"]),
+    dispatch(
+      setSelectedAction(
+        relsPerLayer[groupKey].map((rel) => (rel as any)["osm_relation_id"]),
+      ),
     );
   };
 

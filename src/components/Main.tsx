@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/Main.module.css";
 import Footer from "./Footer";
 import SearchDropdown from "./SearchDropdown";
@@ -7,7 +7,6 @@ import "leaflet/dist/leaflet.css";
 import AlertDialog from "./AlertDialog";
 import { useSearchParams } from "react-router";
 import Map from "./Map";
-import { MapActionsContext, MapActionsContextType } from "./MapActionsContext";
 import TagsSection from "./TagsSection";
 import logger from "../utils/logger.js";
 import { getRelationsDataWithCache } from "../utils/overpass";
@@ -17,21 +16,24 @@ import ChartsSection from "./ChartsSection";
 import WikidataSection from "./WikidataSection";
 import ChoroplethMapSection from "./ChoroplethMapSection";
 import { CustomError, osmRel } from "../types/index";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../utils/store";
+import { setSelected } from "../utils/selectedSlice.ts";
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
   const error = searchParams.get("error");
   const message = searchParams.get("message");
-  const { selected, setSelected } = useContext(
-    MapActionsContext,
-  ) as MapActionsContextType;
   const [osmRels, setOsmRels] = useState<osmRel[]>([]);
   const [isProgressIconActive, setIsProgressIconActive] = useState(false);
   const [computedDataRels, setComputedDataRels] = useState([]);
   const [isComputingIconActive, setIsComputingIconActive] = useState(false);
   const [isFetchingIconActive, setIsFetchingIconActive] = useState(false);
   const [wikidataIndex, setWikidataIndex] = useState({});
+
+  const selected = useSelector((state: RootState) => state.selected.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (error)
@@ -67,11 +69,11 @@ export default function Main() {
   };
 
   const handleSearchSelect = (item: Record<string, string>) => {
-    setSelected([item.osm_id.toString()]);
+    dispatch(setSelected([item.osm_id.toString()]));
   };
 
   const handleTreeSelect = (ids: string[]) => {
-    setSelected(ids);
+    dispatch(setSelected(ids));
   };
 
   //* effect for computed props
@@ -80,7 +82,7 @@ export default function Main() {
 
     setIsComputingIconActive(true);
     const worker = new Worker(
-      new URL("../utils/computePropsWorker.js", import.meta.url),
+      new URL("../utils/computePropsWorker.ts", import.meta.url),
       { type: "module" },
     );
     // send data
@@ -105,7 +107,7 @@ export default function Main() {
 
     setIsFetchingIconActive(true);
     const worker = new Worker(
-      new URL("../utils/fetchWikidataPropsWorker.js", import.meta.url),
+      new URL("../utils/fetchWikidataPropsWorker.ts", import.meta.url),
       { type: "module" },
     );
     worker.postMessage(wikidataIds);
