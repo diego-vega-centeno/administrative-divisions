@@ -1,13 +1,13 @@
-import Home from "../pages/Home"
-import About from "../pages/About"
-import { BrowserRouter, Routes, Route } from "react-router"
-import { AuthProvider } from "./AuthContext"
-import { MapActionsProvider } from './MapActionsContext'
+import Home from "../pages/Home";
+import About from "../pages/About";
+import { BrowserRouter, Routes, Route } from "react-router";
+import { AuthProvider } from "./AuthContext";
+import { store } from "../utils/store";
+import { Provider } from "react-redux";
 
 function App() {
-
   return (
-    <MapActionsProvider>
+    <Provider store={store}>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
@@ -16,8 +16,8 @@ function App() {
           </Routes>
         </BrowserRouter>
       </AuthProvider>
-    </MapActionsProvider>
-  )
+    </Provider>
+  );
 }
 
-export default App
+export default App;
