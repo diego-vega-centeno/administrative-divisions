@@ -8,7 +8,7 @@ import AlertDialog from "./AlertDialog";
 import { useSearchParams } from "react-router";
 import Map from "./Map";
 import TagsSection from "./TagsSection";
-import logger from "../utils/logger.js";
+import logger from "../utils/logger";
 import { getRelationsDataWithCache } from "../utils/overpass";
 import { profileSize } from "../utils/overpass";
 import DataTable from "./DataTable";

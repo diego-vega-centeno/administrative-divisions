@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { saveActionSection } from "../styles/Main";
-import { addToolsButton } from "../styles/SelectAddDropdown.js";
+import { addToolsButton } from "../styles/SelectAddDropdown";
 import { useState, useRef, Dispatch, SetStateAction } from "react";
 import {
   basicMenu,
@@ -12,7 +12,7 @@ import {
   tableContainer,
   modalCenter,
   menuHeader,
-} from "../styles/Menu.js";
+} from "../styles/Menu";
 import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -22,14 +22,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
-import { saveLayerToDB } from "../utils/database.js";
-import logger from "../utils/logger.js";
+import { saveLayerToDB } from "../utils/database";
+import logger from "../utils/logger";
 import Modal from "@mui/material/Modal";
 import {
   SelectedNodesType,
   CustomError,
   FormattedRelsType,
-} from "../types/index.js";
+} from "../types/index";
 
 interface SaveMenuProsp {
   open: boolean;

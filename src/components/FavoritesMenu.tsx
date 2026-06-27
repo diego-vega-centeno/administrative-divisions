@@ -16,7 +16,7 @@ import TableContainer from "@mui/material/TableContainer";
 import { useState, useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import FavoritesMenuTable from "./FavoritesMenuTable";
-import logger from "../utils/logger.js";
+import logger from "../utils/logger";
 import { RelationsUserLayersType, CustomError } from "../types/index.ts";
 import { setSelected as setSelectedAction } from "../utils/selectedSlice.ts";
 

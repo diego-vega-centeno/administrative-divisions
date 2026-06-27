@@ -1,12 +1,12 @@
 import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { tableContainerHeader } from "../styles/Menu.js";
+import { tableContainerHeader } from "../styles/Menu";
 import CircularProgress from "@mui/material/CircularProgress";
 import { progressIcon } from "../styles/Main";
 import { memo, useEffect, useState } from "react";
-import Map from "./Map.js";
-import { osmRel, ComputedDataRelsType } from "../types/index.js";
+import Map from "./Map";
+import { osmRel, ComputedDataRelsType } from "../types/index";
 
 interface ChoroplethMapSectionProps {
   osmRels: osmRel[];

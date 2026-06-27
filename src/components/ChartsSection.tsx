@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { tableContainerHeader } from "../styles/Menu.js";
-import { chartsContainer, chartContainer } from "../styles/Menu.js";
+import { tableContainerHeader } from "../styles/Menu";
+import { chartsContainer, chartContainer } from "../styles/Menu";
 import CircularProgress from "@mui/material/CircularProgress";
 import { progressIcon } from "../styles/Main";
 import BarChart from "./charts/BarChart";
 import { memo } from "react";
-import { ComputedDataRelsType } from "../types/index.js";
+import { ComputedDataRelsType } from "../types/index";
 
 const ChartsSection = memo(
   ({

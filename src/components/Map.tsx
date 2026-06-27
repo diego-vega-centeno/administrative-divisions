@@ -4,14 +4,14 @@ import L from "leaflet";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { progressMapIcon } from "../styles/Main";
-import { addToLeafletMap } from "../utils/leafletMap.js";
+import { addToLeafletMap } from "../utils/leafletMap";
 import {
   makeTagsPanel,
   createCenterButton,
-} from "../utils/leafletUtilities.js";
-import logger from "../utils/logger.js";
-import { CustomError } from "../types/index.js";
-import { LeafletStateRefProps } from "../types/index.js";
+} from "../utils/leafletUtilities";
+import logger from "../utils/logger";
+import { CustomError } from "../types/index";
+import { LeafletStateRefProps } from "../types/index";
 
 interface MapProps {
   osmRels: any[];

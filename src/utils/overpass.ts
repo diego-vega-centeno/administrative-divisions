@@ -6,7 +6,7 @@ import {
   formatOsmRel,
   SelectedNodesType,
   osmRel,
-} from "../types/index.js";
+} from "../types/index";
 
 async function getRelationsOSMData(ids: string[], out = "geom") {
   const endPoints = [

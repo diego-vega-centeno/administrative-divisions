@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faX } from "@fortawesome/free-solid-svg-icons";
-import { dropdown, dropdownIcon } from "../styles/SearchDropdown.js";
+import { dropdown, dropdownIcon } from "../styles/SearchDropdown";
 import { useState } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -12,15 +12,15 @@ import {
   searchField,
   searchFieldIconBox,
   progressIcon,
-} from "../styles/SearchDropdown.js";
-import { cancelButton } from "../styles/SelectAddDropdown.js";
+} from "../styles/SearchDropdown";
+import { cancelButton } from "../styles/SelectAddDropdown";
 import TextField from "@mui/material/TextField";
-import { getNominatimSearch } from "../utils/nominatim.js";
+import { getNominatimSearch } from "../utils/nominatim";
 import SearchResultList from "./SearchResultList";
 import CircularProgress from "@mui/material/CircularProgress";
-import logger from "../utils/logger.js";
+import logger from "../utils/logger";
 import IconButton from "@mui/material/IconButton";
-import { CustomError } from "../types/index.js";
+import { CustomError } from "../types/index";
 
 interface SearchDropdownProps {
   text: string;

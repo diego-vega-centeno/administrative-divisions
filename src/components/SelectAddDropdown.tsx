@@ -1,15 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { dropdown } from "../styles/SearchDropdown.js";
+import { dropdown } from "../styles/SearchDropdown";
 import { useState, useRef, useContext } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
-import JsTreeWrapper from "./jsTreeWrapper.js";
+import JsTreeWrapper from "./jsTreeWrapper";
 import {
   searchFieldBox,
   searchField,
   searchFieldIconBox,
-} from "../styles/SearchDropdown.js";
+} from "../styles/SearchDropdown";
 import TextField from "@mui/material/TextField";
 import { faSearch, faX } from "@fortawesome/free-solid-svg-icons";
 import Button from "@mui/material/Button";
@@ -20,14 +20,14 @@ import {
   infoAddBox,
   addPanel,
   cancelButton,
-} from "../styles/SelectAddDropdown.js";
-import DownloadMenu from "./DownloadMenu.jsx";
-import SaveMenu from "./SaveMenu.js";
-import { AuthContext, AuthContextType } from "./AuthContext.js";
-import logger from "../utils/logger.js";
-import SearchTreeResultList from "./SearchTreeResultList.js";
+} from "../styles/SelectAddDropdown";
+import DownloadMenu from "./DownloadMenu";
+import SaveMenu from "./SaveMenu";
+import { AuthContext, AuthContextType } from "./AuthContext";
+import logger from "../utils/logger";
+import SearchTreeResultList from "./SearchTreeResultList";
 import CircularProgress from "@mui/material/CircularProgress";
-import { progressIcon } from "../styles/SearchDropdown.js";
+import { progressIcon } from "../styles/SearchDropdown";
 import IconButton from "@mui/material/IconButton";
 import add_flat_countries from "../add_flat_countries.json";
 import {

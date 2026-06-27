@@ -5,11 +5,11 @@ import {
   tableContainerHeader,
   tableContainerBody,
   tagsItemList,
-} from "../styles/Menu.js";
+} from "../styles/Menu";
 import Box from "@mui/material/Box";
-import { listItem } from "../styles/Menu.js";
+import { listItem } from "../styles/Menu";
 import { useState, useEffect, memo } from "react";
-import Table from "./WikidataTable.js";
+import Table from "./WikidataTable";
 import { progressIcon } from "../styles/Main";
 import CircularProgress from "@mui/material/CircularProgress";
 import BarChart from "./charts/BarChart";

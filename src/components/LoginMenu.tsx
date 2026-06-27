@@ -12,7 +12,7 @@ import {
 } from "../styles/LoginMenu";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import logger from "../utils/logger.js";
+import logger from "../utils/logger";
 import { Dispatch, SetStateAction } from "react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 

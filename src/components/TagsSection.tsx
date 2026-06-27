@@ -5,12 +5,12 @@ import {
   tableContainerHeader,
   tableContainerBody,
   tagsItemList,
-} from "../styles/Menu.js";
+} from "../styles/Menu";
 import Box from "@mui/material/Box";
-import { listItem } from "../styles/Menu.js";
+import { listItem } from "../styles/Menu";
 import { useState, useEffect, memo } from "react";
 import TagsTable from "./TagsTable";
-import { osmRel } from "../types/index.js";
+import { osmRel } from "../types/index";
 
 const TagsSection = memo(({ osmRels }: { osmRels: osmRel[] }) => {
   const [selectedRel, setSelectedRel] = useState<osmRel>();

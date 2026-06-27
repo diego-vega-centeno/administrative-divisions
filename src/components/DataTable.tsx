@@ -19,9 +19,9 @@ import {
   compareTableContainer,
   compareTableSortLabel,
   tableContainerHeader,
-} from "../styles/Menu.jsx";
+} from "../styles/Menu";
 import { useEffect, useState, memo } from "react";
-import { ComputedDataRelsType, ComputedDataRelType } from "../types/index.js";
+import { ComputedDataRelsType, ComputedDataRelType } from "../types/index";
 
 const DataTable = memo(
   ({
