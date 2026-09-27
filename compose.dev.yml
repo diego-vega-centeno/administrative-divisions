@@ -1,0 +1,22 @@
+services:
+  dev:
+    build:
+      context: .
+      target: dev
+    ports:
+      - 5173:5173
+    env_file:
+      - .env.development
+    environment:
+      - NODE_ENV=development
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+        - action: rebuild
+          path: package-lock.json
