@@ -1,10 +1,8 @@
 # Dev stage: target for development mode
 FROM dhi.io/node:24-alpine3.23-dev AS dev
 WORKDIR /app
-RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    npm ci
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
 EXPOSE 5173
 CMD ["npm", "run", "dev"]
@@ -12,7 +10,7 @@ CMD ["npm", "run", "dev"]
 # Build react application
 FROM dhi.io/node:24-alpine3.22-dev AS builder
 WORKDIR /app
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
 RUN npm run build
