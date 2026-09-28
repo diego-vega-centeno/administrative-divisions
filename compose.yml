@@ -5,3 +5,5 @@ services:
       target: runner
     ports:
       - "8080:8080"
+    env_file:
+      - ${ENV_FILE:-.env.production}
