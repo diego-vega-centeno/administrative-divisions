@@ -3,7 +3,19 @@ services:
     build:
       context: .
       target: runner
+      secrets:
+        - env_prod
+        - env_local
     ports:
-      - "8080:8080"
+      - "5173:8080"
     env_file:
-      - ${ENV_FILE:-.env.production}
+      - path: .env.production
+        required: true
+      - path: .env.production.local
+        required: false
+
+secrets:
+  env_prod:
+    file: .env.production
+  env_local:
+    file: .env.production.local
