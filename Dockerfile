@@ -13,7 +13,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
-RUN npm run build
+
+# Mounts the secret file temporarily during build only
+RUN --mount=type=secret,id=env_prod,target=/app/.env.production \
+    --mount=type=secret,id=env_local,target=/app/.env.production.local,required=false \
+    npm run build
 
 # Prepare Nginx to Serve Static Files
 FROM dhi.io/nginx:1.28.0-alpine3.21-dev AS runner
