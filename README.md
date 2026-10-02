@@ -52,7 +52,7 @@ This app gives researchers and journalists a fast way to explore current OSM dat
 ## Stack:
 
 * Data engineer: python, pandas, numpy, github actions, b2 backblaze
-* Frontend: Vercel, node, javascript, react, react-chartjs-2, jstree, leaflet, turf, fortawesome and material UI
+* Frontend: Vercel, node, typescript, javascript, react, react-chartjs-2, jstree, leaflet, turf, fortawesome and material UI
 * Backend: Render, REST API, OAuth (jsonwebtoken), express, passport, postgreSQL , pg, zod, jest.
 * User storage: Supabase
 
