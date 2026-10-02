@@ -2,7 +2,7 @@ import Home from "../pages/Home";
 import About from "../pages/About";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { AuthProvider } from "./AuthContext";
-import { store } from "../utils/store";
+import { store } from "../store/store";
 import { Provider } from "react-redux";
 
 function App() {

@@ -17,8 +17,8 @@ import WikidataSection from "./WikidataSection";
 import ChoroplethMapSection from "./ChoroplethMapSection";
 import { CustomError, osmRel } from "../types/index";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../utils/store";
-import { setSelected } from "../utils/selectedSlice.ts";
+import type { RootState } from "../store/store.ts";
+import { setSelected } from "../store/slices/selectedSlice.ts";
 
 export default function Main() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
