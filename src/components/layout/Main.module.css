@@ -1,0 +1,133 @@
+.main {
+  display: flex;
+  min-height: calc(100vh - var(--header-footer-height));
+  width: 100%;
+}
+
+.aside {
+  width: clamp(270px, 23%, 400px);
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  border-right: 1px solid black;
+  overflow-y: scroll;
+  scrollbar-color: var(--color-primary) var(--color-secondary);
+}
+
+.main-body {
+  flex: 1;
+}
+
+.main-content {
+  min-height: calc(100vh - var(--header-footer-height));
+}
+
+.map-container {
+  height: calc(100vh - 2*var(--header-footer-height));
+  padding: 1.2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map {
+  height: 100%;
+  width: 90%;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.leaflet-control-table {
+  border-collapse: collapse;
+}
+
+.leaflet-control-table-row {
+  background-color: #F8F9FA;
+  font-size: 0.9em;
+  text-align: left;
+  border-bottom: 0.5px solid #dee2e6;
+}
+
+.leaflet-control-table-cell {
+  padding: .5rem .5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .aside {
+    width: 100%;
+    position: static;
+    height: 65vh;
+    border-right: none;
+    border-bottom: 1px solid black;
+  }
+}
+
+.btn-toggle {
+  padding: .2rem .4rem;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: white;
+  box-shadow: 0 0 10px black;
+  border: none;
+  outline: none;
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.btn-toggle:hover {
+  background-color: rgb(219, 199, 199);
+}
+
+.btn-toggle-container {
+  text-align: right;
+}
+
+.leaflet-btn {
+  width: 1.7rem;
+  height: 1.7rem;
+  cursor: pointer;
+  background-color: white;
+  box-shadow: 0 0 10px black;
+  line-height: 1.7rem;
+  font-size: 1.2rem;
+}
+
+.leaflet-btn:hover {
+  background-color: #d8d8d8;
+}
+
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
+
+.legend {
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
+.hidden{
+  display: none;
+}

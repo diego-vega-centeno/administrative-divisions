@@ -1,0 +1,88 @@
+:root {
+  --color-primary: #3b3b45;
+  --color-secondary: #28272c;
+  --color-text: rgb(215, 200, 200);
+  --header-footer-height: 7vh;
+}
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Oswald Variable', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-primary);
+}
+
+*.leaflet-interactive:focus {
+  /* chrome adds black outline */
+  outline: none;
+}
+
+.jstree-anchor {
+  white-space: normal !important;
+  word-break: break-word;
+  padding-right: 1.5rem !important;
+  height: auto !important;
+  color: var(--color-text);
+}
+
+.jstree-node {
+  overflow: hidden;
+}
+
+.jstree-container-ul {
+  color: var(--color-text);
+}
+
+.jstree-clicked {
+  background: var(--color-secondary) !important;
+}
+
+.jstree-checked {
+  background-color: var(--color-secondary);
+}
+
+.jstree-hovered {
+  background-color: var(--color-secondary) !important;
+}
+
+.jstree-node.jstree-open > .jstree-ocl {
+  filter: brightness(0) invert(1) !important;
+}
+
+.vakata-context li>a{
+  padding: 0 0.4rem !important;
+  background-color: var(--color-secondary) !important;
+  color: white !important;
+  text-shadow: none !important;
+  font-size: 0.9rem;
+  min-width: 10rem !important;
+}
+
+.vakata-context li>a:hover{
+  background-color: color-mix(in srgb, var(--color-secondary) 90%, white) !important;
+}
+
+.vakata-context{
+  background-color: var(--color-secondary) !important;
+  padding: 0 !important;
+  z-index: 500;
+}
+
+.vakata-context ul{
+  background-color: var(--color-secondary) !important;
+  padding: 0 !important;
+}
+
+.vakata-context li > a.vakata-context-parent {
+  background-size: 1rem;
+}
+
+.jstree-context{
+  background-color: var(--color-secondary) !important;
+}

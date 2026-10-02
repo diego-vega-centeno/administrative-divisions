@@ -1,6 +1,6 @@
 import { icon } from "@fortawesome/fontawesome-svg-core";
 import { faMapPin } from "@fortawesome/free-solid-svg-icons";
-import styles from "../styles/Main.module.css";
+import styles from "../components/layout/Main.module.css";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import { CustomMapControl, LeafletStateRefProps } from "../types";
 import L from "leaflet";
