@@ -15,5 +15,5 @@
     // "allowJs": true,
     "types": ["node"]
   },
-  "include": ["src"]
+  "include": ["src", "App.tsx"]
 }

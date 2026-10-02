@@ -1,4 +1,4 @@
-import { fetchWithUserUpdate } from "./fetch";
+import { fetchWithUserUpdate } from "../api-services/fetch.ts";
 import { CustomError, FormattedRelsType } from "../types/index.ts";
 
 async function saveLayerToDB(title: string, formattedRels: FormattedRelsType) {

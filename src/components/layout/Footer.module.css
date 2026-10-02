@@ -1,0 +1,16 @@
+.footer {
+  color: white;
+  background-color: var(--color-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  font-weight: 700;
+  font-size: 1rem;
+  height: var(--header-footer-height);
+}
+
+.footer-linkedin{
+  color: white;
+  font-size: 2rem;
+}
