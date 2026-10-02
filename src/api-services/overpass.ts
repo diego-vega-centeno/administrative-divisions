@@ -108,7 +108,7 @@ function formatData(
       }),
     );
     osmElems.forEach((ele) => {
-      ele["geometry"] = geojsonMap.get(ele.id.toString());
+      ele["geojson_geometry"] = geojsonMap.get(ele.id.toString());
     });
   }
 
@@ -117,7 +117,7 @@ function formatData(
     const normalized = normalizeSelection(osmElems);
     return makeTree(normalized);
   }
-
+  console.log(osmElems);
   return osmElems;
 }
 
