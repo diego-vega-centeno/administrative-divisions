@@ -20,7 +20,7 @@ async function getRelationsOSMData(ids: string[], out = "geom") {
   // to accept an array
   const idsArray = typeof ids == "string" ? [ids] : ids;
 
-  const query = `[out:json][timeout:90];rel(id:${idsArray.join(",")});out ${out};`;
+  const query = `[out:json][timeout:300];rel(id:${idsArray.join(",")});out ${out};`;
   let response;
   for (const endpoint of endPoints) {
     logger.info(`Trying endpoint: ${endpoint}`);
