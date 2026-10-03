@@ -117,7 +117,6 @@ function formatData(
     const normalized = normalizeSelection(osmElems);
     return makeTree(normalized);
   }
-  console.log(osmElems);
   return osmElems;
 }
 
