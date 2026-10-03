@@ -1,10 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+interface SelectedState {
+  value: string[];
+}
 
+const initialState: SelectedState = { value: [] };
 const selectedSlice = createSlice({
   name: "selected",
-  initialState: {
-    value: [],
-  },
+  initialState,
   reducers: {
     setSelected: (state, action) => {
       state.value = action.payload;
