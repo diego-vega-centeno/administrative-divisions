@@ -56,6 +56,14 @@ This app gives researchers and journalists a fast way to explore current OSM dat
 * Backend: Render, REST API, OAuth (jsonwebtoken), express, passport, postgreSQL , pg, zod, jest.
 * User storage: Supabase
 
+## Tests
+
+Run unit and component tests
+
+```
+npm run test
+```
+
 ## API
 
 Public REST API to get hierarchy:
