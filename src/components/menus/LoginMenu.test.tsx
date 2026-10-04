@@ -9,7 +9,7 @@ describe("LoginMenu Component", () => {
     document.body.innerHTML = "";
   });
 
-  it("renders login options when modal is open", () => {
+  it("renders login options when modal is open.", () => {
     render(<LoginMenu open={true} onClose={() => {}} />);
 
     expect(screen.getByText("Login")).toBeDefined();
