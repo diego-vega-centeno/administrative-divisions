@@ -24,7 +24,15 @@ async function getRelationsOSMData(ids: string[], out = "geom") {
   let response;
   for (const endpoint of endPoints) {
     logger.info(`Trying endpoint: ${endpoint}`);
-    response = await fetch(endpoint + "?data=" + encodeURIComponent(query));
+    response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "User-Agent": "my-app/1.0 (contact@example.com)",
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "data=" + encodeURIComponent(query),
+    });
 
     if (response.ok) {
       const osmRes = await response.json();
