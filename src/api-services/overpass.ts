@@ -21,35 +21,43 @@ async function getRelationsOSMData(ids: string[], out = "geom") {
   const idsArray = typeof ids == "string" ? [ids] : ids;
 
   const query = `[out:json][timeout:300];rel(id:${idsArray.join(",")});out ${out};`;
-  let response;
+  let lastError = "no endpoints tried";
+  let osmRes;
   for (const endpoint of endPoints) {
-    logger.info(`Trying endpoint: ${endpoint}`);
-    response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "User-Agent": "my-app/1.0 (contact@example.com)",
-        Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: "data=" + encodeURIComponent(query),
-    });
+    try {
+      logger.info(`Trying endpoint: ${endpoint}`);
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "User-Agent": "my-app/1.0 (contact@example.com)",
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "data=" + encodeURIComponent(query),
+        // signal:AbortSignal.timeout(60000)
+      });
 
-    if (response.ok) {
-      const osmRes = await response.json();
-      if (osmRes.elements.length === 0) {
-        throw new Error("Fetch response has empty elements");
+      if (!response.ok) {
+        lastError = `${response.status} - ${response.statusText}`;
+        logger.info(`endpoint failed: ${lastError}`);
+        continue;
       }
-      return osmRes;
+      osmRes = await response.json();
+      break;
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
+      logger.info(`endpoint errored: ${lastError}`);
     }
-
-    logger.info(`endpoint failed`);
   }
 
-  // if no endpoint returned ok then throw
-  // A 'not ok' response doesn't throw an error, so throw one and add status
-  throw new Error(
-    `Fetch response was not ok: ${response!.status} - ${response!.statusText}`,
-  );
+  if (!osmRes) {
+    throw new Error(`All Overpass endpoints failed. Last error: ${lastError}`);
+  }
+  if (osmRes.elements.length === 0) {
+    throw new Error("Fetch response has empty elements");
+  }
+
+  return osmRes;
 }
 
 function formatData(
