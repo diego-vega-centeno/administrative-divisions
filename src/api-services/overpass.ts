@@ -34,7 +34,7 @@ async function getRelationsOSMData(ids: string[], out = "geom") {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: "data=" + encodeURIComponent(query),
-        // signal:AbortSignal.timeout(60000)
+        signal:AbortSignal.timeout(120000)
       });
 
       if (!response.ok) {
